@@ -2,6 +2,8 @@
 
 #include "util.h"
 
+static unsigned short *const console_buffer = (unsigned short*)0xB8000;
+
 static const unsigned int console_width  = 80;
 static const unsigned int console_height = 25;
 
@@ -9,8 +11,6 @@ static unsigned int console_row;
 static unsigned int console_column;
 
 static unsigned char console_color;
-
-static unsigned short *console_buffer;
 
 static unsigned char vga_entry_color(enum vga_color fg, enum vga_color bg);
 static unsigned short vga_entry(unsigned char uc, unsigned char color);
@@ -20,7 +20,6 @@ void console_initialize() {
     console_row = 0;
     console_column = 0;
     console_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-    console_buffer = (unsigned short*)0xB8000;
 
     for (unsigned int y = 0; y < console_height; y++) {
         for (unsigned int x = 0; x < console_width; x++) {
