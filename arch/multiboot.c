@@ -5,10 +5,9 @@
 #define MULTIBOOT_1_MAGIC 0x2BADB002
 #define MULTIBOOT_2_MAGIC 0x36d76289
 
-#define MULTIBOOT_TAG_TYPE_END               0
-#define MULTIBOOT_TAG_TYPE_CMDLINE           1
-#define MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME  2
-#define MULTIBOOT_TAG_TYPE_MODULE            3
+#define MULTIBOOT_TAG_TYPE_END     0
+#define MULTIBOOT_TAG_TYPE_CMDLINE 1
+#define MULTIBOOT_TAG_TYPE_MODULE  3
 
 struct multiboot_tag
 {
@@ -62,13 +61,6 @@ void print_multiboot_info(struct KernelMQ_Multiboot_Info info)
             case MULTIBOOT_TAG_TYPE_CMDLINE:
                 printf(
                     "Command line = %s\n",
-                    ((struct multiboot_tag_string *) tag)->string
-                );
-                break;
-
-            case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
-                printf(
-                    "Boot loader name = %s\n",
                     ((struct multiboot_tag_string *) tag)->string
                 );
                 break;
