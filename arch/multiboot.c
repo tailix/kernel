@@ -12,13 +12,11 @@ void print_multiboot_info(unsigned long addr)
 
     if (addr & 7)
     {
-        printf ("Unaligned mbi: 0x%x\n", addr);
+        printf("Unaligned mbi: 0x%x\n", addr);
         return;
     }
 
     size = *(unsigned *) addr;
-
-    printf ("Announced mbi size 0x%x\n", size);
 
     for (
         tag = (struct multiboot_tag *) (addr + 8);
@@ -37,10 +35,6 @@ void print_multiboot_info(unsigned long addr)
                 break;
         }
     }
-
-    tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7));
-
-    printf ("Total mbi size 0x%x\n", (unsigned) tag - addr);
 }
 
 void itoa(char *buf, int base, int d)
