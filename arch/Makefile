@@ -1,3 +1,7 @@
+ifneq (ok, $(shell test -d '$(I)' && echo 'ok'))
+$(error 'Include directory "$(I)" does not exist')
+endif
+
 CCPREFIX = i686-elf-
 
 AS = $(CCPREFIX)as
@@ -14,7 +18,7 @@ kernel: $(OBJS)
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $(OBJS)
 
 %.c.o: %.c
-	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -fno-builtin -fno-stack-protector -Wall -Wextra
+	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -fno-builtin -fno-stack-protector -Wall -Wextra -I$(I)
 
 %.s.o: %.s
 	$(AS) $< -o $@

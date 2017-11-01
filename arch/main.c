@@ -1,3 +1,5 @@
+#include <kernelmq/multiboot.h>
+
 #include "logger.h"
 #include "gdt.h"
 #include "idt.h"
@@ -6,10 +8,10 @@ void main(uint32_t multiboot_magic)
 {
     logger_initialize();
 
-    if (multiboot_magic == 0x2BADB002) {
+    if (multiboot_magic == KERNELMQ_MULTIBOOT_1_MAGIC) {
         logger_info("Loaded with Multiboot-compliant bootloader, specification version 1.");
     }
-    else if (multiboot_magic == 0x36d76289) {
+    else if (multiboot_magic == KERNELMQ_MULTIBOOT_2_MAGIC) {
         logger_info("Loaded with Multiboot-compliant bootloader, specification version 2.");
     }
     else {
