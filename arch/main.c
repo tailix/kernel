@@ -4,7 +4,7 @@
 #include "gdt.h"
 #include "idt.h"
 
-void main(unsigned int multiboot_magic)
+void main(unsigned int multiboot_magic, unsigned long multiboot_info)
 {
     logger_initialize();
 
