@@ -16,6 +16,8 @@ clean:
 
 kernel: $(OBJS)
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $(OBJS)
+	grub-file --is-x86-multiboot $@
+	grub-file --is-x86-multiboot2 $@
 
 %.c.o: %.c
 	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -fno-builtin -fno-stack-protector -Wall -Wextra -I$(I)

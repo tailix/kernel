@@ -1,14 +1,24 @@
-.set ALIGN,    1<<0
-.set MEMINFO,  1<<1
-.set FLAGS,    ALIGN | MEMINFO
-.set MAGIC,    0x1BADB002
-.set CHECKSUM, -(MAGIC + FLAGS)
+.set MULTIBOOT_1_MAGIC, 0x1BADB002
+.set MULTIBOOT_1_FLAGS, (1 << 0) | (1 << 1) // Align, meminfo
+.set MULTIBOOT_1_CHECKSUM, -(MULTIBOOT_1_MAGIC + MULTIBOOT_1_FLAGS)
 
-.section .multiboot
+.set MULTIBOOT_2_MAGIC, 0xE85250D6
+.set MULTIBOOT_2_ARCH, 0
+.set MULTIBOOT_2_LENGTH, 16
+.set MULTIBOOT_2_CHECKSUM, -(MULTIBOOT_2_MAGIC + MULTIBOOT_2_ARCH + MULTIBOOT_2_LENGTH)
+
+.section .multiboot2
 .align 4
-.long MAGIC
-.long FLAGS
-.long CHECKSUM
+.long MULTIBOOT_2_MAGIC
+.long MULTIBOOT_2_ARCH
+.long MULTIBOOT_2_LENGTH
+.long MULTIBOOT_2_CHECKSUM
+
+.section .multiboot1
+.align 4
+.long MULTIBOOT_1_MAGIC
+.long MULTIBOOT_1_FLAGS
+.long MULTIBOOT_1_CHECKSUM
 
 .section .bss
 .align 16
