@@ -14,12 +14,14 @@ void main(unsigned int multiboot_magic, unsigned long multiboot_info)
         logger_info("Loaded with Multiboot-compliant bootloader, specification version 1.");
     }
     else if (multiboot_magic == KERNELMQ_MULTIBOOT_2_MAGIC) {
-        logger_info("Loaded with Multiboot-compliant bootloader, specification version 2.");
+        //logger_info("Loaded with Multiboot-compliant bootloader, specification version 2.");
         print_multiboot2_info(multiboot_info);
     }
     else {
         logger_warn("Loaded with no Multiboot-compliant bootloader.");
     }
+
+    return;
 
     logger_info("Kernel initialization started.");
 
@@ -53,8 +55,6 @@ void print_multiboot2_info(unsigned long addr)
     struct multiboot_tag *tag;
     unsigned size;
 
-    logger_info("Multiboot 2 info:");
-
     if (addr & 7)
     {
         printf ("Unaligned mbi: 0x%x\n", addr);
@@ -84,6 +84,7 @@ void print_multiboot2_info(unsigned long addr)
                         ((struct multiboot_tag_module *) tag)->mod_end,
                         ((struct multiboot_tag_module *) tag)->cmdline);
                 break;
+/*
             case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
                 printf ("mem_lower = %uKB, mem_upper = %uKB\n",
                         ((struct multiboot_tag_basic_meminfo *) tag)->mem_lower,
@@ -193,6 +194,7 @@ void print_multiboot2_info(unsigned long addr)
                     }
                     break;
                 }
+*/
         }
     }
     tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag
