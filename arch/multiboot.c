@@ -1,11 +1,11 @@
-#include "multiboot2.h"
+#include "multiboot.h"
 
 #include "console.h"
 
 static void itoa(char *buf, int base, int d);
 static void printf(const char *format, ...);
 
-void print_multiboot2_info(unsigned long addr)
+void print_multiboot_info(unsigned long addr)
 {
     struct multiboot_tag *tag;
     unsigned size;

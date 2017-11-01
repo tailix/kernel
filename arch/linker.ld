@@ -6,8 +6,7 @@ SECTIONS
 
     .text BLOCK(4K) : ALIGN(4K)
     {
-        *(.multiboot2)
-        *(.multiboot1)
+        *(.multiboot)
         *(.text)
     }
 

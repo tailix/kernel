@@ -1,7 +1,7 @@
 #ifndef MULTIBOOT_HEADER
 #define MULTIBOOT_HEADER 1
 
-void print_multiboot2_info(unsigned long addr);
+void print_multiboot_info(unsigned long addr);
 
 /*
  * How many bytes from the start of the file we search for the header.
