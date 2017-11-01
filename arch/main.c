@@ -23,8 +23,12 @@ void main(unsigned int multiboot_magic)
     gdt_initialize();
     idt_initialize();
 
+    asm volatile ("int $0x0");
     asm volatile ("int $0x3");
     asm volatile ("int $0x4");
+    asm volatile ("int $0xF");
+    asm volatile ("int $0x10");
+    asm volatile ("int $0x1F");
 
     logger_warn("Nothing to do.");
     logger_fail("Halt.");
