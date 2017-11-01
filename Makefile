@@ -1,8 +1,23 @@
-run: all
-	qemu-system-i386 -kernel arch/kernel -d guest_errors
+run: run-iso
 
-all:
+all: all-kernel all-iso
+
+clean: clean-iso clean-kernel
+
+run-kernel:
+	make run -C arch I=$(shell pwd)/include
+
+all-kernel:
 	make all -C arch I=$(shell pwd)/include
 
-clean:
+clean-kernel:
 	make clean -C arch I=$(shell pwd)/include
+
+run-iso: all-kernel
+	make run -C iso K=$(shell pwd)/arch/kernel
+
+all-iso: all-kernel
+	make all -C iso K=$(shell pwd)/arch/kernel
+
+clean-iso:
+	make clean -C iso K=$(shell pwd)/arch/kernel
