@@ -1,5 +1,7 @@
 #include "gdt.h"
 
+#include "logger.h"
+
 static struct GdtPointer gdt_pointer;
 
 static struct GdtEntry gdt_entries[5];
@@ -10,11 +12,15 @@ void gdt_flush(uint32_t pointer);
 
 void gdt_initialize()
 {
+    logger_info("Setup GDT.");
+
     gdt_set_gate(0, 0, 0, 0, 0);                // Null segment
     gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
     gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
     gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
     gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
+
+    logger_info("Load GDT.");
 
     gdt_pointer.limit = sizeof(struct GdtEntry) * 5 - 1;
     gdt_pointer.base  = (uint32_t)&gdt_entries;
