@@ -7,7 +7,7 @@ CCPREFIX = i686-elf-
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
 
-OBJS = boot.s.o main.c.o logger.c.o console.c.o gdt.c.o gdt.asm.o idt.c.o idt.asm.o isr.c.o isr.asm.o
+OBJS = boot.s.o main.c.o logger.c.o console.c.o gdt.c.o gdt.asm.o idt.c.o idt.asm.o isr.c.o isr.asm.o multiboot2.c.o
 
 run: kernel
 	qemu-system-i386 -kernel kernel -d guest_errors
