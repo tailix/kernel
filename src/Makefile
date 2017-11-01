@@ -3,12 +3,12 @@ CCPREFIX = i686-elf-
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
 
-OBJS = boot.s.o main.c.o
+OBJS = boot.s.o main.c.o logger.c.o console.c.o
 
 all: kernel
 
 clean:
-	rm kernel $(OBJS)
+	rm -f kernel $(OBJS)
 
 kernel: $(OBJS)
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -O2 -lgcc $(OBJS)
