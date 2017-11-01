@@ -6,9 +6,9 @@ static struct GdtPointer gdt_pointer;
 
 static struct GdtEntry gdt_entries[5];
 
-static void gdt_set_gate(int32_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
+static void gdt_set_gate(int num, unsigned int base, unsigned int limit, unsigned char access, unsigned char gran);
 
-void gdt_flush(uint32_t pointer);
+void gdt_flush(unsigned int pointer);
 
 void gdt_initialize()
 {
@@ -23,12 +23,12 @@ void gdt_initialize()
     logger_info("Load GDT.");
 
     gdt_pointer.limit = sizeof(struct GdtEntry) * 5 - 1;
-    gdt_pointer.base  = (uint32_t)&gdt_entries;
+    gdt_pointer.base  = (unsigned int)&gdt_entries;
 
-    gdt_flush((uint32_t)&gdt_pointer);
+    gdt_flush((unsigned int)&gdt_pointer);
 }
 
-void gdt_set_gate(int32_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran)
+void gdt_set_gate(int num, unsigned int base, unsigned int limit, unsigned char access, unsigned char gran)
 {
     gdt_entries[num].base_low    = (base & 0xFFFF);
     gdt_entries[num].base_middle = (base >> 16) & 0xFF;

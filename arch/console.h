@@ -1,9 +1,6 @@
 #ifndef TAILIX_KERNEL_INCLUDED_CONSOLE
 #define TAILIX_KERNEL_INCLUDED_CONSOLE 1
 
-#include <stdint.h>
-#include <stddef.h>
-
 // Hardware text mode color constants.
 enum vga_color {
     VGA_COLOR_BLACK         = 0,
@@ -29,7 +26,7 @@ void console_initialize();
 void console_print(const char *s);
 void console_putc(char c);
 void console_puts(const char *s);
-void console_setcolor(uint8_t color);
-void console_write(const char *data, size_t size);
+void console_setcolor(unsigned char color);
+void console_write(const char *data, unsigned int size);
 
 #endif
