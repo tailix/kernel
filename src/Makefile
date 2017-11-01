@@ -14,7 +14,7 @@ kernel: $(OBJS)
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $(OBJS)
 
 %.c.o: %.c
-	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -Wall -Wextra
+	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -fno-builtin -fno-stack-protector -Wall -Wextra
 
 %.s.o: %.s
 	$(AS) $< -o $@
