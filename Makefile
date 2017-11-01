@@ -1,3 +1,6 @@
+run: all
+	qemu-system-i386 -kernel src/kernel
+
 all:
 	make all -C src
 
