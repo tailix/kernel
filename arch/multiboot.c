@@ -8,15 +8,12 @@ static void printf(const char *format, ...);
 void print_multiboot_info(unsigned long addr)
 {
     struct multiboot_tag *tag;
-    unsigned size;
 
     if (addr & 7)
     {
         printf("Unaligned mbi: 0x%x\n", addr);
         return;
     }
-
-    size = *(unsigned *) addr;
 
     for (
         tag = (struct multiboot_tag *) (addr + 8);
