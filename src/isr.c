@@ -7,8 +7,7 @@ struct IsrRegisters {
     unsigned int eip, cs, eflags, useresp, ss;           // Pushed by the processor automatically.
 };
 
-// void isr(struct IsrRegisters regs)
-void isr()
+void isr(struct IsrRegisters regs)
 {
     logger_warn("ISR.");
 }

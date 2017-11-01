@@ -11,10 +11,10 @@ clean:
 	rm -f kernel $(OBJS)
 
 kernel: $(OBJS)
-	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -O2 -lgcc $(OBJS)
+	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $(OBJS)
 
 %.c.o: %.c
-	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -Wall -Wextra
 
 %.s.o: %.s
 	$(AS) $< -o $@
