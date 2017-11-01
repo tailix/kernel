@@ -5,6 +5,33 @@
 #define MULTIBOOT_1_MAGIC 0x2BADB002
 #define MULTIBOOT_2_MAGIC 0x36d76289
 
+#define MULTIBOOT_TAG_TYPE_END               0
+#define MULTIBOOT_TAG_TYPE_CMDLINE           1
+#define MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME  2
+#define MULTIBOOT_TAG_TYPE_MODULE            3
+
+struct multiboot_tag
+{
+    unsigned int type;
+    unsigned int size;
+};
+
+struct multiboot_tag_string
+{
+    unsigned int type;
+    unsigned int size;
+    char string[0];
+};
+
+struct multiboot_tag_module
+{
+    unsigned int type;
+    unsigned int size;
+    unsigned int mod_start;
+    unsigned int mod_end;
+    char cmdline[0];
+};
+
 static void itoa(char *buf, int base, int d);
 static void printf(const char *format, ...);
 
@@ -28,7 +55,7 @@ void print_multiboot_info(struct KernelMQ_Multiboot_Info info)
     for (
         struct multiboot_tag *tag = (struct multiboot_tag *) (info.addr + 8);
         tag->type != MULTIBOOT_TAG_TYPE_END;
-        tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7)))
+        tag = (struct multiboot_tag *) ((unsigned char *) tag + ((tag->size + 7) & ~7)))
     {
         switch (tag->type)
         {
