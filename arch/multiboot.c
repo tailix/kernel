@@ -25,6 +25,20 @@ void print_multiboot_info(unsigned long addr)
     {
         switch (tag->type)
         {
+            case MULTIBOOT_TAG_TYPE_CMDLINE:
+                printf(
+                    "Command line = %s\n",
+                    ((struct multiboot_tag_string *) tag)->string
+                );
+                break;
+
+            case MULTIBOOT_TAG_TYPE_BOOT_LOADER_NAME:
+                printf(
+                    "Boot loader name = %s\n",
+                    ((struct multiboot_tag_string *) tag)->string
+                );
+                break;
+
             case MULTIBOOT_TAG_TYPE_MODULE:
                 printf(
                     "Module at 0x%x-0x%x. Command line %s\n",
