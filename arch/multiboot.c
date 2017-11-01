@@ -1,4 +1,4 @@
-#include "multiboot.h"
+#include <kernelmq/multiboot.h>
 
 #include "console.h"
 

@@ -1,7 +1,6 @@
 #include <kernelmq/multiboot.h>
 
 #include "logger.h"
-#include "multiboot.h"
 #include "gdt.h"
 #include "idt.h"
 
