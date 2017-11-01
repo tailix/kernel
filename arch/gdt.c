@@ -2,6 +2,22 @@
 
 #include "logger.h"
 
+struct GdtPointer {
+    unsigned short limit;
+    unsigned int   base;
+}
+__attribute__((packed));
+
+struct GdtEntry {
+    unsigned short limit_low;
+    unsigned short base_low;
+    unsigned char  base_middle;
+    unsigned char  access;
+    unsigned char  granularity;
+    unsigned char  base_high;
+}
+__attribute__((packed));
+
 static struct GdtPointer gdt_pointer;
 
 static struct GdtEntry gdt_entries[5];

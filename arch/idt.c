@@ -2,6 +2,21 @@
 
 #include "logger.h"
 
+struct IdtPointer {
+    unsigned short limit;
+    unsigned int   base;
+}
+__attribute__((packed));
+
+struct IdtEntry {
+    unsigned short base_lo;
+    unsigned short sel;
+    unsigned char  always0;
+    unsigned char  flags;
+    unsigned short base_hi;
+}
+__attribute__((packed));
+
 static struct IdtPointer idt_pointer;
 
 static struct IdtEntry idt_entries[256];
