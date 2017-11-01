@@ -5,10 +5,12 @@
 extern "C" {
 #endif
 
-void print_multiboot_info(unsigned long addr);
+struct KernelMQ_Multiboot_Info {
+    unsigned long magic;
+    unsigned long addr;
+};
 
-#define KERNELMQ_MULTIBOOT_1_MAGIC 0x2BADB002
-#define KERNELMQ_MULTIBOOT_2_MAGIC 0x36d76289
+void print_multiboot_info(struct KernelMQ_Multiboot_Info info);
 
 /*
  * How many bytes from the start of the file we search for the header.

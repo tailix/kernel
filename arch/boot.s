@@ -24,8 +24,8 @@ stack_top:
 .type _start, @function
 _start:
     mov $stack_top, %esp
-    push %ebx // unsigned long multiboot_info
-    push %eax // unsigned int multiboot_magic
+    push %ebx
+    push %eax
     call main
     cli
 1:

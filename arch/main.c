@@ -4,22 +4,11 @@
 #include "gdt.h"
 #include "idt.h"
 
-void main(unsigned int multiboot_magic, unsigned long multiboot_info)
+void main(struct KernelMQ_Multiboot_Info multiboot_info)
 {
     logger_initialize();
 
-    if (multiboot_magic == KERNELMQ_MULTIBOOT_2_MAGIC) {
-        logger_info("Loaded with Multiboot-compliant bootloader, specification version 2.");
-        print_multiboot_info(multiboot_info);
-    }
-    else if (multiboot_magic == KERNELMQ_MULTIBOOT_1_MAGIC) {
-        logger_fail("Loaded with Multiboot-compliant bootloader, but specification version 1.");
-        return;
-    }
-    else {
-        logger_fail("Loaded with no Multiboot-compliant bootloader.");
-        return;
-    }
+    print_multiboot_info(multiboot_info);
 
     logger_info("Kernel initialization started.");
 

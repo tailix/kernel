@@ -2,21 +2,31 @@
 
 #include "console.h"
 
+#define MULTIBOOT_1_MAGIC 0x2BADB002
+#define MULTIBOOT_2_MAGIC 0x36d76289
+
 static void itoa(char *buf, int base, int d);
 static void printf(const char *format, ...);
 
-void print_multiboot_info(unsigned long addr)
+void print_multiboot_info(struct KernelMQ_Multiboot_Info info)
 {
-    struct multiboot_tag *tag;
+    if (info.magic == MULTIBOOT_1_MAGIC) {
+        printf("Old Multiboot specification does not support modules.");
+        return;
+    }
 
-    if (addr & 7)
-    {
-        printf("Unaligned mbi: 0x%x\n", addr);
+    if (info.magic != MULTIBOOT_2_MAGIC) {
+        printf("No Multiboot-compliant bootloader is not supported.");
+        return;
+    }
+
+    if (info.addr & 7) {
+        printf("Unaligned Multiboot information address: 0x%x\n", info.addr);
         return;
     }
 
     for (
-        tag = (struct multiboot_tag *) (addr + 8);
+        struct multiboot_tag *tag = (struct multiboot_tag *) (info.addr + 8);
         tag->type != MULTIBOOT_TAG_TYPE_END;
         tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag + ((tag->size + 7) & ~7)))
     {
