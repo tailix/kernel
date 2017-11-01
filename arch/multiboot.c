@@ -52,10 +52,10 @@ void print_multiboot_info(struct KernelMQ_Multiboot_Info info)
     }
 
     for (
-        struct multiboot_tag *tag = (struct multiboot_tag *) (info.addr + 8);
+        struct multiboot_tag *tag = (struct multiboot_tag*)(info.addr + sizeof(struct KernelMQ_Multiboot_Info));
         tag->type != MULTIBOOT_TAG_TYPE_END;
-        tag = (struct multiboot_tag *) ((unsigned char *) tag + ((tag->size + 7) & ~7)))
-    {
+        tag = (struct multiboot_tag*)((unsigned char*)tag + ((tag->size + 7) & ~7))
+    ) {
         switch (tag->type)
         {
             case MULTIBOOT_TAG_TYPE_CMDLINE:
