@@ -2,8 +2,8 @@
 
 #include "util.h"
 
-static const unsigned int VGA_WIDTH  = 80;
-static const unsigned int VGA_HEIGHT = 25;
+static const unsigned int console_width  = 80;
+static const unsigned int console_height = 25;
 
 static unsigned int console_row;
 static unsigned int console_column;
@@ -22,9 +22,9 @@ void console_initialize() {
     console_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
     console_buffer = (unsigned short*)0xB8000;
 
-    for (unsigned int y = 0; y < VGA_HEIGHT; y++) {
-        for (unsigned int x = 0; x < VGA_WIDTH; x++) {
-            const unsigned int index = y * VGA_WIDTH + x;
+    for (unsigned int y = 0; y < console_height; y++) {
+        for (unsigned int x = 0; x < console_width; x++) {
+            const unsigned int index = y * console_width + x;
             console_buffer[index] = vga_entry(' ', console_color);
         }
     }
@@ -39,7 +39,7 @@ void console_putc(const char c) {
     if (c == '\n') {
         console_column = 0;
 
-        if (++console_row == VGA_HEIGHT) {
+        if (++console_row == console_height) {
             console_row = 0;
         }
 
@@ -48,10 +48,10 @@ void console_putc(const char c) {
 
     console_putentryat(c, console_color, console_column, console_row);
 
-    if (++console_column == VGA_WIDTH) {
+    if (++console_column == console_width) {
         console_column = 0;
 
-        if (++console_row == VGA_HEIGHT) {
+        if (++console_row == console_height) {
             console_row = 0;
         }
     }
@@ -82,6 +82,6 @@ unsigned short vga_entry(unsigned char uc, unsigned char color) {
 }
 
 void console_putentryat(char c, unsigned char color, unsigned int x, unsigned int y) {
-    const unsigned int index = y * VGA_WIDTH + x;
+    const unsigned int index = y * console_width + x;
     console_buffer[index] = vga_entry(c, color);
 }
