@@ -1,7 +1,3 @@
-ifneq (ok, $(shell test -d '$(I)' && echo 'ok'))
-$(error 'Include directory "$(I)" does not exist')
-endif
-
 CCPREFIX = i686-elf-
 
 AS = $(CCPREFIX)as
@@ -19,7 +15,7 @@ kernel: $(OBJS)
 	grub-file --is-x86-multiboot2 $@
 
 %.c.o: %.c
-	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I$(I)
+	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I "$(I)"
 
 %.s.o: %.s
 	$(AS) $< -o $@
