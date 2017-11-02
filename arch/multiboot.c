@@ -95,14 +95,14 @@ void print_multiboot_info(struct KernelMQ_Multiboot_Info info)
         {
             case MULTIBOOT_TAG_TYPE_CMDLINE:
                 printf(
-                    "Command line = %s\n",
+                    "Kernel command line: %s\n",
                     ((struct multiboot_tag_string *) tag)->string
                 );
                 break;
 
             case MULTIBOOT_TAG_TYPE_MODULE:
                 printf(
-                    "Module at 0x%x-0x%x. Command line %s\n",
+                    "Module at 0x%x-0x%x, command line: %s\n",
                     ((struct multiboot_tag_module *) tag)->mod_start,
                     ((struct multiboot_tag_module *) tag)->mod_end,
                     ((struct multiboot_tag_module *) tag)->cmdline
@@ -119,7 +119,7 @@ void print_multiboot_info(struct KernelMQ_Multiboot_Info info)
 
             case MULTIBOOT_TAG_TYPE_MMAP:
             {
-                printf("mmap\n");
+                printf("Memory map:\n");
 
                 for (
                     multiboot_memory_map_t *mmap = ((struct multiboot_tag_mmap *) tag)->entries;
