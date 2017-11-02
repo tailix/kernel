@@ -1,4 +1,5 @@
 [GLOBAL gdt_flush]
+[GLOBAL idt_flush]
 
 gdt_flush:
     mov eax, [esp+4]
@@ -12,4 +13,9 @@ gdt_flush:
     mov ss, ax
     jmp 0x08:.flush
 .flush:
+    ret
+
+idt_flush:
+    mov eax, [esp+4]
+    lidt [eax]
     ret
