@@ -69,6 +69,8 @@ struct multiboot_tag_mmap
 static void itoa(char *buf, int base, int d);
 static void printf(const char *format, ...);
 
+static void print_multiboot_tag(const struct multiboot_tag *tag);
+
 void print_multiboot_info(struct KernelMQ_Multiboot_Info info)
 {
     if (info.magic == MULTIBOOT_1_MAGIC) {
@@ -91,53 +93,58 @@ void print_multiboot_info(struct KernelMQ_Multiboot_Info info)
         tag->type != MULTIBOOT_TAG_TYPE_END;
         tag = (struct multiboot_tag*)((unsigned char*)tag + ((tag->size + 7) & ~7))
     ) {
-        switch (tag->type)
+        print_multiboot_tag(tag);
+    }
+}
+
+void print_multiboot_tag(const struct multiboot_tag *const tag)
+{
+    switch (tag->type)
+    {
+        case MULTIBOOT_TAG_TYPE_CMDLINE:
+            printf(
+                "Kernel command line: %s\n",
+                ((struct multiboot_tag_string *) tag)->string
+            );
+            break;
+
+        case MULTIBOOT_TAG_TYPE_MODULE:
+            printf(
+                "Module at 0x%x-0x%x, command line: %s\n",
+                ((struct multiboot_tag_module *) tag)->mod_start,
+                ((struct multiboot_tag_module *) tag)->mod_end,
+                ((struct multiboot_tag_module *) tag)->cmdline
+            );
+            break;
+
+        case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
+            printf(
+                "mem_lower = %uKB, mem_upper = %uKB\n",
+                ((struct multiboot_tag_basic_meminfo *) tag)->mem_lower,
+                ((struct multiboot_tag_basic_meminfo *) tag)->mem_upper
+            );
+            break;
+
+        case MULTIBOOT_TAG_TYPE_MMAP:
         {
-            case MULTIBOOT_TAG_TYPE_CMDLINE:
+            printf("Memory map:\n");
+
+            for (
+                multiboot_memory_map_t *mmap = ((struct multiboot_tag_mmap *) tag)->entries;
+                (unsigned char *) mmap < (unsigned char *) tag + tag->size;
+                mmap = (multiboot_memory_map_t *)((unsigned long) mmap + ((struct multiboot_tag_mmap *) tag)->entry_size)
+            ) {
                 printf(
-                    "Kernel command line: %s\n",
-                    ((struct multiboot_tag_string *) tag)->string
+                    " base_addr = 0x%x%x, length = 0x%x%x, type = 0x%x\n",
+                    (unsigned) (mmap->addr >> 32),
+                    (unsigned) (mmap->addr & 0xffffffff),
+                    (unsigned) (mmap->len >> 32),
+                    (unsigned) (mmap->len & 0xffffffff),
+                    (unsigned) mmap->type
                 );
-                break;
-
-            case MULTIBOOT_TAG_TYPE_MODULE:
-                printf(
-                    "Module at 0x%x-0x%x, command line: %s\n",
-                    ((struct multiboot_tag_module *) tag)->mod_start,
-                    ((struct multiboot_tag_module *) tag)->mod_end,
-                    ((struct multiboot_tag_module *) tag)->cmdline
-                );
-                break;
-
-            case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
-                printf(
-                    "mem_lower = %uKB, mem_upper = %uKB\n",
-                    ((struct multiboot_tag_basic_meminfo *) tag)->mem_lower,
-                    ((struct multiboot_tag_basic_meminfo *) tag)->mem_upper
-                );
-                break;
-
-            case MULTIBOOT_TAG_TYPE_MMAP:
-            {
-                printf("Memory map:\n");
-
-                for (
-                    multiboot_memory_map_t *mmap = ((struct multiboot_tag_mmap *) tag)->entries;
-                    (unsigned char *) mmap < (unsigned char *) tag + tag->size;
-                    mmap = (multiboot_memory_map_t *)((unsigned long) mmap + ((struct multiboot_tag_mmap *) tag)->entry_size)
-                ) {
-                    printf(
-                        " base_addr = 0x%x%x, length = 0x%x%x, type = 0x%x\n",
-                        (unsigned) (mmap->addr >> 32),
-                        (unsigned) (mmap->addr & 0xffffffff),
-                        (unsigned) (mmap->len >> 32),
-                        (unsigned) (mmap->len & 0xffffffff),
-                        (unsigned) mmap->type
-                    );
-                }
             }
-                break;
         }
+            break;
     }
 }
 
