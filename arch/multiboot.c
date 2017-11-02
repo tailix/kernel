@@ -144,17 +144,17 @@ void print_multiboot_tag_mmap(const struct multiboot_tag_mmap *const tag)
     printf("Memory map:\n");
 
     for (
-        multiboot_memory_map_t *mmap = ((struct multiboot_tag_mmap *) tag)->entries;
-        (unsigned char *) mmap < (unsigned char *) tag + tag->size;
-        mmap = (multiboot_memory_map_t *)((unsigned long) mmap + ((struct multiboot_tag_mmap *) tag)->entry_size)
+        const multiboot_memory_map_t *mmap = tag->entries;
+        (unsigned char*)mmap < (unsigned char*)tag + tag->size;
+        mmap = (multiboot_memory_map_t*)((unsigned long) mmap + tag->entry_size)
     ) {
         printf(
             " base_addr = 0x%x%x, length = 0x%x%x, type = 0x%x\n",
-            (unsigned) (mmap->addr >> 32),
-            (unsigned) (mmap->addr & 0xffffffff),
-            (unsigned) (mmap->len >> 32),
-            (unsigned) (mmap->len & 0xffffffff),
-            (unsigned) mmap->type
+            (unsigned)(mmap->addr >> 32),
+            (unsigned)(mmap->addr & 0xffffffff),
+            (unsigned)(mmap->len >> 32),
+            (unsigned)(mmap->len & 0xffffffff),
+            (unsigned)mmap->type
         );
     }
 }
