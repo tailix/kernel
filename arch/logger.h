@@ -1,5 +1,5 @@
-#ifndef TAILIX_KERNEL_INCLUDED_LOGGER
-#define TAILIX_KERNEL_INCLUDED_LOGGER 1
+#ifndef KERNELMQ_INCLUDED_LOGGER
+#define KERNELMQ_INCLUDED_LOGGER 1
 
 void logger_initialize();
 void logger_info(const char *s);

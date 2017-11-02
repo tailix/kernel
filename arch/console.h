@@ -1,5 +1,5 @@
-#ifndef TAILIX_KERNEL_INCLUDED_CONSOLE
-#define TAILIX_KERNEL_INCLUDED_CONSOLE 1
+#ifndef KERNELMQ_INCLUDED_CONSOLE
+#define KERNELMQ_INCLUDED_CONSOLE 1
 
 // Hardware text mode color constants.
 enum vga_color {

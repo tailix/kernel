@@ -1,5 +1,5 @@
-#ifndef TAILIX_KERNEL_INCLUDED_UTIL
-#define TAILIX_KERNEL_INCLUDED_UTIL 1
+#ifndef KERNELMQ_INCLUDED_UTIL
+#define KERNELMQ_INCLUDED_UTIL 1
 
 static inline unsigned int strlen(const char *s);
 
