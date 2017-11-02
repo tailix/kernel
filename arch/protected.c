@@ -111,7 +111,7 @@ void idt_initialize()
 {
     logger_info("Setup IDT.");
 
-    for (unsigned char *p = (unsigned char*)idt_entries; p < (unsigned char*)&idt_entries[256]; ++p) {
+    for (unsigned char *p = (unsigned char*)idt_entries; p < (unsigned char*)&idt_entries[IDT_SIZE]; ++p) {
         *p = 0;
     }
 
@@ -150,7 +150,7 @@ void idt_initialize()
 
     logger_info("Load IDT.");
 
-    idt_pointer.limit = sizeof(struct IdtEntry) * 256 - 1;
+    idt_pointer.limit = sizeof(struct IdtEntry) * IDT_SIZE - 1;
     idt_pointer.base  = (unsigned int)&idt_entries;
 
     idt_flush((unsigned int)&idt_pointer);
