@@ -11,8 +11,7 @@ void main(struct KernelMQ_Multiboot_Info multiboot_info)
 
     logger_info("Kernel initialization started.");
 
-    gdt_initialize();
-    idt_initialize();
+    protected_initialize();
 
     asm volatile ("int $0x3");
     asm volatile ("int $0x4");
