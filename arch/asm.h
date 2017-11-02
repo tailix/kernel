@@ -1,5 +1,5 @@
-#ifndef KERNELMQ_INCLUDED_IO
-#define KERNELMQ_INCLUDED_IO 1
+#ifndef KERNELMQ_INCLUDED_ASM
+#define KERNELMQ_INCLUDED_ASM 1
 
 inline static unsigned char  inb(unsigned short port);
 inline static unsigned short inw(unsigned short port);
