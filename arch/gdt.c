@@ -1,8 +1,7 @@
 #include "gdt.h"
 
+#include "config.h"
 #include "logger.h"
-
-#define GDT_SIZE 3
 
 struct GdtPointer {
     unsigned short limit;
@@ -32,9 +31,11 @@ void gdt_initialize()
 {
     logger_info("Setup GDT.");
 
-    gdt_set_gate(0, 0, 0, 0, 0);                // Null segment
-    gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
-    gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
+    gdt_set_gate(GDT_NULL_INDEX,      0, 0x00000000, 0,    0);
+    gdt_set_gate(GDT_KERNEL_CS_INDEX, 0, 0xFFFFFFFF, 0x9A, 0xCF);
+    gdt_set_gate(GDT_KERNEL_DS_INDEX, 0, 0xFFFFFFFF, 0x92, 0xCF);
+    gdt_set_gate(GDT_USER_CS_INDEX,   0, 0xFFFFFFFF, 0xFA, 0xCF);
+    gdt_set_gate(GDT_USER_DS_INDEX,   0, 0xFFFFFFFF, 0xF2, 0xCF);
 
     logger_info("Load GDT.");
 
