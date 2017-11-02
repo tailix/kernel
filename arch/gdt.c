@@ -1,4 +1,4 @@
-#include "gdt.h"
+#include "protected.h"
 
 #include "config.h"
 #include "logger.h"

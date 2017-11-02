@@ -1,8 +1,7 @@
 #include <kernelmq/multiboot.h>
 
 #include "logger.h"
-#include "gdt.h"
-#include "idt.h"
+#include "protected.h"
 
 void main(struct KernelMQ_Multiboot_Info multiboot_info)
 {
