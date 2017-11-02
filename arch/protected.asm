@@ -1,3 +1,5 @@
+#include "config.h"
+
 [GLOBAL gdt_flush]
 [GLOBAL idt_flush]
 
@@ -5,13 +7,13 @@ gdt_flush:
     mov eax, [esp+4]
     lgdt [eax]
 
-    mov ax, 0x10
+    mov ax, GDT_KERNEL_DS_SELECTOR
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
     mov ss, ax
-    jmp 0x08:.flush
+    jmp GDT_KERNEL_CS_SELECTOR:.flush
 .flush:
     ret
 
