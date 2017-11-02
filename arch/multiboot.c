@@ -1,6 +1,7 @@
 #include <kernelmq/multiboot.h>
 
 #include "console.h"
+#include "util.h"
 
 #define MULTIBOOT_1_MAGIC 0x2BADB002
 #define MULTIBOOT_2_MAGIC 0x36d76289
@@ -156,51 +157,6 @@ void print_multiboot_tag_mmap(const struct multiboot_tag_mmap *const tag)
             (unsigned)(mmap->len & 0xffffffff),
             (unsigned)mmap->type
         );
-    }
-}
-
-void itoa(char *buf, int base, int d)
-{
-    char *p = buf;
-    char *p1, *p2;
-    unsigned long ud = d;
-    int divisor = 10;
-    /*
-     * If %d is specified and D is minus, put '-' in the head.
-     * */
-    if (base == 'd' && d < 0)
-    {
-        *p++ = '-';
-        buf++;
-        ud = -d;
-    }
-    else if (base == 'x')
-        divisor = 16;
-    /*
-     * Divide UD by DIVISOR until UD == 0.
-     * */
-    do
-    {
-        int remainder = ud % divisor;
-        *p++ = (remainder < 10) ? remainder + '0' : remainder + 'a' - 10;
-    }
-    while (ud /= divisor);
-    /*
-     * Terminate BUF.
-     * */
-    *p = 0;
-    /*
-     * Reverse BUF.
-     * */
-    p1 = buf;
-    p2 = p - 1;
-    while (p1 < p2)
-    {
-        char tmp = *p1;
-        *p1 = *p2;
-        *p2 = tmp;
-        p1++;
-        p2--;
     }
 }
 
