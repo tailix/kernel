@@ -2,6 +2,8 @@
 
 #include "logger.h"
 
+#define GDT_SIZE 3
+
 struct GdtPointer {
     unsigned short limit;
     unsigned int   base;
@@ -20,7 +22,7 @@ __attribute__((packed));
 
 static struct GdtPointer gdt_pointer;
 
-static struct GdtEntry gdt_entries[5];
+static struct GdtEntry gdt_entries[GDT_SIZE];
 
 static void gdt_set_gate(int num, unsigned int base, unsigned int limit, unsigned char access, unsigned char gran);
 
@@ -33,12 +35,10 @@ void gdt_initialize()
     gdt_set_gate(0, 0, 0, 0, 0);                // Null segment
     gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
     gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
-    gdt_set_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
-    gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
 
     logger_info("Load GDT.");
 
-    gdt_pointer.limit = sizeof(struct GdtEntry) * 5 - 1;
+    gdt_pointer.limit = sizeof(struct GdtEntry) * GDT_SIZE - 1;
     gdt_pointer.base  = (unsigned int)&gdt_entries;
 
     gdt_flush((unsigned int)&gdt_pointer);
