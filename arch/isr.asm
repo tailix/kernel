@@ -1,3 +1,5 @@
+#include "config.h"
+
 [EXTERN isr]
 
 %macro ISR_NOERRCODE 1
@@ -56,7 +58,7 @@ isr_common_stub:
    mov ax, ds ; Lower 16-bits of eax = ds.
    push eax ; save the data segment descriptor
 
-   mov ax, 0x10 ; load the kernel data segment descriptor
+   mov ax, GDT_KERNEL_DS_SELECTOR
    mov ds, ax
    mov es, ax
    mov fs, ax
