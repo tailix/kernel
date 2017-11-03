@@ -5,7 +5,7 @@ all: all-kernel all-iso
 clean: clean-iso clean-kernel
 
 all-kernel:
-	make all -C arch I=$(shell pwd)/include
+	make all -C arch
 
 clean-kernel:
 	make clean -C arch
