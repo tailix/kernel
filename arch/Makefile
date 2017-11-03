@@ -3,7 +3,11 @@ CCPREFIX = i686-elf-
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
 
-OBJS = boot.s.o main.c.o logger.c.o console.c.o isr.c.o isr.asm.cpp.o multiboot.c.o protected.asm.cpp.o protected.c.o
+OBJS = boot.s.o main.c.o
+OBJS += logger.c.o console.c.o
+OBJS += multiboot.c.o
+OBJS += isr.c.o isr.asm.cpp.o
+OBJS += protected.c.o protected.asm.cpp.o
 
 all: kernel
 
