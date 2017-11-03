@@ -40,9 +40,6 @@ static struct IdtPointer idt_pointer;
 static struct GdtEntry gdt_entries[GDT_SIZE];
 static struct IdtEntry idt_entries[IDT_SIZE];
 
-static void gdt_initialize();
-static void idt_initialize();
-
 static void gdt_set_gate(int num, unsigned int base, unsigned int limit, unsigned char access, unsigned char gran);
 
 static void idt_set_gate(unsigned char num, unsigned int base, unsigned short sel, unsigned char flags);
@@ -85,12 +82,6 @@ void isr31();
 
 void protected_initialize()
 {
-    gdt_initialize();
-    idt_initialize();
-}
-
-void gdt_initialize()
-{
     logger_info("Setup GDT.");
 
     gdt_set_gate(GDT_NULL_INDEX,      0, 0x00000000, 0,    0);
@@ -105,10 +96,7 @@ void gdt_initialize()
     gdt_pointer.base  = (unsigned int)&gdt_entries;
 
     gdt_flush(&gdt_pointer);
-}
 
-void idt_initialize()
-{
     logger_info("Setup IDT.");
 
     for (unsigned char *p = (unsigned char*)idt_entries; p < (unsigned char*)&idt_entries[IDT_SIZE]; ++p) {
