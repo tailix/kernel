@@ -7,7 +7,12 @@ void timer_initialize(unsigned int frequency)
 {
     logger_info("Initialize timer.");
 
+    const unsigned int divisor = 1193180 / frequency;
+
+    const unsigned char l = divisor & 0xFF;
+    const unsigned char h = (divisor >> 8) & 0xFF;
+
     outportb(0x43, 0x36);
-    outportb(0x40, (1193180 / frequency) & 0xFF);
-    outportb(0x40, (1193180 / frequency) >> 8);
+    outportb(0x40, l);
+    outportb(0x40, h);
 }
