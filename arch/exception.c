@@ -1,3 +1,4 @@
+#include "config.h"
 #include "logger.h"
 
 struct IsrRegisters {
@@ -44,5 +45,12 @@ static const char *const messages[] = {
 
 void exception_handler(struct IsrRegisters regs)
 {
+    if (
+        !(regs.int_no >= INT_EXCEPTION_FIRST &&
+          regs.int_no <= INT_EXCEPTION_LAST)
+    ) {
+        return;
+    }
+
     logger_warn(messages[regs.int_no]);
 }

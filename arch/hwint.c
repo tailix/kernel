@@ -1,3 +1,4 @@
+#include "config.h"
 #include "logger.h"
 
 struct IsrRegisters {
@@ -28,5 +29,14 @@ static const char *const messages[] = {
 
 void hwint_handler(struct IsrRegisters regs)
 {
-    logger_warn(messages[regs.int_no - 32]);
+    if (
+        !(regs.int_no >= INT_HWINT_FIRST &&
+          regs.int_no <= INT_HWINT_LAST)
+    ) {
+        return;
+    }
+
+    const unsigned char hwint_no = regs.int_no - INT_HWINT_FIRST;
+
+    logger_warn(messages[hwint_no]);
 }
