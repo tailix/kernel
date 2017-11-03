@@ -8,22 +8,22 @@ struct IsrRegisters {
 };
 
 static const char *const messages[] = {
-    "Unhandled hwint: 0",
-    "Unhandled hwint: 1",
-    "Unhandled hwint: 2",
-    "Unhandled hwint: 3",
-    "Unhandled hwint: 4",
-    "Unhandled hwint: 5",
-    "Unhandled hwint: 6",
-    "Unhandled hwint: 7",
-    "Unhandled hwint: 8",
-    "Unhandled hwint: 9",
-    "Unhandled hwint: 10",
-    "Unhandled hwint: 11",
-    "Unhandled hwint: 12",
-    "Unhandled hwint: 13",
-    "Unhandled hwint: 14",
-    "Unhandled hwint: 15",
+    "Unhandled hardware interrupt: 0",
+    "Unhandled hardware interrupt: 1",
+    "Unhandled hardware interrupt: 2",
+    "Unhandled hardware interrupt: 3",
+    "Unhandled hardware interrupt: 4",
+    "Unhandled hardware interrupt: 5",
+    "Unhandled hardware interrupt: 6",
+    "Unhandled hardware interrupt: 7",
+    "Unhandled hardware interrupt: 8",
+    "Unhandled hardware interrupt: 9",
+    "Unhandled hardware interrupt: 10",
+    "Unhandled hardware interrupt: 11",
+    "Unhandled hardware interrupt: 12",
+    "Unhandled hardware interrupt: 13",
+    "Unhandled hardware interrupt: 14",
+    "Unhandled hardware interrupt: 15",
 };
 
 void hwint_handler(struct IsrRegisters regs)
