@@ -42,7 +42,7 @@ static const char *const messages[] = {
     "Unhandled interrupt: 0x1F",
 };
 
-void isr(struct IsrRegisters regs)
+void exception_handler(struct IsrRegisters regs)
 {
     logger_warn(messages[regs.int_no]);
 }

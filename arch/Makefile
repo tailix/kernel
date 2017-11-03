@@ -6,8 +6,8 @@ CC = $(CCPREFIX)gcc
 OBJS = boot.s.o main.c.o
 OBJS += logger.c.o console.c.o
 OBJS += multiboot.c.o
-OBJS += isr.c.o isr.asm.cpp.o
 OBJS += protected.c.o protected.asm.cpp.o
+OBJS += exception.c.o exception.asm.cpp.o
 
 all: kernel
 
