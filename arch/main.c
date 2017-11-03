@@ -13,7 +13,7 @@ void main(struct KernelMQ_Multiboot_Info multiboot_info)
     protected_initialize();
 
     asm volatile ("int $0x3");
-    asm volatile ("int $0x4");
+    asm volatile ("int $0x24");
 
     logger_warn("Nothing to do.");
     logger_fail("Halt.");

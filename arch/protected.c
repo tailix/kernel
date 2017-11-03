@@ -3,6 +3,7 @@
 #include "config.h"
 #include "logger.h"
 #include "exception.h"
+#include "hwint.h"
 
 struct GdtPointer {
     unsigned short limit;
@@ -96,6 +97,23 @@ void protected_initialize()
     idt_set_gate(29, (unsigned int)exception_29, 0x08, 0x8E);
     idt_set_gate(30, (unsigned int)exception_30, 0x08, 0x8E);
     idt_set_gate(31, (unsigned int)exception_31, 0x08, 0x8E);
+
+    idt_set_gate(32, (unsigned int)hwint_0,  0x08, 0x8E);
+    idt_set_gate(33, (unsigned int)hwint_1,  0x08, 0x8E);
+    idt_set_gate(34, (unsigned int)hwint_2,  0x08, 0x8E);
+    idt_set_gate(35, (unsigned int)hwint_3,  0x08, 0x8E);
+    idt_set_gate(36, (unsigned int)hwint_4,  0x08, 0x8E);
+    idt_set_gate(37, (unsigned int)hwint_5,  0x08, 0x8E);
+    idt_set_gate(38, (unsigned int)hwint_6,  0x08, 0x8E);
+    idt_set_gate(39, (unsigned int)hwint_7,  0x08, 0x8E);
+    idt_set_gate(40, (unsigned int)hwint_8,  0x08, 0x8E);
+    idt_set_gate(41, (unsigned int)hwint_9,  0x08, 0x8E);
+    idt_set_gate(42, (unsigned int)hwint_10, 0x08, 0x8E);
+    idt_set_gate(43, (unsigned int)hwint_11, 0x08, 0x8E);
+    idt_set_gate(44, (unsigned int)hwint_12, 0x08, 0x8E);
+    idt_set_gate(45, (unsigned int)hwint_13, 0x08, 0x8E);
+    idt_set_gate(46, (unsigned int)hwint_14, 0x08, 0x8E);
+    idt_set_gate(47, (unsigned int)hwint_15, 0x08, 0x8E);
 
     logger_info("Load GDT.");
 
