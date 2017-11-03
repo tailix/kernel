@@ -90,13 +90,6 @@ void protected_initialize()
     gdt_set_gate(GDT_USER_CS_INDEX,   0, 0xFFFFFFFF, 0xFA, 0xCF);
     gdt_set_gate(GDT_USER_DS_INDEX,   0, 0xFFFFFFFF, 0xF2, 0xCF);
 
-    logger_info("Load GDT.");
-
-    gdt_pointer.limit = sizeof(struct GdtEntry) * GDT_SIZE - 1;
-    gdt_pointer.base  = (unsigned int)&gdt_entries;
-
-    gdt_flush(&gdt_pointer);
-
     logger_info("Setup IDT.");
 
     for (unsigned char *p = (unsigned char*)idt_entries; p < (unsigned char*)&idt_entries[IDT_SIZE]; ++p) {
@@ -135,6 +128,13 @@ void protected_initialize()
     idt_set_gate(29, (unsigned int)isr29, 0x08, 0x8E);
     idt_set_gate(30, (unsigned int)isr30, 0x08, 0x8E);
     idt_set_gate(31, (unsigned int)isr31, 0x08, 0x8E);
+
+    logger_info("Load GDT.");
+
+    gdt_pointer.limit = sizeof(struct GdtEntry) * GDT_SIZE - 1;
+    gdt_pointer.base  = (unsigned int)&gdt_entries;
+
+    gdt_flush(&gdt_pointer);
 
     logger_info("Load IDT.");
 
