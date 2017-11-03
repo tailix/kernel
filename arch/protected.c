@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "logger.h"
+#include "asm.h"
 #include "exception.h"
 #include "hwint.h"
 
@@ -51,6 +52,19 @@ void idt_flush(const struct IdtPointer *pointer);
 
 void protected_initialize()
 {
+    logger_info("Remap the IRQ table.");
+
+    outportb(0x20, 0x11);
+    outportb(0xA0, 0x11);
+    outportb(0x21, 0x20);
+    outportb(0xA1, 0x28);
+    outportb(0x21, 0x04);
+    outportb(0xA1, 0x02);
+    outportb(0x21, 0x01);
+    outportb(0xA1, 0x01);
+    outportb(0x21, 0x00);
+    outportb(0xA1, 0x00);
+
     logger_info("Setup GDT.");
 
     gdt_set_gate(GDT_NULL_INDEX,      0, 0x00000000, 0,    0);
@@ -128,6 +142,10 @@ void protected_initialize()
     idt_pointer.base  = (unsigned int)&idt_entries;
 
     idt_flush(&idt_pointer);
+
+    logger_info("Enable interrupts.");
+
+    asm volatile ("sti");
 }
 
 void gdt_set_gate(int num, unsigned int base, unsigned int limit, unsigned char access, unsigned char gran)
