@@ -47,8 +47,8 @@ static void gdt_set_gate(int num, unsigned int base, unsigned int limit, unsigne
 
 static void idt_set_gate(unsigned char num, unsigned int base, unsigned short sel, unsigned char flags);
 
-void gdt_flush(unsigned int pointer);
-void idt_flush(unsigned int pointer);
+void gdt_flush(const struct GdtPointer *pointer);
+void idt_flush(const struct IdtPointer *pointer);
 
 void isr0();
 void isr1();
@@ -104,7 +104,7 @@ void gdt_initialize()
     gdt_pointer.limit = sizeof(struct GdtEntry) * GDT_SIZE - 1;
     gdt_pointer.base  = (unsigned int)&gdt_entries;
 
-    gdt_flush((unsigned int)&gdt_pointer);
+    gdt_flush(&gdt_pointer);
 }
 
 void idt_initialize()
@@ -153,7 +153,7 @@ void idt_initialize()
     idt_pointer.limit = sizeof(struct IdtEntry) * IDT_SIZE - 1;
     idt_pointer.base  = (unsigned int)&idt_entries;
 
-    idt_flush((unsigned int)&idt_pointer);
+    idt_flush(&idt_pointer);
 }
 
 void gdt_set_gate(int num, unsigned int base, unsigned int limit, unsigned char access, unsigned char gran)
