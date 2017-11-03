@@ -11,22 +11,23 @@ hwint_%1:
     jmp hwint_common_stub
 %endmacro
 
-HWINT 0,  32
-HWINT 1,  33
-HWINT 2,  34
-HWINT 3,  35
-HWINT 4,  36
-HWINT 5,  37
-HWINT 6,  38
-HWINT 7,  39
-HWINT 8,  40
-HWINT 9,  41
-HWINT 10, 42
-HWINT 11, 43
-HWINT 12, 44
-HWINT 13, 45
-HWINT 14, 46
-HWINT 15, 47
+HWINT 0,  32 ; Programmable Interval Timer
+HWINT 1,  33 ; Keyboard
+HWINT 2,  34 ; Slave PIC
+HWINT 3,  35 ; COM 2/4
+HWINT 4,  36 ; COM 1/3
+HWINT 5,  37 ; LPT 2
+HWINT 6,  38 ; Floppy Drive Controller
+HWINT 7,  39 ; LPT 1
+
+HWINT 8,  40 ; Real Time Clock
+HWINT 9,  41 ; Master PIC
+HWINT 10, 42 ; Reserved
+HWINT 11, 43 ; Reserved
+HWINT 12, 44 ; Reserved
+HWINT 13, 45 ; Coprocessor exception
+HWINT 14, 46 ; Hard Drive Controller
+HWINT 15, 47 ; Reserved
 
 hwint_common_stub:
     pusha ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
