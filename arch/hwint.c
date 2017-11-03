@@ -1,3 +1,5 @@
+#include "hwint.h"
+
 #include "config.h"
 #include "asm.h"
 #include "logger.h"
@@ -28,6 +30,8 @@ static const char *const messages[] = {
     "Unhandled hardware interrupt: 15",
 };
 
+static hwint_handler_t handlers[INT_HWINT_COUNT] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
 void hwint_handler(struct IsrRegisters regs)
 {
     if (
@@ -49,5 +53,21 @@ void hwint_handler(struct IsrRegisters regs)
 
     const unsigned char hwint_no = regs.int_no - INT_HWINT_FIRST;
 
-    logger_warn(messages[hwint_no]);
+    const hwint_handler_t handler = handlers[hwint_no];
+
+    if (!handler) {
+        logger_warn(messages[hwint_no]);
+        return;
+    }
+
+    handler();
+}
+
+void hwint_register_handler(unsigned int int_no, hwint_handler_t handler)
+{
+    if (int_no >= INT_HWINT_COUNT) {
+        return;
+    }
+
+    handlers[int_no] = handler;
 }

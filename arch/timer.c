@@ -16,3 +16,8 @@ void timer_initialize(unsigned int frequency)
     outportb(0x40, l);
     outportb(0x40, h);
 }
+
+void timer_register_handler(timer_handler_t handler)
+{
+    hwint_register_handler(0, handler);
+}
