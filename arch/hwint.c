@@ -41,11 +41,11 @@ void hwint_handler(struct IsrRegisters regs)
 
     if (regs.int_no >= 40) { // TODO: hardcoded
         // Send reset signal to slave
-        outb(0xA0, 0x20); // TODO: hardcoded
+        outportb(0xA0, 0x20); // TODO: hardcoded
     }
 
     // Send reset signal to master
-    outb(0x20, 0x20); // TODO: hardcoded
+    outportb(0x20, 0x20); // TODO: hardcoded
 
     const unsigned char hwint_no = regs.int_no - INT_HWINT_FIRST;
 
