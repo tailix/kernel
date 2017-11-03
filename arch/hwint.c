@@ -1,4 +1,5 @@
 #include "config.h"
+#include "asm.h"
 #include "logger.h"
 
 struct IsrRegisters {
@@ -35,6 +36,16 @@ void hwint_handler(struct IsrRegisters regs)
     ) {
         return;
     }
+
+    // Send an EOI (end of interrupt) signal to the PICs
+
+    if (regs.int_no >= 40) { // TODO: hardcoded
+        // Send reset signal to slave
+        outb(0xA0, 0x20);
+    }
+
+    // Send reset signal to master
+    outb(0x20, 0x20);
 
     const unsigned char hwint_no = regs.int_no - INT_HWINT_FIRST;
 
