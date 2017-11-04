@@ -1,3 +1,21 @@
 #!/bin/sh -e
 
-cp config.mk.in config.mk
+ENV="$1"
+
+if [ -z "$ENV" ]; then
+    ENV='build'
+fi
+
+CONFIG="env/$ENV.mk"
+
+if [ ! -f "$CONFIG" ]; then
+    echo >&2 "ERROR: file "$CONFIG" does not exist"
+    exit 1
+fi
+
+if [ -f 'config.mk' ]; then
+    echo >&2 "ERROR: file 'config.mk' already exist"
+    exit 1
+fi
+
+cp "$CONFIG" 'config.mk'
