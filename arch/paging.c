@@ -26,6 +26,8 @@
 #define assert(n) if (n) {}
 #define panic()   if (1) {}
 
+void write_cr3(volatile unsigned long);
+
 static unsigned long pagedir[I386_VM_PT_ENTRIES] __attribute__((aligned(4096)));
 
 void paging_clear()
@@ -77,4 +79,11 @@ int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
     }
 
     return pde;
+}
+
+unsigned long paging_load()
+{
+    unsigned long pagedir_phys = (unsigned long)pagedir;
+    write_cr3(pagedir_phys);
+    return pagedir_phys;
 }
