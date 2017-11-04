@@ -1,8 +1,12 @@
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
 
+# Architecture-dependent
 OBJS = start.s.o
 OBJS += init.c.o
+
+# Architecture-independent
+OBJS += info.c.o
 OBJS += main.c.o
 
 OBJS += logger.c.o

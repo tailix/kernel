@@ -3,6 +3,7 @@
 #include "protected.h"
 #include "paging.h"
 #include "timer.h"
+#include "kprintf.h"
 
 #include <kernelmq/info.h>
 #include <kernelmq/stdlib.h>
@@ -17,12 +18,23 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
 
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
-    if (!kinfo_ptr) {
-        logger_fail("No kernel information. Halt.");
+    if (!kernelmq_info_validate_and_copy(&kinfo, kinfo_ptr)) {
+        logger_fail("Invalid kernel information. Halt.");
         return;
     }
 
-    kinfo = *kinfo_ptr;
+    kprintf("Kernel command line: %s\n", kinfo.cmdline);
+
+    for (unsigned int i = 0; i < kinfo.modules_count; ++i) {
+        struct KernelMQ_Info_Module *module = &kinfo.modules[i];
+
+        kprintf(
+            "Module at 0x%x, size 0x%x, command line: %s\n",
+            module->base,
+            module->size,
+            module->cmdline
+        );
+    }
 
     protected_initialize();
 
