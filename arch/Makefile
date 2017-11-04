@@ -1,8 +1,3 @@
-CCPREFIX = i686-elf-
-
-AS = $(CCPREFIX)as
-CC = $(CCPREFIX)gcc
-
 OBJS = start.s.o
 OBJS += init.c.o
 OBJS += main.c.o

@@ -1,3 +1,9 @@
+export CCPREFIX = i686-elf-
+
+export AR = $(CCPREFIX)ar
+export AS = $(CCPREFIX)as
+export CC = $(CCPREFIX)gcc
+
 run: run-iso
 
 all:     all-kernel   all-iso   all-libk
