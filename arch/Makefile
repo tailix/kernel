@@ -4,6 +4,7 @@ CC = $(CCPREFIX)gcc
 # Architecture-dependent
 OBJS = start.s.o
 OBJS += init.c.o
+OBJS += multiboot.c.o
 
 # Architecture-independent
 OBJS += info.c.o
@@ -13,7 +14,6 @@ OBJS += logger.c.o
 OBJS += console.c.o
 OBJS += kprintf.c.o
 
-OBJS += multiboot.c.o
 OBJS += kmalloc.c.o
 OBJS += paging.c.o
 
