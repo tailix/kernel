@@ -35,6 +35,7 @@ _start:
 
     mov $stack_top, %esp // Initialize stack
 
+    push %eax // Kernel information pointer
     call main
 
 halt:

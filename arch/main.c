@@ -4,11 +4,25 @@
 #include "paging.h"
 #include "timer.h"
 
+#include <kernelmq/info.h>
+#include <kernelmq/stdlib.h>
+
+static struct KernelMQ_Info kinfo;
+
 static void on_timer();
 
-void main()
+void main(const struct KernelMQ_Info *const kinfo_ptr)
 {
+    kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
+
     console_initialize();
+
+    if (!kinfo_ptr) {
+        logger_fail("No kernel information. Halt.");
+        return;
+    }
+
+    kinfo = *kinfo_ptr;
 
     protected_initialize();
 
