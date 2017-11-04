@@ -40,5 +40,7 @@ const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long mu
     /* kinfo.freepde_start = */ paging_mapkernel(&kinfo);
     paging_load();
 
+    paging_enable();
+
     return &kinfo;
 }
