@@ -26,7 +26,7 @@ _start:
     mov $stack_top, %esp
     push %ebx
     push %eax
-    call main
+    call init
     cli
 1:
     hlt

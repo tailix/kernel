@@ -5,7 +5,7 @@
 
 static void on_timer();
 
-void main(struct KernelMQ_Multiboot_Info multiboot_info)
+void init(struct KernelMQ_Multiboot_Info multiboot_info)
 {
     logger_initialize();
 
