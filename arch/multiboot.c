@@ -149,6 +149,8 @@ unsigned char print_multiboot_tag_module(struct KernelMQ_Info *kinfo, const stru
 
     ++kinfo->modules_count;
 
+    kinfo->modules_total_size += module->size;
+
     return 1;
 }
 
