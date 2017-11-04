@@ -1,7 +1,6 @@
 #include "multiboot.h"
 
-#include "console.h"
-#include "util.h"
+#include "kprintf.h"
 
 #define MULTIBOOT_1_MAGIC 0x2BADB002
 #define MULTIBOOT_2_MAGIC 0x36d76289
@@ -67,9 +66,6 @@ struct multiboot_tag_mmap
     struct multiboot_mmap_entry entries[0];
 };
 
-static void itoa(char *buf, int base, int d);
-static void printf(const char *format, ...);
-
 static void print_multiboot_tag(const struct multiboot_tag *tag);
 
 static void print_multiboot_tag_cmdline      (const struct multiboot_tag_string        *tag);
@@ -80,17 +76,17 @@ static void print_multiboot_tag_mmap         (const struct multiboot_tag_mmap   
 void print_multiboot_info(struct KernelMQ_Multiboot_Info info)
 {
     if (info.magic == MULTIBOOT_1_MAGIC) {
-        printf("Old Multiboot specification does not support modules.");
+        kprintf("Old Multiboot specification does not support modules.");
         return;
     }
 
     if (info.magic != MULTIBOOT_2_MAGIC) {
-        printf("No Multiboot-compliant bootloader is not supported.");
+        kprintf("No Multiboot-compliant bootloader is not supported.");
         return;
     }
 
     if (info.addr & 7) {
-        printf("Unaligned Multiboot information address: 0x%x\n", info.addr);
+        kprintf("Unaligned Multiboot information address: 0x%x\n", info.addr);
         return;
     }
 
@@ -127,29 +123,29 @@ void print_multiboot_tag(const struct multiboot_tag *const tag)
 
 void print_multiboot_tag_cmdline(const struct multiboot_tag_string *const tag)
 {
-    printf("Kernel command line: %s\n", tag->string);
+    kprintf("Kernel command line: %s\n", tag->string);
 }
 
 void print_multiboot_tag_module(const struct multiboot_tag_module *const tag)
 {
-    printf("Module at 0x%x-0x%x, command line: %s\n", tag->mod_start, tag->mod_end, tag->cmdline);
+    kprintf("Module at 0x%x-0x%x, command line: %s\n", tag->mod_start, tag->mod_end, tag->cmdline);
 }
 
 void print_multiboot_tag_basic_meminfo(const struct multiboot_tag_basic_meminfo *const tag)
 {
-    printf("mem_lower = %uKB, mem_upper = %uKB\n", tag->mem_lower, tag->mem_upper);
+    kprintf("mem_lower = %uKB, mem_upper = %uKB\n", tag->mem_lower, tag->mem_upper);
 }
 
 void print_multiboot_tag_mmap(const struct multiboot_tag_mmap *const tag)
 {
-    printf("Memory map:\n");
+    kprintf("Memory map:\n");
 
     for (
         const multiboot_memory_map_t *mmap = tag->entries;
         (unsigned char*)mmap < (unsigned char*)tag + tag->size;
         mmap = (multiboot_memory_map_t*)((unsigned long) mmap + tag->entry_size)
     ) {
-        printf(
+        kprintf(
             " base_addr = 0x%x%x, length = 0x%x%x, type = 0x%x\n",
             (unsigned)(mmap->addr >> 32),
             (unsigned)(mmap->addr & 0xffffffff),
@@ -157,58 +153,5 @@ void print_multiboot_tag_mmap(const struct multiboot_tag_mmap *const tag)
             (unsigned)(mmap->len & 0xffffffff),
             (unsigned)mmap->type
         );
-    }
-}
-
-void printf(const char *format, ...)
-{
-    char **arg = (char **) &format;
-    int c;
-    char buf[20];
-    arg++;
-    while ((c = *format++) != 0)
-    {
-        if (c != '%')
-            console_putc(c);
-        else
-        {
-            char *p, *p2;
-            int pad0 = 0, pad = 0;
-            c = *format++;
-            if (c == '0')
-            {
-                pad0 = 1;
-                c = *format++;
-            }
-            if (c >= '0' && c <= '9')
-            {
-                pad = c - '0';
-                c = *format++;
-            }
-            switch (c)
-            {
-                case 'd':
-                case 'u':
-                case 'x':
-                    itoa (buf, c, *((int *) arg++));
-                    p = buf;
-                    goto string;
-                    break;
-                case 's':
-                    p = *arg++;
-                    if (! p)
-                        p = "(null)";
-string:
-                    for (p2 = p; *p2; p2++);
-                    for (; p2 < p + pad; p2++)
-                        console_putc(pad0 ? '0' : ' ');
-                    while (*p)
-                        console_putc(*p++);
-                    break;
-                default:
-                    console_putc(*((int *) arg++));
-                    break;
-            }
-        }
     }
 }

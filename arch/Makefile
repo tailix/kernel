@@ -7,8 +7,9 @@ OBJS = start.s.o
 OBJS += init.c.o
 OBJS += main.c.o
 
-OBJS += logger.c.o console.c.o
+OBJS += logger.c.o console.c.o kprintf.c.o
 OBJS += multiboot.c.o
+OBJS += memory.c.o
 
 OBJS += protected.c.o protected.asm.cpp.o
 OBJS += exception.c.o exception.asm.cpp.o
