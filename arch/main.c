@@ -1,6 +1,7 @@
 #include "console.h"
 #include "logger.h"
 #include "protected.h"
+#include "paging.h"
 #include "timer.h"
 #include "kprintf.h"
 
@@ -54,6 +55,14 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
     }
 
     protected_initialize();
+
+    // Set up a new post-relocate bootstrap pagetable so that
+    // we can map in VM, and we no longer rely on pre-relocated
+    // data.
+    paging_clear();
+    paging_identity(&kinfo); // Still need 1:1 for lapic and video mem and such.
+    paging_mapkernel(&kinfo);
+    paging_load();
 
     timer_register_handler(on_timer);
     timer_initialize(50);
