@@ -13,5 +13,10 @@ const unsigned int memory_virt_base = (unsigned int)&_memory_virt_base;
 
 void print_memory_info()
 {
-    kprintf("0x%x + 0x%x = 0x%x\n", memory_phys_base, memory_offset, memory_virt_base);
+    kprintf(
+        "0x%x (phys base) + 0x%x (offset) = 0x%x (virt base)\n",
+        memory_phys_base,
+        memory_offset,
+        memory_virt_base
+    );
 }

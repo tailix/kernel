@@ -7,7 +7,7 @@ void init(struct KernelMQ_Multiboot_Info multiboot_info)
 {
     console_initialize();
 
-    logger_info("Memory info:");
+    logger_info("Virtual memory info:");
 
     print_memory_info();
 
