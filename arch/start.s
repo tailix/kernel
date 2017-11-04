@@ -21,7 +21,11 @@ stack_top:
 .section .text
 
 .global _start
+.global halt
+
 .type _start, @function
+.type halt,   @function
+
 _start:
     mov $stack_top, %esp // Initialize stack
 
@@ -33,9 +37,11 @@ _start:
 
     call main
 
+halt:
     cli
 1:
     hlt
     jmp 1b
 
 .size _start, . - _start
+.size _halt,  . - halt
