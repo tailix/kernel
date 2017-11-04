@@ -77,7 +77,7 @@ void protected_initialize()
 
     logger_info("Setup IDT.");
 
-    memset(idt_entries, 0, sizeof(idt_entries));
+    kmemset(idt_entries, 0, sizeof(idt_entries));
 
     idt_set_gate(0,  (unsigned int)exception_0,  0x08, 0x8E);
     idt_set_gate(1,  (unsigned int)exception_1,  0x08, 0x8E);

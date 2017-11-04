@@ -31,7 +31,7 @@ void console_initialize() {
 
 void console_print(const char *const s)
 {
-    console_write(s, strlen(s));
+    console_write(s, kstrlen(s));
 }
 
 void console_putc(const char c) {

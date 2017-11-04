@@ -1,4 +1,4 @@
-void itoa(char *buf, int base, int d)
+void kitoa(char *buf, int base, int d)
 {
     char *p = buf;
     char *p1, *p2;

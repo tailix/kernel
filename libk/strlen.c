@@ -1,4 +1,4 @@
-unsigned int strlen(const char *const s)
+unsigned int kstrlen(const char *const s)
 {
     unsigned int result = 0;
 

@@ -65,11 +65,11 @@ void paging_initialize()
 
     nframes = mem_end_page / 0x1000;
     frames = (unsigned int*)kmalloc(INDEX_FROM_BIT(nframes));
-    memset(frames, 0, INDEX_FROM_BIT(nframes));
+    kmemset(frames, 0, INDEX_FROM_BIT(nframes));
 
     // Let's make a page directory.
     kernel_dir = (struct page_dir*)kmalloc_a(sizeof(struct page_dir));
-    memset(kernel_dir, 0, sizeof(struct page_dir));
+    kmemset(kernel_dir, 0, sizeof(struct page_dir));
     current_dir = kernel_dir;
 
     // We need to identity map (phys addr = virt addr) from
@@ -116,7 +116,7 @@ struct page *get_page(unsigned int address, unsigned char make, struct page_dir 
     if (make) {
         unsigned int tmp;
         dir->tables[table_idx] = (struct page_table*)kmalloc_ap(sizeof(struct page_table), &tmp);
-        memset(dir->tables[table_idx], 0, 0x1000);
+        kmemset(dir->tables[table_idx], 0, 0x1000);
         dir->tables_phys[table_idx] = tmp | 0x7; // PRESENT, RW, US.
         return &dir->tables[table_idx]->pages[address%1024];
     }
