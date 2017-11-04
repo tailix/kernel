@@ -1,3 +1,4 @@
 *.o
 
 /arch/kernel
+/libk/libk.a
