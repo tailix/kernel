@@ -11,11 +11,19 @@ clean: clean-kernel clean-iso clean-libk clean-test
 
 test: run-test
 
+##########
+# Kernel #
+##########
+
 all-kernel: all-libk
 	make all -C arch
 
 clean-kernel:
 	make clean -C arch
+
+#######
+# ISO #
+#######
 
 run-iso: all-iso
 	make run -C iso
@@ -26,19 +34,25 @@ all-iso: all-kernel
 clean-iso:
 	make clean -C iso
 
+########
+# libk #
+########
+
 all-libk:
 	make all -C libk
 
 clean-libk:
 	make clean -C libk
 
-test-libk: all-test
-	make run -C test/libk
+#########
+# Tests #
+#########
 
-run-test: test-libk
+run-test: all-test
+	make run -C test
 
 all-test: all-libk
-	make all -C test/libk
+	make all -C test
 
 clean-test:
-	make clean -C test/libk
+	make clean -C test
