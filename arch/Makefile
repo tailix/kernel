@@ -28,7 +28,7 @@ clean:
 	rm -f kernel $(OBJS)
 
 kernel: $(OBJS)
-	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $(OBJS)
+	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $(OBJS) $(LIBK)
 	grub-file --is-x86-multiboot2 $@
 
 %.c.o: %.c

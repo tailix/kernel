@@ -1,11 +1,10 @@
 run: run-iso
 
-all: all-kernel all-iso
+all:     all-kernel   all-iso   all-libk
+clean: clean-kernel clean-iso clean-libk
 
-clean: clean-iso clean-kernel
-
-all-kernel:
-	make all -C arch
+all-kernel: all-libk
+	make all -C arch LIBK=$(shell pwd)/libk/libk.a
 
 clean-kernel:
 	make clean -C arch
@@ -18,3 +17,9 @@ all-iso: all-kernel
 
 clean-iso:
 	make clean -C iso
+
+all-libk:
+	make all -C libk
+
+clean-libk:
+	make clean -C libk
