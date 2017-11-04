@@ -3,7 +3,7 @@ CCPREFIX = i686-elf-
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
 
-OBJS = boot.s.o
+OBJS = start.s.o
 OBJS += main.c.o
 
 OBJS += logger.c.o console.c.o
