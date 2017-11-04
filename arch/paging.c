@@ -46,7 +46,6 @@
 
 // TODO: implement this
 #define assert(n) if (n) {}
-#define panic()   if (1) {}
 
 unsigned long read_cr0();
 unsigned long read_cr4();
