@@ -7,7 +7,7 @@ extern char _memory_offset;
 extern char _memory_phys_base;
 extern char _memory_virt_base;
 
-const unsigned int memory_offset = (unsigned int)&_memory_offset;
+const unsigned int memory_offset    = (unsigned int)&_memory_offset;
 const unsigned int memory_phys_base = (unsigned int)&_memory_phys_base;
 const unsigned int memory_virt_base = (unsigned int)&_memory_virt_base;
 
