@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+cp config.mk.in config.mk

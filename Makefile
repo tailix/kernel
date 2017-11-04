@@ -1,4 +1,4 @@
-export CCPREFIX = i686-elf-
+include config.mk
 
 run: run-iso
 

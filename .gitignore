@@ -1,4 +1,6 @@
 *.o
 
+/config.mk
+
 /arch/kernel
 /libk/libk.a
