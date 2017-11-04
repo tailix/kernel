@@ -1,8 +1,18 @@
 #ifndef KERNELMQ_INCLUDED_UTIL
 #define KERNELMQ_INCLUDED_UTIL 1
 
+static inline void memset(void *buffer, unsigned char value, unsigned int size);
 static inline unsigned int strlen(const char *s);
 static inline void itoa(char *buf, int base, int d);
+
+void memset(void *buffer, unsigned char value, unsigned int size)
+{
+    const unsigned char *end = buffer + size;
+
+    for (unsigned char *p = buffer; p < end; ++p) {
+        *p = value;
+    }
+}
 
 unsigned int strlen(const char *const s)
 {

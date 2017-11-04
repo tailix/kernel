@@ -1,14 +1,15 @@
 #include "logger.h"
 #include "protected.h"
+#include "paging.h"
 #include "timer.h"
 
 static void on_timer();
 
 void main()
 {
-    logger_info("Kernel initialization started.");
-
     protected_initialize();
+
+    // paging_initialize();
 
     timer_register_handler(on_timer);
     timer_initialize(50);

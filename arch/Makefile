@@ -7,9 +7,13 @@ OBJS = start.s.o
 OBJS += init.c.o
 OBJS += main.c.o
 
-OBJS += logger.c.o console.c.o kprintf.c.o
+OBJS += logger.c.o
+OBJS += console.c.o
+OBJS += kprintf.c.o
+
 OBJS += multiboot.c.o
 OBJS += memory.c.o
+OBJS += kmalloc.c.o
 OBJS += paging.c.o
 
 OBJS += protected.c.o protected.asm.cpp.o
