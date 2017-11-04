@@ -1,4 +1,3 @@
-#include "console.h"
 #include "multiboot.h"
 
 #include <kernelmq/info.h>
@@ -18,8 +17,6 @@ const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long mu
     }
 
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
-
-    console_initialize();
 
     if (!multiboot_parse(&kinfo, multiboot_info_addr)) {
         return 0;

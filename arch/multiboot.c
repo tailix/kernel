@@ -1,7 +1,5 @@
 #include "multiboot.h"
 
-#include "kprintf.h"
-
 #include <kernelmq/stdlib.h>
 
 #define MULTIBOOT_TAG_TYPE_END           0
@@ -126,8 +124,6 @@ unsigned char print_multiboot_tag_cmdline(struct KernelMQ_Info *kinfo, const str
 
     kstrncpy(kinfo->cmdline, tag->string, length);
 
-    kprintf("Kernel command line: %s\n", tag->string);
-
     return 1;
 }
 
@@ -153,8 +149,6 @@ unsigned char print_multiboot_tag_module(struct KernelMQ_Info *kinfo, const stru
 
     ++kinfo->modules_count;
 
-    kprintf("Module at 0x%x-0x%x, command line: %s\n", tag->mod_start, tag->mod_end, tag->cmdline);
-
     return 1;
 }
 
@@ -168,15 +162,11 @@ unsigned char print_multiboot_tag_basic_meminfo(struct KernelMQ_Info *kinfo, con
     kinfo->mem_upper_size  = tag->mem_upper * 1024;
     kinfo->mem_upper_limit = kinfo->mem_upper_base + kinfo->mem_upper_size - 1;
 
-    kprintf("mem_lower = %uKB, mem_upper = %uKB\n", tag->mem_lower, tag->mem_upper);
-
     return 1;
 }
 
 unsigned char print_multiboot_tag_mmap(struct KernelMQ_Info *kinfo, const struct multiboot_tag_mmap *const tag)
 {
-    kprintf("Memory map:\n");
-
     for (
         const multiboot_memory_map_t *mmap = tag->entries;
         (unsigned char*)mmap < (unsigned char*)tag + tag->size;
@@ -195,15 +185,6 @@ unsigned char print_multiboot_tag_mmap(struct KernelMQ_Info *kinfo, const struct
         area->is_available = mmap->type == MULTIBOOT_MEMORY_AVAILABLE;
 
         ++kinfo->areas_count;
-
-        kprintf(
-            " base_addr = 0x%x%x, length = 0x%x%x, type = 0x%x\n",
-            (unsigned)(mmap->addr >> 32),
-            (unsigned)(mmap->addr & 0xffffffff),
-            (unsigned)(mmap->len >> 32),
-            (unsigned)(mmap->len & 0xffffffff),
-            (unsigned)mmap->type
-        );
     }
 
     return 1;

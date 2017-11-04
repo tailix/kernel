@@ -1,3 +1,4 @@
+#include "console.h"
 #include "logger.h"
 #include "protected.h"
 #include "paging.h"
@@ -12,6 +13,8 @@ static void on_timer();
 
 void main(const struct KernelMQ_Info *const kinfo_ptr)
 {
+    console_initialize();
+
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
     if (!kinfo_ptr) {
