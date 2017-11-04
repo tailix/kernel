@@ -23,9 +23,10 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
-    mov $stack_top, %esp
-    push %ebx
-    push %eax
+    mov $stack_top, %esp // Initialize stack
+
+    push %ebx // Multiboot information pointer
+    push %eax // Multiboot magic number
     call init
     cli
 1:
