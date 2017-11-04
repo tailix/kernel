@@ -15,4 +15,4 @@ run-%.bin: %.bin
 	@./$< && echo "[ OK ] $*" || echo "[FAIL] $*"
 
 %.bin: %.c
-	$(CC) $< -o $@ $(CFLAGS) -I "$(I)" "$(LIBK)"
+	$(CC) $< -o $@ $(CFLAGS) -I "$(INCLUDE)" "$(LIBK)"
