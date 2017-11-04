@@ -1,3 +1,6 @@
+AR = $(CCPREFIX)ar
+CC = $(CCPREFIX)gcc
+
 CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
 
 OUTPUT = libk.a
