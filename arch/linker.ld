@@ -8,7 +8,7 @@ _kernel_virt_base = (_kernel_phys_base + _kernel_offset);
 
 SECTIONS
 {
-    . = 1M;
+    . = _kernel_phys_base;
 
     .text BLOCK(4K) : ALIGN(4K)
     {
