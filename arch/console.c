@@ -16,6 +16,8 @@ static unsigned char vga_entry_color(enum vga_color fg, enum vga_color bg);
 static unsigned short vga_entry(unsigned char uc, unsigned char color);
 static void console_putentryat(char c, unsigned char color, unsigned int x, unsigned int y);
 
+static void console_scroll();
+
 void console_initialize() {
     console_row = 0;
     console_column = 0;
@@ -38,8 +40,9 @@ void console_putc(const char c) {
     if (c == '\n') {
         console_column = 0;
 
-        if (++console_row == console_height) {
-            console_row = 0;
+        if (++console_row >= console_height) {
+            console_row = console_height - 1;
+            console_scroll();
         }
 
         return;
@@ -47,11 +50,12 @@ void console_putc(const char c) {
 
     console_putentryat(c, console_color, console_column, console_row);
 
-    if (++console_column == console_width) {
+    if (++console_column >= console_width) {
         console_column = 0;
 
-        if (++console_row == console_height) {
-            console_row = 0;
+        if (++console_row >= console_height) {
+            console_row = console_height - 1;
+            console_scroll();
         }
     }
 }
@@ -83,4 +87,17 @@ unsigned short vga_entry(unsigned char uc, unsigned char color) {
 void console_putentryat(char c, unsigned char color, unsigned int x, unsigned int y) {
     const unsigned int index = y * console_width + x;
     console_buffer[index] = vga_entry(c, color);
+}
+
+void console_scroll()
+{
+    for (unsigned int row = 1; row < console_height; ++row) {
+        for (unsigned int col = 0; col < console_width; ++col) {
+            console_buffer[(row - 1) * console_width + col] = console_buffer[row * console_width + col];
+        }
+    }
+
+    for(unsigned int col = 0; col < console_width; ++col) {
+        console_buffer[(console_height - 1) * console_width + col] = ' ';
+    }
 }
