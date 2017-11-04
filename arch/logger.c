@@ -2,11 +2,6 @@
 
 #include "console.h"
 
-void logger_initialize()
-{
-    console_initialize();
-}
-
 void logger_info(const char *const s)
 {
     console_setcolor(VGA_COLOR_LIGHT_GREY);

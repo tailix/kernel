@@ -1,9 +1,9 @@
 #include "multiboot.h"
-#include "logger.h"
+#include "console.h"
 
 void init(struct KernelMQ_Multiboot_Info multiboot_info)
 {
-    logger_initialize();
+    console_initialize();
 
     print_multiboot_info(multiboot_info);
 }
