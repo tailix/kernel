@@ -5,7 +5,8 @@
 #include "asm.h"
 #include "exception.h"
 #include "hwint.h"
-#include "util.h"
+
+#include <kernelmq/stdlib.h>
 
 struct GdtPointer {
     unsigned short limit;

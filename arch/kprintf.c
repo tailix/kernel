@@ -1,7 +1,8 @@
 #include "kprintf.h"
 
 #include "console.h"
-#include "util.h"
+
+#include <kernelmq/stdlib.h>
 
 void kprintf(const char *format, ...)
 {

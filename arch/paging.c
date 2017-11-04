@@ -2,7 +2,8 @@
 
 #include "logger.h"
 #include "kmalloc.h"
-#include "util.h"
+
+#include <kernelmq/stdlib.h>
 
 #define PAGES_PER_TABLE 1024
 #define TABLES_PER_DIR  1024

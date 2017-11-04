@@ -10,7 +10,7 @@ all:     all-kernel   all-iso   all-libk
 clean: clean-kernel clean-iso clean-libk
 
 all-kernel: all-libk
-	make all -C arch LIBK=$(shell pwd)/libk/libk.a
+	make all -C arch I=$(shell pwd)/include LIBK=$(shell pwd)/libk/libk.a
 
 clean-kernel:
 	make clean -C arch

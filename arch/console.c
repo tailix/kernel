@@ -1,6 +1,6 @@
 #include "console.h"
 
-#include "util.h"
+#include <kernelmq/stdlib.h>
 
 static unsigned short *const console_buffer = (unsigned short*)0xB8000;
 
