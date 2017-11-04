@@ -1,4 +1,4 @@
-#include "kprintf.h"
+#include "multiboot.h"
 
 #define MULTIBOOT_TAG_TYPE_END           0
 #define MULTIBOOT_TAG_TYPE_CMDLINE       1
@@ -68,8 +68,17 @@ static void print_multiboot_tag_module       (const struct multiboot_tag_module 
 static void print_multiboot_tag_basic_meminfo(const struct multiboot_tag_basic_meminfo *tag);
 static void print_multiboot_tag_mmap         (const struct multiboot_tag_mmap          *tag);
 
-void print_multiboot_info(unsigned long addr)
+unsigned char multiboot_parse(struct KernelMQ_Info *kinfo, unsigned long addr)
 {
+    if (!kinfo) {
+        return 0;
+    }
+
+    // Unaligned address
+    if (addr & 7) {
+        return 0;
+    }
+
     for (
         struct multiboot_tag *tag = (struct multiboot_tag*)(addr + 8);
         tag->type != MULTIBOOT_TAG_TYPE_END;
@@ -77,6 +86,8 @@ void print_multiboot_info(unsigned long addr)
     ) {
         print_multiboot_tag(tag);
     }
+
+    return 1;
 }
 
 void print_multiboot_tag(const struct multiboot_tag *const tag)

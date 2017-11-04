@@ -1,7 +1,8 @@
+#include "console.h"
+#include "multiboot.h"
+
 #include <kernelmq/info.h>
 #include <kernelmq/stdlib.h>
-
-#define MULTIBOOT_MAGIC 0x36d76289
 
 // Defined in linker script
 extern char _kernel_offset;
@@ -16,12 +17,13 @@ const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long mu
         return 0;
     }
 
-    // Unaligned address
-    if (multiboot_info_addr & 7) {
+    kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
+
+    console_initialize();
+
+    if (!multiboot_parse(&kinfo, multiboot_info_addr)) {
         return 0;
     }
-
-    kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
     kinfo.kernel_offset = (unsigned long)&_kernel_offset;
 
