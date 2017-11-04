@@ -14,9 +14,6 @@ OBJS += logger.c.o
 OBJS += console.c.o
 OBJS += kprintf.c.o
 
-OBJS += kmalloc.c.o
-OBJS += paging.c.o
-
 OBJS += protected.c.o protected.asm.cpp.o
 OBJS += exception.c.o exception.asm.cpp.o
 OBJS += hwint.c.o     hwint.asm.cpp.o

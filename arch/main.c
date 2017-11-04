@@ -1,7 +1,6 @@
 #include "console.h"
 #include "logger.h"
 #include "protected.h"
-#include "paging.h"
 #include "timer.h"
 #include "kprintf.h"
 
@@ -55,8 +54,6 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
     }
 
     protected_initialize();
-
-    // paging_initialize();
 
     timer_register_handler(on_timer);
     timer_initialize(50);
