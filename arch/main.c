@@ -25,6 +25,24 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
 
     kprintf("Kernel command line: %s\n", kinfo.cmdline);
 
+    kprintf(
+        "Kernel phys base 0x%x, limit 0x%x\n",
+        kinfo.kernel_phys_base,
+        kinfo.kernel_phys_limit
+    );
+
+    kprintf(
+        "Kernel virt base 0x%x, limit 0x%x\n",
+        kinfo.kernel_virt_base,
+        kinfo.kernel_virt_limit
+    );
+
+    kprintf(
+        "Kernel size 0x%x, offset 0x%x\n",
+        kinfo.kernel_size,
+        kinfo.kernel_offset
+    );
+
     for (unsigned int i = 0; i < kinfo.modules_count; ++i) {
         struct KernelMQ_Info_Module *module = &kinfo.modules[i];
 

@@ -5,6 +5,7 @@
 
 // Defined in linker script
 extern char _kernel_offset;
+extern char _kernel_size;
 extern char _kernel_phys_base;
 extern char _kernel_virt_base;
 
@@ -23,9 +24,13 @@ const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long mu
     }
 
     kinfo.kernel_offset = (unsigned long)&_kernel_offset;
+    kinfo.kernel_size   = (unsigned long)&_kernel_size;
 
     kinfo.kernel_phys_base = (unsigned long)&_kernel_phys_base;
     kinfo.kernel_virt_base = (unsigned long)&_kernel_virt_base;
+
+    kinfo.kernel_phys_limit = kinfo.kernel_phys_base + kinfo.kernel_size - 1;
+    kinfo.kernel_virt_limit = kinfo.kernel_virt_base + kinfo.kernel_size - 1;
 
     return &kinfo;
 }

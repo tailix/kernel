@@ -31,4 +31,6 @@ SECTIONS
         *(COMMON)
         *(.bss)
     }
+
+    _kernel_size = .;
 }
