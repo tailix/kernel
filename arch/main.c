@@ -1,3 +1,4 @@
+#include "console.h"
 #include "logger.h"
 #include "protected.h"
 #include "paging.h"
@@ -7,6 +8,8 @@ static void on_timer();
 
 void main()
 {
+    console_initialize();
+
     protected_initialize();
 
     // paging_initialize();
