@@ -1,4 +1,5 @@
 #include "multiboot.h"
+#include "paging.h"
 
 #include <kernelmq/info.h>
 #include <kernelmq/stdlib.h>
@@ -33,6 +34,11 @@ const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long mu
     kinfo.kernel_virt_limit = kinfo.kernel_virt_base + kinfo.kernel_size - 1;
 
     kinfo.kernel_and_modules_total_size = kinfo.kernel_size + kinfo.modules_total_size;
+
+    paging_clear();
+    paging_identity(&kinfo);
+    /* kinfo.freepde_start = */ paging_mapkernel(&kinfo);
+    paging_load();
 
     return &kinfo;
 }
