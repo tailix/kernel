@@ -2,7 +2,7 @@ CC = $(CCPREFIX)gcc
 
 CFLAGS = -std=gnu99 -Wall -Wextra
 
-BINS = strlen.bin
+BINS = strlen.bin memset.bin
 
 run: all $(addprefix run-, $(BINS))
 
