@@ -61,12 +61,12 @@ struct multiboot_tag_mmap
     struct multiboot_mmap_entry entries[0];
 };
 
-static void print_multiboot_tag(const struct multiboot_tag *tag);
+static void print_multiboot_tag(struct KernelMQ_Info *kinfo, const struct multiboot_tag *tag);
 
-static void print_multiboot_tag_cmdline      (const struct multiboot_tag_string        *tag);
-static void print_multiboot_tag_module       (const struct multiboot_tag_module        *tag);
-static void print_multiboot_tag_basic_meminfo(const struct multiboot_tag_basic_meminfo *tag);
-static void print_multiboot_tag_mmap         (const struct multiboot_tag_mmap          *tag);
+static void print_multiboot_tag_cmdline      (struct KernelMQ_Info *kinfo, const struct multiboot_tag_string        *tag);
+static void print_multiboot_tag_module       (struct KernelMQ_Info *kinfo, const struct multiboot_tag_module        *tag);
+static void print_multiboot_tag_basic_meminfo(struct KernelMQ_Info *kinfo, const struct multiboot_tag_basic_meminfo *tag);
+static void print_multiboot_tag_mmap         (struct KernelMQ_Info *kinfo, const struct multiboot_tag_mmap          *tag);
 
 unsigned char multiboot_parse(struct KernelMQ_Info *kinfo, unsigned long addr)
 {
@@ -84,50 +84,50 @@ unsigned char multiboot_parse(struct KernelMQ_Info *kinfo, unsigned long addr)
         tag->type != MULTIBOOT_TAG_TYPE_END;
         tag = (struct multiboot_tag*)((unsigned char*)tag + ((tag->size + 7) & ~7))
     ) {
-        print_multiboot_tag(tag);
+        print_multiboot_tag(kinfo, tag);
     }
 
     return 1;
 }
 
-void print_multiboot_tag(const struct multiboot_tag *const tag)
+void print_multiboot_tag(struct KernelMQ_Info *kinfo, const struct multiboot_tag *const tag)
 {
     switch (tag->type)
     {
         case MULTIBOOT_TAG_TYPE_CMDLINE:
-            print_multiboot_tag_cmdline((struct multiboot_tag_string*)tag);
+            print_multiboot_tag_cmdline(kinfo, (struct multiboot_tag_string*)tag);
             break;
 
         case MULTIBOOT_TAG_TYPE_MODULE:
-            print_multiboot_tag_module((struct multiboot_tag_module*)tag);
+            print_multiboot_tag_module(kinfo, (struct multiboot_tag_module*)tag);
             break;
 
         case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
-            print_multiboot_tag_basic_meminfo((struct multiboot_tag_basic_meminfo*)tag);
+            print_multiboot_tag_basic_meminfo(kinfo, (struct multiboot_tag_basic_meminfo*)tag);
             break;
 
         case MULTIBOOT_TAG_TYPE_MMAP:
-            print_multiboot_tag_mmap((struct multiboot_tag_mmap*)tag);
+            print_multiboot_tag_mmap(kinfo, (struct multiboot_tag_mmap*)tag);
             break;
     }
 }
 
-void print_multiboot_tag_cmdline(const struct multiboot_tag_string *const tag)
+void print_multiboot_tag_cmdline(struct KernelMQ_Info *kinfo, const struct multiboot_tag_string *const tag)
 {
     kprintf("Kernel command line: %s\n", tag->string);
 }
 
-void print_multiboot_tag_module(const struct multiboot_tag_module *const tag)
+void print_multiboot_tag_module(struct KernelMQ_Info *kinfo, const struct multiboot_tag_module *const tag)
 {
     kprintf("Module at 0x%x-0x%x, command line: %s\n", tag->mod_start, tag->mod_end, tag->cmdline);
 }
 
-void print_multiboot_tag_basic_meminfo(const struct multiboot_tag_basic_meminfo *const tag)
+void print_multiboot_tag_basic_meminfo(struct KernelMQ_Info *kinfo, const struct multiboot_tag_basic_meminfo *const tag)
 {
     kprintf("mem_lower = %uKB, mem_upper = %uKB\n", tag->mem_lower, tag->mem_upper);
 }
 
-void print_multiboot_tag_mmap(const struct multiboot_tag_mmap *const tag)
+void print_multiboot_tag_mmap(struct KernelMQ_Info *kinfo, const struct multiboot_tag_mmap *const tag)
 {
     kprintf("Memory map:\n");
 
