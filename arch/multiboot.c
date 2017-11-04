@@ -1,9 +1,4 @@
-#include "multiboot.h"
-
 #include "kprintf.h"
-
-#define MULTIBOOT_1_MAGIC 0x2BADB002
-#define MULTIBOOT_2_MAGIC 0x36d76289
 
 #define MULTIBOOT_TAG_TYPE_END           0
 #define MULTIBOOT_TAG_TYPE_CMDLINE       1
@@ -73,25 +68,10 @@ static void print_multiboot_tag_module       (const struct multiboot_tag_module 
 static void print_multiboot_tag_basic_meminfo(const struct multiboot_tag_basic_meminfo *tag);
 static void print_multiboot_tag_mmap         (const struct multiboot_tag_mmap          *tag);
 
-void print_multiboot_info(struct KernelMQ_Multiboot_Info info)
+void print_multiboot_info(unsigned long addr)
 {
-    if (info.magic == MULTIBOOT_1_MAGIC) {
-        kprintf("Old Multiboot specification does not support modules.");
-        return;
-    }
-
-    if (info.magic != MULTIBOOT_2_MAGIC) {
-        kprintf("No Multiboot-compliant bootloader is not supported.");
-        return;
-    }
-
-    if (info.addr & 7) {
-        kprintf("Unaligned Multiboot information address: 0x%x\n", info.addr);
-        return;
-    }
-
     for (
-        struct multiboot_tag *tag = (struct multiboot_tag*)(info.addr + sizeof(struct KernelMQ_Multiboot_Info));
+        struct multiboot_tag *tag = (struct multiboot_tag*)(addr + 8);
         tag->type != MULTIBOOT_TAG_TYPE_END;
         tag = (struct multiboot_tag*)((unsigned char*)tag + ((tag->size + 7) & ~7))
     ) {
