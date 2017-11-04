@@ -5,6 +5,7 @@ CC = $(CCPREFIX)gcc
 
 OBJS = start.s.o
 OBJS += init.c.o
+OBJS += main.c.o
 
 OBJS += logger.c.o console.c.o
 OBJS += multiboot.c.o

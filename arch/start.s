@@ -28,6 +28,11 @@ _start:
     push %ebx // Multiboot information pointer
     push %eax // Multiboot magic number
     call init
+
+    mov $stack_top, %esp // Initialize stack
+
+    call main
+
     cli
 1:
     hlt
