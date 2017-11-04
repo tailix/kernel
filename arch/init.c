@@ -3,6 +3,10 @@
 #include "multiboot.h"
 #include "memory.h"
 
+#include <kernelmq/info.h>
+
+static struct KernelMQ_Info kinfo;
+
 void init(struct KernelMQ_Multiboot_Info multiboot_info)
 {
     console_initialize();
