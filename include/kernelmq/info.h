@@ -24,9 +24,9 @@ struct KernelMQ_Info_Module {
 };
 
 struct KernelMQ_Info_Area {
-    unsigned long base;
-    unsigned long size;
-    unsigned long limit;
+    unsigned long long base;
+    unsigned long long size;
+    unsigned long long limit;
 
     unsigned char is_available;
 };

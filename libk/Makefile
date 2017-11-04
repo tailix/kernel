@@ -5,7 +5,7 @@ CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -
 
 OUTPUT = libk.a
 
-OBJS = memset.o strlen.o itoa.o
+OBJS = memset.o strlen.o itoa.o strncpy.o
 
 all: $(OUTPUT)
 
