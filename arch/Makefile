@@ -5,6 +5,7 @@ CC = $(CCPREFIX)gcc
 OBJS = start.s.o
 OBJS += init.c.o
 OBJS += multiboot.c.o
+OBJS += memory.c.o
 OBJS += paging.c.o paging.asm.cpp.o
 
 # Architecture-independent
