@@ -22,31 +22,6 @@ unsigned char kernelmq_info_validate_and_copy(
         return 0;
     }
 
-    // TODO: architecture-dependent
-    if (src->mem_lower_base != KERNELMQ_INFO_MEM_LOWER_BASE) {
-        return 0;
-    }
-
-    // TODO: architecture-dependent
-    if (src->mem_upper_base != KERNELMQ_INFO_MEM_UPPER_BASE) {
-        return 0;
-    }
-
-    // TODO: architecture-dependent
-    if (src->mem_lower_size == 0) {
-        return 0;
-    }
-
-    // TODO: architecture-dependent
-    if (src->mem_upper_size == 0) {
-        return 0;
-    }
-
-    // TODO: architecture-dependent
-    if (src->mem_lower_size > KERNELMQ_INFO_MEM_LOWER_SIZE_MAX) {
-        return 0;
-    }
-
     if (src->mem_lower_base + src->mem_lower_size != src->mem_lower_limit + 1) {
         return 0;
     }

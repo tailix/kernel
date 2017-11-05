@@ -13,6 +13,9 @@
 #define MULTIBOOT_MEMORY_ACPI_RECLAIMABLE 3
 #define MULTIBOOT_MEMORY_NVS              4
 
+#define MEM_LOWER_BASE ((unsigned long)0)
+#define MEM_UPPER_BASE ((unsigned long)(1 * 1024 * 1024 * 1024)) // 1 MB
+
 struct multiboot_mmap_entry
 {
     unsigned long long addr;
@@ -156,11 +159,11 @@ unsigned char print_multiboot_tag_module(struct KernelMQ_Info *kinfo, const stru
 
 unsigned char print_multiboot_tag_basic_meminfo(struct KernelMQ_Info *kinfo, const struct multiboot_tag_basic_meminfo *const tag)
 {
-    kinfo->mem_lower_base  = KERNELMQ_INFO_MEM_LOWER_BASE;
+    kinfo->mem_lower_base  = MEM_LOWER_BASE;
     kinfo->mem_lower_size  = tag->mem_lower * 1024;
     kinfo->mem_lower_limit = kinfo->mem_lower_base + kinfo->mem_lower_size - 1;
 
-    kinfo->mem_upper_base  = KERNELMQ_INFO_MEM_UPPER_BASE;
+    kinfo->mem_upper_base  = MEM_UPPER_BASE;
     kinfo->mem_upper_size  = tag->mem_upper * 1024;
     kinfo->mem_upper_limit = kinfo->mem_upper_base + kinfo->mem_upper_size - 1;
 

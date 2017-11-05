@@ -10,14 +10,6 @@ extern "C" {
 #define KERNELMQ_INFO_MODULES_MAX 20
 #define KERNELMQ_INFO_AREAS_MAX 20
 
-// TODO: architecture-dependent
-#define KERNELMQ_INFO_MEM_LOWER_BASE ((unsigned long)0)
-// TODO: architecture-dependent
-#define KERNELMQ_INFO_MEM_UPPER_BASE ((unsigned long)(1 * 1024 * 1024 * 1024)) // 1 MB
-
-// TODO: architecture-dependent
-#define KERNELMQ_INFO_MEM_LOWER_SIZE_MAX ((unsigned long)(640 * 1024)) // 640 KB
-
 struct KernelMQ_Info_Module {
     unsigned long base;
     unsigned long size;
