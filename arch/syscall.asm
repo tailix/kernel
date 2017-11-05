@@ -7,6 +7,9 @@
 syscall_gate:
     cli
 
+    push byte 0
+    push byte INT_SYSCALL
+
     pusha ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
 
     mov ax, ds ; Lower 16-bits of eax = ds.
@@ -27,6 +30,8 @@ syscall_gate:
     mov gs, ax
 
     popa                     ; Pops edi,esi,ebp...
+
+    add esp, 8 ; Cleans up the pushed error code and pushed ISR number
 
     sti
     iret ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
