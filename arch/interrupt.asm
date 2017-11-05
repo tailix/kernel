@@ -20,10 +20,10 @@ interrupt_%2:
 %macro INTERRUPT_COMMON 1
 [EXTERN %1_handler]
 %1_wrapper:
-    pusha ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
+    pushad
 
     mov ax, ds ; Lower 16-bits of eax = ds.
-    push eax ; save the data segment descriptor
+    push dword eax ; save the data segment descriptor
 
     mov ax, GDT_KERNEL_DS_SELECTOR
     mov ds, ax
@@ -33,13 +33,14 @@ interrupt_%2:
 
     call %1_handler
 
-    pop eax ; reload the original data segment descriptor
+    pop dword eax ; reload the original data segment descriptor
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
 
-    popa                     ; Pops edi,esi,ebp...
+    popad
+
     add esp, 8 ; Cleans up the pushed error code and pushed ISR number
     sti
     iret ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
