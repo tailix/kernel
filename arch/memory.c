@@ -45,6 +45,32 @@ unsigned long memory_alloc_page()
     return 0;
 }
 
+unsigned long memory_alloc_big_page()
+{
+    unsigned int start = 0;
+
+    for (unsigned int i = 0; i < FRAMES_COUNT; ++i) {
+        if (frames[i]) {
+            start = i + 1;
+            continue;
+        }
+
+        if (start % (PAGE_BIG_SIZE / PAGE_SIZE)) {
+            continue;
+        }
+
+        if (i - start + 1 == PAGE_BIG_SIZE / PAGE_SIZE) {
+            for (unsigned int j = start; j <= i; ++j) {
+                frames[j] = 0xFF;
+            }
+
+            return start * PAGE_SIZE;
+        }
+    }
+
+    return 0;
+}
+
 void memory_free_page(const unsigned long addr)
 {
     const unsigned long i = addr / PAGE_SIZE;
@@ -54,6 +80,16 @@ void memory_free_page(const unsigned long addr)
     }
 
     frames[i] = 0;
+}
+
+void memory_free_big_page(const unsigned long addr)
+{
+    const unsigned long start = addr / PAGE_SIZE;
+    const unsigned long end   = start + PAGE_BIG_SIZE / PAGE_SIZE;
+
+    for (unsigned int i = start; i <= end && i < FRAMES_COUNT; ++i) {
+        frames[i] = 0;
+    }
 }
 
 void mark_used(const unsigned long base, const unsigned long limit)
