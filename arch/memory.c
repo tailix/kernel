@@ -45,6 +45,17 @@ unsigned long memory_alloc_page()
     return 0;
 }
 
+void memory_free_page(const unsigned long addr)
+{
+    const unsigned long i = addr / PAGE_SIZE;
+
+    if (i >= FRAMES_COUNT) {
+        return;
+    }
+
+    frames[i] = 0;
+}
+
 void mark_used(const unsigned long base, const unsigned long limit)
 {
     const unsigned int start = base  / PAGE_SIZE;
