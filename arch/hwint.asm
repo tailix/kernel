@@ -1,55 +1,25 @@
 #include "config.h"
 
+%include "interrupt.asm"
+
 [EXTERN hwint_handler]
 
-%macro HWINT 2
-[GLOBAL hwint_%1]
-hwint_%1:
-    cli
-    push byte 0
-    push byte %2
-    jmp hwint_common_stub
-%endmacro
+INTERRUPT_NOERRCODE 32 ; Programmable Interval Timer
+INTERRUPT_NOERRCODE 33 ; Keyboard
+INTERRUPT_NOERRCODE 34 ; Slave PIC
+INTERRUPT_NOERRCODE 35 ; COM 2/4
+INTERRUPT_NOERRCODE 36 ; COM 1/3
+INTERRUPT_NOERRCODE 37 ; LPT 2
+INTERRUPT_NOERRCODE 38 ; Floppy Drive Controller
+INTERRUPT_NOERRCODE 39 ; LPT 1
 
-HWINT 0,  32 ; Programmable Interval Timer
-HWINT 1,  33 ; Keyboard
-HWINT 2,  34 ; Slave PIC
-HWINT 3,  35 ; COM 2/4
-HWINT 4,  36 ; COM 1/3
-HWINT 5,  37 ; LPT 2
-HWINT 6,  38 ; Floppy Drive Controller
-HWINT 7,  39 ; LPT 1
+INTERRUPT_NOERRCODE 40 ; Real Time Clock
+INTERRUPT_NOERRCODE 41 ; Master PIC
+INTERRUPT_NOERRCODE 42 ; Reserved
+INTERRUPT_NOERRCODE 43 ; Reserved
+INTERRUPT_NOERRCODE 44 ; Reserved
+INTERRUPT_NOERRCODE 45 ; Coprocessor exception
+INTERRUPT_NOERRCODE 46 ; Hard Drive Controller
+INTERRUPT_NOERRCODE 47 ; Reserved
 
-HWINT 8,  40 ; Real Time Clock
-HWINT 9,  41 ; Master PIC
-HWINT 10, 42 ; Reserved
-HWINT 11, 43 ; Reserved
-HWINT 12, 44 ; Reserved
-HWINT 13, 45 ; Coprocessor exception
-HWINT 14, 46 ; Hard Drive Controller
-HWINT 15, 47 ; Reserved
-
-hwint_common_stub:
-    pusha ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
-
-    mov ax, ds ; Lower 16-bits of eax = ds.
-    push eax ; save the data segment descriptor
-
-    mov ax, GDT_KERNEL_DS_SELECTOR
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-
-    call hwint_handler
-
-    pop eax ; reload the original data segment descriptor
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-
-    popa                     ; Pops edi,esi,ebp...
-    add esp, 8 ; Cleans up the pushed error code and pushed ISR number
-    sti
-    iret ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
+INTERRUPT_COMMON hwint_handler, GDT_KERNEL_DS_SELECTOR

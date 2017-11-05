@@ -5,21 +5,21 @@ typedef void(*hwint_handler_t)();
 
 void hwint_register_handler(unsigned int int_no, hwint_handler_t handler);
 
-void hwint_0();
-void hwint_1();
-void hwint_2();
-void hwint_3();
-void hwint_4();
-void hwint_5();
-void hwint_6();
-void hwint_7();
-void hwint_8();
-void hwint_9();
-void hwint_10();
-void hwint_11();
-void hwint_12();
-void hwint_13();
-void hwint_14();
-void hwint_15();
+void interrupt_32();
+void interrupt_33();
+void interrupt_34();
+void interrupt_35();
+void interrupt_36();
+void interrupt_37();
+void interrupt_38();
+void interrupt_39();
+void interrupt_40();
+void interrupt_41();
+void interrupt_42();
+void interrupt_43();
+void interrupt_44();
+void interrupt_45();
+void interrupt_46();
+void interrupt_47();
 
 #endif
