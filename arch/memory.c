@@ -14,6 +14,8 @@ void memory_initialize(const struct KernelMQ_Info *const kinfo)
 {
     kmemset(frames, 0, sizeof(frames));
 
+    mark_used(0, MEM_UPPER_BASE - 1);
+
     mark_used(kinfo->kernel_phys_base, kinfo->kernel_phys_limit);
 
     for (unsigned int i = 0; i < kinfo->modules_count; ++i) {
@@ -35,6 +37,7 @@ unsigned long memory_alloc_page()
 {
     for (unsigned int i = 0; i < FRAMES_COUNT; ++i) {
         if (!frames[i]) {
+            frames[i] = 0xFF;
             return i * PAGE_SIZE;
         }
     }
@@ -48,6 +51,6 @@ void mark_used(const unsigned long base, const unsigned long limit)
     const unsigned int end   = limit / PAGE_SIZE;
 
     for (unsigned int i = start; i <= end; ++i) {
-        frames[i] = 1;
+        frames[i] = 0xFF;
     }
 }

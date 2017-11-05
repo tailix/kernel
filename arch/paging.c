@@ -4,8 +4,6 @@
 
 #include <kernelmq/stdlib.h>
 
-#define MEM_UPPER_BASE ((unsigned long)(1 * 1024 * 1024 * 1024)) // 1 MB
-
 // i386 paging constants
 #define I386_VM_PRESENT 0x001 // Page is present
 #define I386_VM_WRITE   0x002 // Read/write access allowed
