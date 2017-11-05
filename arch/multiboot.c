@@ -2,19 +2,15 @@
 
 #include <kernelmq/stdlib.h>
 
-#define MULTIBOOT_TAG_TYPE_END           0
-#define MULTIBOOT_TAG_TYPE_CMDLINE       1
-#define MULTIBOOT_TAG_TYPE_MODULE        3
-#define MULTIBOOT_TAG_TYPE_BASIC_MEMINFO 4
-#define MULTIBOOT_TAG_TYPE_MMAP          6
+#define MULTIBOOT_TAG_TYPE_END     0
+#define MULTIBOOT_TAG_TYPE_CMDLINE 1
+#define MULTIBOOT_TAG_TYPE_MODULE  3
+#define MULTIBOOT_TAG_TYPE_MMAP    6
 
 #define MULTIBOOT_MEMORY_AVAILABLE        1
 #define MULTIBOOT_MEMORY_RESERVED         2
 #define MULTIBOOT_MEMORY_ACPI_RECLAIMABLE 3
 #define MULTIBOOT_MEMORY_NVS              4
-
-#define MEM_LOWER_BASE ((unsigned long)0)
-#define MEM_UPPER_BASE ((unsigned long)(1 * 1024 * 1024 * 1024)) // 1 MB
 
 struct multiboot_mmap_entry
 {
@@ -49,14 +45,6 @@ struct multiboot_tag_module
     char cmdline[0];
 };
 
-struct multiboot_tag_basic_meminfo
-{
-    unsigned int type;
-    unsigned int size;
-    unsigned int mem_lower;
-    unsigned int mem_upper;
-};
-
 struct multiboot_tag_mmap
 {
     unsigned int type;
@@ -68,10 +56,9 @@ struct multiboot_tag_mmap
 
 static unsigned char print_multiboot_tag(struct KernelMQ_Info *kinfo, const struct multiboot_tag *tag);
 
-static unsigned char print_multiboot_tag_cmdline      (struct KernelMQ_Info *kinfo, const struct multiboot_tag_string        *tag);
-static unsigned char print_multiboot_tag_module       (struct KernelMQ_Info *kinfo, const struct multiboot_tag_module        *tag);
-static unsigned char print_multiboot_tag_basic_meminfo(struct KernelMQ_Info *kinfo, const struct multiboot_tag_basic_meminfo *tag);
-static unsigned char print_multiboot_tag_mmap         (struct KernelMQ_Info *kinfo, const struct multiboot_tag_mmap          *tag);
+static unsigned char print_multiboot_tag_cmdline(struct KernelMQ_Info *kinfo, const struct multiboot_tag_string *tag);
+static unsigned char print_multiboot_tag_module (struct KernelMQ_Info *kinfo, const struct multiboot_tag_module *tag);
+static unsigned char print_multiboot_tag_mmap   (struct KernelMQ_Info *kinfo, const struct multiboot_tag_mmap   *tag);
 
 unsigned char multiboot_parse(struct KernelMQ_Info *kinfo, unsigned long addr)
 {
@@ -106,9 +93,6 @@ unsigned char print_multiboot_tag(struct KernelMQ_Info *kinfo, const struct mult
 
         case MULTIBOOT_TAG_TYPE_MODULE:
             return print_multiboot_tag_module(kinfo, (struct multiboot_tag_module*)tag);
-
-        case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
-            return print_multiboot_tag_basic_meminfo(kinfo, (struct multiboot_tag_basic_meminfo*)tag);
 
         case MULTIBOOT_TAG_TYPE_MMAP:
             return print_multiboot_tag_mmap(kinfo, (struct multiboot_tag_mmap*)tag);
@@ -153,19 +137,6 @@ unsigned char print_multiboot_tag_module(struct KernelMQ_Info *kinfo, const stru
     ++kinfo->modules_count;
 
     kinfo->modules_total_size += module->size;
-
-    return 1;
-}
-
-unsigned char print_multiboot_tag_basic_meminfo(struct KernelMQ_Info *kinfo, const struct multiboot_tag_basic_meminfo *const tag)
-{
-    kinfo->mem_lower_base  = MEM_LOWER_BASE;
-    kinfo->mem_lower_size  = tag->mem_lower * 1024;
-    kinfo->mem_lower_limit = kinfo->mem_lower_base + kinfo->mem_lower_size - 1;
-
-    kinfo->mem_upper_base  = MEM_UPPER_BASE;
-    kinfo->mem_upper_size  = tag->mem_upper * 1024;
-    kinfo->mem_upper_limit = kinfo->mem_upper_base + kinfo->mem_upper_size - 1;
 
     return 1;
 }

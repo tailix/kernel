@@ -22,14 +22,6 @@ unsigned char kernelmq_info_validate_and_copy(
         return 0;
     }
 
-    if (src->mem_lower_base + src->mem_lower_size != src->mem_lower_limit + 1) {
-        return 0;
-    }
-
-    if (src->mem_upper_base + src->mem_upper_size != src->mem_upper_limit + 1) {
-        return 0;
-    }
-
     if (src->kernel_size == 0) {
         return 0;
     }

@@ -35,14 +35,6 @@ struct KernelMQ_Info {
     struct KernelMQ_Info_Area areas[KERNELMQ_INFO_AREAS_MAX];
     unsigned int areas_count;
 
-    unsigned long mem_lower_base;
-    unsigned long mem_lower_size;
-    unsigned long mem_lower_limit;
-
-    unsigned long mem_upper_base;
-    unsigned long mem_upper_size;
-    unsigned long mem_upper_limit;
-
     unsigned long kernel_offset;
 
     unsigned long kernel_phys_base;

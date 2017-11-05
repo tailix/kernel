@@ -2,6 +2,8 @@
 
 #include <kernelmq/stdlib.h>
 
+#define MEM_UPPER_BASE ((unsigned long)(1 * 1024 * 1024 * 1024)) // 1 MB
+
 #define I386_VM_PT_ENTRIES 1024
 
 #define I386_PAGE_SIZE     4096
@@ -94,8 +96,6 @@ void paging_clear()
 
 void paging_identity(const struct KernelMQ_Info *const kinfo)
 {
-    assert(kinfo->mem_upper_base);
-
     for (int i = 0; i < I386_VM_PT_ENTRIES; ++i) {
         unsigned int flags = I386_VM_PRESENT |
                              I386_VM_BIGPAGE |
@@ -104,7 +104,7 @@ void paging_identity(const struct KernelMQ_Info *const kinfo)
 
         unsigned long phys = i * I386_BIG_PAGE_SIZE;
 
-        if ((kinfo->mem_upper_base & I386_VM_ADDR_MASK_4MB) <=
+        if ((MEM_UPPER_BASE & I386_VM_ADDR_MASK_4MB) <=
             (phys & I386_VM_ADDR_MASK_4MB)
         ) {
             flags |= I386_VM_PWT | I386_VM_PCD;
