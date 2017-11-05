@@ -5,4 +5,6 @@
 
 void tss_write_to_gdt(const struct KernelMQ_Info *kinfo, void *gdt_entry);
 
+void tss_flush();
+
 #endif
