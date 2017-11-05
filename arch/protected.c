@@ -148,6 +148,10 @@ void protected_initialize(const struct KernelMQ_Info *const kinfo)
 
     idt_flush(&idt_pointer);
 
+    logger_info("Load TSS.");
+
+    tss_flush();
+
     logger_info("Enable interrupts.");
 
     asm volatile ("sti");
