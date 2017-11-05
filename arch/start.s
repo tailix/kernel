@@ -14,9 +14,10 @@
 
 .section .bss
 .align 16
-stack_bottom:
 .skip 16384 # 16 KiB
-stack_top:
+_kernel_stack_top:
+
+.global _kernel_stack_top
 
 .section .text
 
@@ -27,13 +28,13 @@ stack_top:
 .type halt,   @function
 
 _start:
-    mov $stack_top, %esp // Initialize stack
+    mov $_kernel_stack_top, %esp // Initialize stack
 
     push %ebx // Multiboot information pointer
     push %eax // Multiboot magic number
     call init
 
-    mov $stack_top, %esp // Initialize stack
+    mov $_kernel_stack_top, %esp // Initialize stack
 
     push %eax // Kernel information pointer
     call main

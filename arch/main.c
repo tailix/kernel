@@ -58,7 +58,7 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
 
     memory_initialize(&kinfo);
 
-    protected_initialize();
+    protected_initialize(&kinfo);
 
     // Set up a new post-relocate bootstrap pagetable so that
     // we can map in VM, and we no longer rely on pre-relocated

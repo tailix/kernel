@@ -47,6 +47,8 @@ struct KernelMQ_Info {
 
     unsigned long modules_total_size;
     unsigned long kernel_and_modules_total_size;
+
+    unsigned long kernel_stack_top;
 };
 
 unsigned char kernelmq_info_validate_and_copy(struct KernelMQ_Info *dest, const struct KernelMQ_Info *src);

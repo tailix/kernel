@@ -9,6 +9,7 @@ extern char _kernel_offset;
 extern char _kernel_size;
 extern char _kernel_phys_base;
 extern char _kernel_virt_base;
+extern char _kernel_stack_top;
 
 static struct KernelMQ_Info kinfo;
 
@@ -34,6 +35,8 @@ const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long mu
     kinfo.kernel_virt_limit = kinfo.kernel_virt_base + kinfo.kernel_size - 1;
 
     kinfo.kernel_and_modules_total_size = kinfo.kernel_size + kinfo.modules_total_size;
+
+    kinfo.kernel_stack_top = (unsigned long)&_kernel_stack_top;
 
     paging_clear();
     paging_identity();

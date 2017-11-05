@@ -56,7 +56,7 @@ __attribute__((packed));
 
 static struct tss_entry tss;
 
-void tss_write_to_gdt(void *gdt_entry_ptr)
+void tss_write_to_gdt(const struct KernelMQ_Info *const kinfo, void *gdt_entry_ptr)
 {
     struct gdt_entry_bits *const g = gdt_entry_ptr;
 
@@ -84,5 +84,5 @@ void tss_write_to_gdt(void *gdt_entry_ptr)
     kmemset(&tss, 0, sizeof(tss));
 
     tss.ss0 = GDT_KERNEL_DS_SELECTOR;
-    tss.esp0 = 0; // TODO: get from kinfo
+    tss.esp0 = kinfo->kernel_stack_top;
 }

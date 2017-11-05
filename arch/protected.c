@@ -53,7 +53,7 @@ static void idt_set_gate(unsigned char num, unsigned int base, unsigned short se
 void gdt_flush(const struct GdtPointer *pointer);
 void idt_flush(const struct IdtPointer *pointer);
 
-void protected_initialize()
+void protected_initialize(const struct KernelMQ_Info *const kinfo)
 {
     logger_info("Remap the IRQ table.");
 
@@ -76,7 +76,7 @@ void protected_initialize()
     gdt_set_gate(GDT_USER_CS_INDEX,   0, 0xFFFFFFFF, 0xFA, 0xCF);
     gdt_set_gate(GDT_USER_DS_INDEX,   0, 0xFFFFFFFF, 0xF2, 0xCF);
 
-    tss_write_to_gdt(&gdt_entries[GDT_TSS_INDEX]);
+    tss_write_to_gdt(kinfo, &gdt_entries[GDT_TSS_INDEX]);
 
     logger_info("Setup IDT.");
 

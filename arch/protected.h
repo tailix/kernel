@@ -1,6 +1,8 @@
 #ifndef KERNELMQ_INCLUDED_PROTECTED
 #define KERNELMQ_INCLUDED_PROTECTED 1
 
-void protected_initialize();
+#include <kernelmq/info.h>
+
+void protected_initialize(const struct KernelMQ_Info *kinfo);
 
 #endif
