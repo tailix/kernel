@@ -8,6 +8,7 @@
 
 #include <kernelmq/info.h>
 #include <kernelmq/stdlib.h>
+#include <kernelmq/module.h>
 
 static struct KernelMQ_Info kinfo;
 
@@ -66,6 +67,10 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
     paging_identity(); // Still need 1:1 for lapic and video mem and such.
     paging_mapkernel(&kinfo);
     paging_load();
+
+    for (unsigned int i = 0; i < kinfo.modules_count; ++i) {
+        ((KernelMQ_Module_Function)kinfo.modules[i].base)();
+    }
 
     timer_register_handler(on_timer);
     timer_initialize(50);
