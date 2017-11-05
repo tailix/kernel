@@ -3,9 +3,8 @@
 #include "config.h"
 #include "logger.h"
 #include "asm.h"
-#include "exception.h"
+#include "interrupt.h"
 #include "hwint.h"
-#include "syscall.h"
 
 #include <kernelmq/stdlib.h>
 
