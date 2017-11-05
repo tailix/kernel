@@ -5,6 +5,7 @@
 #include "paging.h"
 #include "timer.h"
 #include "kprintf.h"
+#include "tasks.h"
 
 #include <kernelmq/info.h>
 #include <kernelmq/stdlib.h>
@@ -69,7 +70,7 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
     paging_load();
 
     for (unsigned int i = 0; i < kinfo.modules_count; ++i) {
-        ((KernelMQ_Module_Function)kinfo.modules[i].base)();
+        tasks_switch_to_user(kinfo.modules[i].base);
     }
 
     timer_register_handler(on_timer);
