@@ -3,6 +3,7 @@ include config.mk
 export INCLUDE = $(shell pwd)/include
 export KERNEL  = $(shell pwd)/arch/kernel
 export LIBK    = $(shell pwd)/libk/libk.a
+export DUMMY   = $(shell pwd)/modules/dummy
 
 run: run-iso
 
@@ -28,7 +29,7 @@ clean-kernel:
 run-iso: all-iso
 	make run -C iso
 
-all-iso: all-kernel
+all-iso: all-kernel all-modules
 	make all -C iso
 
 clean-iso:

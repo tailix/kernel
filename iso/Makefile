@@ -4,7 +4,8 @@ run: all
 all:
 	grub-file --is-x86-multiboot2 "$(KERNEL)"
 	cp "$(KERNEL)" rootfs/boot/kernelmq
+	cp "$(DUMMY)"  rootfs/boot/dummy
 	grub-mkrescue rootfs -o image.iso
 
 clean:
-	rm -f image.iso rootfs/boot/kernelmq
+	rm -f image.iso rootfs/boot/kernelmq rootfs/boot/dummy
