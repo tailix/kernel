@@ -44,9 +44,8 @@ unsigned long memory_alloc_page()
 
 void mark_used(const unsigned long base, const unsigned long limit)
 {
-    const unsigned int start = base / PAGE_SIZE;
-
-    const unsigned int end = limit % PAGE_SIZE ? limit / PAGE_SIZE : limit / PAGE_SIZE + 1;
+    const unsigned int start = base  / PAGE_SIZE;
+    const unsigned int end   = limit / PAGE_SIZE;
 
     for (unsigned int i = start; i <= end; ++i) {
         frames[i] = 1;
