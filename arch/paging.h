@@ -6,7 +6,7 @@
 void paging_enable();
 
 void paging_clear();
-void paging_identity(const struct KernelMQ_Info *kinfo);
+void paging_identity();
 int paging_mapkernel(const struct KernelMQ_Info *kinfo);
 unsigned long paging_load();
 

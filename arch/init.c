@@ -36,7 +36,7 @@ const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long mu
     kinfo.kernel_and_modules_total_size = kinfo.kernel_size + kinfo.modules_total_size;
 
     paging_clear();
-    paging_identity(&kinfo);
+    paging_identity();
     /* kinfo.freepde_start = */ paging_mapkernel(&kinfo);
     paging_load();
 

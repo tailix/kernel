@@ -60,7 +60,7 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
     // we can map in VM, and we no longer rely on pre-relocated
     // data.
     paging_clear();
-    paging_identity(&kinfo); // Still need 1:1 for lapic and video mem and such.
+    paging_identity(); // Still need 1:1 for lapic and video mem and such.
     paging_mapkernel(&kinfo);
     paging_load();
 

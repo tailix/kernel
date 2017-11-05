@@ -94,7 +94,7 @@ void paging_clear()
     kmemset(pagedir, 0, sizeof(pagedir));
 }
 
-void paging_identity(const struct KernelMQ_Info *const kinfo)
+void paging_identity()
 {
     for (int i = 0; i < I386_VM_PT_ENTRIES; ++i) {
         unsigned int flags = I386_VM_PRESENT |
