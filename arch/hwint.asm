@@ -2,7 +2,7 @@
 
 %include "interrupt.asm"
 
-[EXTERN hwint_handler]
+INTERRUPT_COMMON hwint_handler, GDT_KERNEL_DS_SELECTOR
 
 INTERRUPT_NOERRCODE 32 ; Programmable Interval Timer
 INTERRUPT_NOERRCODE 33 ; Keyboard
@@ -21,5 +21,3 @@ INTERRUPT_NOERRCODE 44 ; Reserved
 INTERRUPT_NOERRCODE 45 ; Coprocessor exception
 INTERRUPT_NOERRCODE 46 ; Hard Drive Controller
 INTERRUPT_NOERRCODE 47 ; Reserved
-
-INTERRUPT_COMMON hwint_handler, GDT_KERNEL_DS_SELECTOR

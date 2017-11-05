@@ -16,6 +16,7 @@ interrupt_%1:
 %endmacro
 
 %macro INTERRUPT_COMMON 2
+[EXTERN %1]
 interrupt_common:
     pusha ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
 

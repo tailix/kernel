@@ -2,7 +2,7 @@
 
 %include "interrupt.asm"
 
-[EXTERN exception_handler]
+INTERRUPT_COMMON exception_handler, GDT_KERNEL_DS_SELECTOR
 
 INTERRUPT_NOERRCODE 0  ; #DE - Divide Error Exception
 INTERRUPT_NOERRCODE 1  ; #DB - Debug Exception
@@ -36,5 +36,3 @@ INTERRUPT_NOERRCODE 28 ; Reserved
 INTERRUPT_NOERRCODE 29 ; Reserved
 INTERRUPT_NOERRCODE 30 ; Reserved
 INTERRUPT_NOERRCODE 31 ; Reserved
-
-INTERRUPT_COMMON exception_handler, GDT_KERNEL_DS_SELECTOR
