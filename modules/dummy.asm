@@ -1,3 +1,5 @@
+[BITS 32]
+
 main:
     mov eax, 512
     int 0x80

@@ -45,7 +45,7 @@ kernel: $(OBJS)
 	$(AS) $< -o $@
 
 %.asm.cpp.o: %.asm.cpp
-	nasm -felf -o $@ $<
+	nasm -felf32 -o $@ $<
 
 %.asm.cpp: %.asm
 	cpp -P $< $@
