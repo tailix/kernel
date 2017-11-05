@@ -18,6 +18,8 @@ OBJS += kprintf.c.o
 
 OBJS += protected.c.o protected.asm.cpp.o
 
+OBJS += tss.c.o
+
 OBJS += interrupt.asm.cpp.o
 
 OBJS += exception.c.o

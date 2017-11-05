@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "interrupt.h"
 #include "hwint.h"
+#include "tss.h"
 
 #include <kernelmq/stdlib.h>
 
@@ -74,6 +75,8 @@ void protected_initialize()
     gdt_set_gate(GDT_KERNEL_DS_INDEX, 0, 0xFFFFFFFF, 0x92, 0xCF);
     gdt_set_gate(GDT_USER_CS_INDEX,   0, 0xFFFFFFFF, 0xFA, 0xCF);
     gdt_set_gate(GDT_USER_DS_INDEX,   0, 0xFFFFFFFF, 0xF2, 0xCF);
+
+    tss_write_to_gdt(&gdt_entries[GDT_TSS_INDEX]);
 
     logger_info("Setup IDT.");
 
