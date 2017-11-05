@@ -1,13 +1,10 @@
 #include "paging.h"
 
+#include "config.h"
+
 #include <kernelmq/stdlib.h>
 
 #define MEM_UPPER_BASE ((unsigned long)(1 * 1024 * 1024 * 1024)) // 1 MB
-
-#define I386_VM_PT_ENTRIES 1024
-
-#define I386_PAGE_SIZE     4096
-#define I386_BIG_PAGE_SIZE (I386_PAGE_SIZE * I386_VM_PT_ENTRIES)
 
 // i386 paging constants
 #define I386_VM_PRESENT 0x001 // Page is present
@@ -56,7 +53,7 @@ void write_cr0(volatile unsigned long);
 void write_cr3(volatile unsigned long);
 void write_cr4(volatile unsigned long);
 
-static unsigned long pagedir[I386_VM_PT_ENTRIES] __attribute__((aligned(4096)));
+static unsigned long pagedir[PAGE_DIR_SIZE] __attribute__((aligned(4096)));
 
 void paging_enable()
 {
@@ -96,13 +93,13 @@ void paging_clear()
 
 void paging_identity()
 {
-    for (int i = 0; i < I386_VM_PT_ENTRIES; ++i) {
+    for (int i = 0; i < PAGE_DIR_SIZE; ++i) {
         unsigned int flags = I386_VM_PRESENT |
                              I386_VM_BIGPAGE |
                              I386_VM_USER    |
                              I386_VM_WRITE;
 
-        unsigned long phys = i * I386_BIG_PAGE_SIZE;
+        unsigned long phys = i * PAGE_BIG_SIZE;
 
         if ((MEM_UPPER_BASE & I386_VM_ADDR_MASK_4MB) <=
             (phys & I386_VM_ADDR_MASK_4MB)
@@ -116,10 +113,10 @@ void paging_identity()
 
 int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
 {
-    assert(!(kinfo->kernel_phys_base % I386_BIG_PAGE_SIZE));
-    assert(!(kinfo->kernel_virt_base % I386_BIG_PAGE_SIZE));
+    assert(!(kinfo->kernel_phys_base % PAGE_BIG_SIZE));
+    assert(!(kinfo->kernel_virt_base % PAGE_BIG_SIZE));
 
-    int pde = kinfo->kernel_virt_base / I386_BIG_PAGE_SIZE;
+    int pde = kinfo->kernel_virt_base / PAGE_BIG_SIZE;
 
     unsigned long mapped = 0;
     unsigned long kern_phys = kinfo->kernel_phys_base;
@@ -129,8 +126,8 @@ int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
                                    I386_VM_BIGPAGE |
                                    I386_VM_WRITE;
 
-        mapped += I386_BIG_PAGE_SIZE;
-        kern_phys += I386_BIG_PAGE_SIZE;
+        mapped += PAGE_BIG_SIZE;
+        kern_phys += PAGE_BIG_SIZE;
 
         ++pde;
     }

@@ -1,6 +1,12 @@
 #ifndef KERNELMQ_INCLUDED_CONFIG
 #define KERNELMQ_INCLUDED_CONFIG 1
 
+#define PAGE_DIR_SIZE   1024
+#define PAGE_TABLE_SIZE 1024
+
+#define PAGE_SIZE     4096
+#define PAGE_BIG_SIZE (PAGE_SIZE * PAGE_TABLE_SIZE)
+
 #define IDT_SIZE 256 // maximal size
 
 #define GDT_NULL_INDEX      0
