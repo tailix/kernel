@@ -71,6 +71,7 @@ unsigned long memory_alloc_big_page()
     return 0;
 }
 
+// TODO: panic if not aligned
 void memory_free_page(const unsigned long addr)
 {
     const unsigned long i = addr / PAGE_SIZE;
@@ -82,6 +83,7 @@ void memory_free_page(const unsigned long addr)
     frames[i] = 0;
 }
 
+// TODO: panic if not aligned
 void memory_free_big_page(const unsigned long addr)
 {
     const unsigned long start = addr / PAGE_SIZE;
