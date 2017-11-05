@@ -1,5 +1,6 @@
 #include "console.h"
 #include "logger.h"
+#include "memory.h"
 #include "protected.h"
 #include "paging.h"
 #include "timer.h"
@@ -53,6 +54,8 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
             module->cmdline
         );
     }
+
+    memory_initialize(&kinfo);
 
     protected_initialize();
 
