@@ -1,10 +1,7 @@
 [BITS 32]
 
 main:
-    mov eax, 512
-    int 0x80
-
-    mov eax, 35000
+    mov eax, 123
     int 0x80
 
     mov eax, 0 ; exit

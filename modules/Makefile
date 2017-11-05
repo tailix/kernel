@@ -1,5 +1,9 @@
-all:
-	nasm -f bin dummy.asm -o dummy
+BINS = dummy1.bin dummy2.bin
+
+all: $(BINS)
 
 clean:
-	rm -f dummy
+	rm -f $(BINS)
+
+%.bin: %.asm
+	nasm -f bin $< -o $@

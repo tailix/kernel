@@ -3,7 +3,7 @@ include config.mk
 export INCLUDE = $(shell pwd)/include
 export KERNEL  = $(shell pwd)/arch/kernel
 export LIBK    = $(shell pwd)/libk/libk.a
-export DUMMY   = $(shell pwd)/modules/dummy
+export MODULES = $(addprefix $(shell pwd)/modules/, dummy1.bin dummy2.bin)
 
 run: run-iso
 
