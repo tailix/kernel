@@ -6,3 +6,5 @@
 /arch/kernel
 /libk/libk.a
 /modules/dummy
+/iso/image.iso
+/iso/rootfs/boot/kernelmq
