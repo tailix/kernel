@@ -6,8 +6,8 @@ export LIBK    = $(shell pwd)/libk/libk.a
 
 run: run-iso
 
-all:     all-kernel   all-iso   all-libk   all-test
-clean: clean-kernel clean-iso clean-libk clean-test
+all:     all-kernel   all-iso   all-libk   all-test   all-modules
+clean: clean-kernel clean-iso clean-libk clean-test clean-modules
 
 test: run-test
 
@@ -56,3 +56,13 @@ all-test: all-libk
 
 clean-test:
 	make clean -C test
+
+###########
+# Modules #
+###########
+
+all-modules:
+	make all -C modules
+
+clean-modules:
+	make clean -C modules

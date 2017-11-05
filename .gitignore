@@ -5,3 +5,4 @@
 
 /arch/kernel
 /libk/libk.a
+/modules/dummy
