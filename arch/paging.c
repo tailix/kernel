@@ -14,11 +14,6 @@
 #define I386_VM_PCD 0x010 // Cache disable
 #define I386_VM_ACC 0x020 // Accessed
 
-#define I386_VM_ADDR_MASK     0xFFFFF000 // physical address
-#define I386_VM_ADDR_MASK_4MB 0xFFC00000 // physical address
-
-#define I386_VM_OFFSET_MASK_4MB 0x003FFFFF // physical address
-
 // Page directory specific flags.
 #define I386_VM_BIGPAGE 0x080 // 4MB page
 
@@ -99,11 +94,7 @@ void paging_identity()
 
         unsigned long phys = i * PAGE_BIG_SIZE;
 
-        if ((MEM_UPPER_BASE & I386_VM_ADDR_MASK_4MB) <=
-            (phys & I386_VM_ADDR_MASK_4MB)
-        ) {
-            flags |= I386_VM_PWT | I386_VM_PCD;
-        }
+        flags |= I386_VM_PWT | I386_VM_PCD;
 
         pagedir[i] = phys | flags;
     }
