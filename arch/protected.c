@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "exception.h"
 #include "hwint.h"
+#include "syscall.h"
 
 #include <kernelmq/stdlib.h>
 
@@ -129,6 +130,8 @@ void protected_initialize()
     idt_set_gate(46, (unsigned int)hwint_14, 0x08, 0x8E);
     idt_set_gate(47, (unsigned int)hwint_15, 0x08, 0x8E);
 
+    idt_set_gate(INT_SYSCALL, (unsigned int)syscall_gate, 0x08, 0x8E | 0x60);
+
     logger_info("Load GDT.");
 
     gdt_pointer.limit = sizeof(struct GdtEntry) * GDT_SIZE - 1;
@@ -168,7 +171,5 @@ void idt_set_gate(unsigned char num, unsigned int base, unsigned short sel, unsi
     idt_entries[num].base_hi = (base >> 16) & 0xFFFF;
     idt_entries[num].sel     = sel;
     idt_entries[num].always0 = 0;
-    // We must uncomment the OR below when we get to using user-mode.
-    // It sets the interrupt gate's privilege level to 3.
-    idt_entries[num].flags   = flags /* | 0x60 */;
+    idt_entries[num].flags   = flags;
 }

@@ -19,6 +19,7 @@ OBJS += kprintf.c.o
 OBJS += protected.c.o protected.asm.cpp.o
 OBJS += exception.c.o exception.asm.cpp.o
 OBJS += hwint.c.o     hwint.asm.cpp.o
+OBJS += syscall.c.o   syscall.asm.cpp.o
 
 OBJS += timer.c.o
 
