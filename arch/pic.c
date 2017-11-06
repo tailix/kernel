@@ -47,13 +47,13 @@ void pic_remap(const unsigned char new_master_irq_start, const unsigned char new
     outportb(SLAVE_DATA,  slave_mask);
 }
 
-void pic_end_of_interrupt(const unsigned char irq)
+unsigned char pic_end_of_interrupt(const unsigned char irq)
 {
     const unsigned char to_master = master_irq_start <= irq && irq < master_irq_start + IRQS_COUNT;
     const unsigned char to_slave  = slave_irq_start  <= irq && irq < slave_irq_start  + IRQS_COUNT;
 
     if (!(to_master || to_slave)) {
-        return;
+        return 0;
     }
 
     if (to_slave) {
@@ -61,4 +61,6 @@ void pic_end_of_interrupt(const unsigned char irq)
     }
 
     outportb(MASTER_COMMAND, 0x20);
+
+    return 1;
 }

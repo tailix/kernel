@@ -29,14 +29,9 @@ static hwint_handler_t handlers[INT_HWINT_COUNT] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 
 void hwint_handler(struct IsrRegisters regs)
 {
-    if (
-        !(regs.int_no >= INT_HWINT_FIRST &&
-          regs.int_no <= INT_HWINT_LAST)
-    ) {
+    if (!pic_end_of_interrupt(regs.int_no)) {
         return;
     }
-
-    pic_end_of_interrupt(regs.int_no);
 
     const unsigned char hwint_no = regs.int_no - INT_HWINT_FIRST;
 
