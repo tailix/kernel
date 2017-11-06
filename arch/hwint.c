@@ -52,4 +52,6 @@ void hwint_register_handler(unsigned int int_no, hwint_handler_t handler)
     }
 
     handlers[int_no] = handler;
+
+    pic_enable(int_no);
 }

@@ -10,6 +10,7 @@
 #define SLAVE_DATA    0xA1
 
 #define IRQS_COUNT 8
+#define IRQS_TOTAL 16
 
 static unsigned char master_irq_start = 0;
 static unsigned char slave_irq_start  = 8;
@@ -29,6 +30,45 @@ void pic_disable_all()
     outportb(MASTER_DATA, 0xFF);
     outportb(SLAVE_DATA,  0xFF);
 }
+
+void pic_enable(const unsigned char line)
+{
+    if (line >= IRQS_TOTAL) {
+        logger_warn_from("pic", "Invalid line %u.", line);
+        return;
+    }
+
+    logger_info_from("pic", "Enable line %u.", line);
+
+    if (line < IRQS_COUNT) {
+        const unsigned char mask = inportb(MASTER_DATA);
+        outportb(MASTER_DATA, mask & ~(1 << line));
+    }
+    else {
+        const unsigned char mask = inportb(SLAVE_DATA);
+        outportb(SLAVE_DATA, mask & ~(1 << (line - IRQS_COUNT)));
+    }
+}
+
+void pic_disable(const unsigned char line)
+{
+    if (line >= IRQS_TOTAL) {
+        logger_warn_from("pic", "Invalid line %u.", line);
+        return;
+    }
+
+    logger_info_from("pic", "Disable line %u.", line);
+
+    if (line < IRQS_COUNT) {
+        const unsigned char mask = inportb(MASTER_DATA);
+        outportb(MASTER_DATA, mask | (1 << line));
+    }
+    else {
+        const unsigned char mask = inportb(SLAVE_DATA);
+        outportb(SLAVE_DATA, mask | (1 << (line - IRQS_COUNT)));
+    }
+}
+
 
 void pic_remap(const unsigned char new_master_irq_start, const unsigned char new_slave_irq_start)
 {
