@@ -53,7 +53,7 @@ void idt_flush(const struct IdtPointer *pointer);
 
 void protected_initialize(const struct KernelMQ_Info *const kinfo)
 {
-    pic_initialize();
+    pic_remap(32, 40);
 
     logger_info_from("protected", "Setup GDT.");
 
@@ -102,6 +102,7 @@ void protected_initialize(const struct KernelMQ_Info *const kinfo)
     idt_set_gate(30, (unsigned int)interrupt_30, 0x08, 0x8E);
     idt_set_gate(31, (unsigned int)interrupt_31, 0x08, 0x8E);
 
+    // Master PIC
     idt_set_gate(32, (unsigned int)interrupt_32, 0x08, 0x8E);
     idt_set_gate(33, (unsigned int)interrupt_33, 0x08, 0x8E);
     idt_set_gate(34, (unsigned int)interrupt_34, 0x08, 0x8E);
@@ -110,6 +111,8 @@ void protected_initialize(const struct KernelMQ_Info *const kinfo)
     idt_set_gate(37, (unsigned int)interrupt_37, 0x08, 0x8E);
     idt_set_gate(38, (unsigned int)interrupt_38, 0x08, 0x8E);
     idt_set_gate(39, (unsigned int)interrupt_39, 0x08, 0x8E);
+
+    // Slave PIC
     idt_set_gate(40, (unsigned int)interrupt_40, 0x08, 0x8E);
     idt_set_gate(41, (unsigned int)interrupt_41, 0x08, 0x8E);
     idt_set_gate(42, (unsigned int)interrupt_42, 0x08, 0x8E);
