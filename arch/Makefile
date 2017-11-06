@@ -29,6 +29,8 @@ OBJS += exception.c.o
 OBJS += hwint.c.o
 OBJS += syscall.c.o
 
+OBJS += pic.c.o
+
 all: kernel
 
 clean:

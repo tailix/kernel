@@ -2,10 +2,10 @@
 
 #include "config.h"
 #include "logger.h"
-#include "asm.h"
 #include "interrupt.h"
 #include "hwint.h"
 #include "tss.h"
+#include "pic.h"
 
 #include <kernelmq/stdlib.h>
 
@@ -53,18 +53,7 @@ void idt_flush(const struct IdtPointer *pointer);
 
 void protected_initialize(const struct KernelMQ_Info *const kinfo)
 {
-    logger_info_from("protected", "Remap the IRQ table.");
-
-    outportb(0x20, 0x11);
-    outportb(0xA0, 0x11);
-    outportb(0x21, 0x20);
-    outportb(0xA1, 0x28);
-    outportb(0x21, 0x04);
-    outportb(0xA1, 0x02);
-    outportb(0x21, 0x01);
-    outportb(0xA1, 0x01);
-    outportb(0x21, 0x00);
-    outportb(0xA1, 0x00);
+    pic_initialize();
 
     logger_info_from("protected", "Setup GDT.");
 
