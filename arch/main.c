@@ -12,6 +12,10 @@
 
 static struct KernelMQ_Info kinfo;
 
+#define TIMER_FREQ 50
+
+static unsigned long ticks = 0;
+
 static void on_timer();
 
 void main(const struct KernelMQ_Info *const kinfo_ptr)
@@ -72,12 +76,14 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
     paging_mapkernel(&kinfo);
     paging_load();
 
+    timer_initialize(TIMER_FREQ);
+    timer_register_handler(on_timer);
+
+    while (ticks < TIMER_FREQ * 3) {}
+
     for (unsigned int i = 0; i < kinfo.modules_count; ++i) {
         tasks_switch_to_user(kinfo.modules[i].base);
     }
-
-    timer_register_handler(on_timer);
-    timer_initialize(50);
 
     logger_warn_from("main", "Nothing to do.");
     logger_fail_from("main", "Halt.");
@@ -85,5 +91,9 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
 
 void on_timer()
 {
-    logger_info_from("main", "Timer tick.");
+    if (ticks % TIMER_FREQ == 0) {
+        logger_info_from("main", "Timer tick %u.", ticks);
+    }
+
+    ++ticks;
 }
