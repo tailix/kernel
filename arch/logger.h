@@ -1,8 +1,10 @@
 #ifndef KERNELMQ_INCLUDED_LOGGER
 #define KERNELMQ_INCLUDED_LOGGER 1
 
-void logger_info(const char *s);
-void logger_warn(const char *s);
-void logger_fail(const char *s);
+#define logger_info(...) logger_log(0, __VA_ARGS__)
+#define logger_warn(...) logger_log(1, __VA_ARGS__)
+#define logger_fail(...) logger_log(2, __VA_ARGS__)
+
+void logger_log(unsigned char level, const char *format, ...);
 
 #endif

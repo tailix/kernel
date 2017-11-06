@@ -4,7 +4,6 @@
 #include "protected.h"
 #include "paging.h"
 #include "timer.h"
-#include "kprintf.h"
 #include "tasks.h"
 
 #include <kernelmq/info.h>
@@ -26,22 +25,22 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
         return;
     }
 
-    kprintf("Kernel command line: %s\n", kinfo.cmdline);
+    logger_info("Kernel command line: %s", kinfo.cmdline);
 
-    kprintf(
-        "Kernel phys base 0x%x, limit 0x%x\n",
+    logger_info(
+        "Kernel phys base 0x%x, limit 0x%x",
         kinfo.kernel_phys_base,
         kinfo.kernel_phys_limit
     );
 
-    kprintf(
-        "Kernel virt base 0x%x, limit 0x%x\n",
+    logger_info(
+        "Kernel virt base 0x%x, limit 0x%x",
         kinfo.kernel_virt_base,
         kinfo.kernel_virt_limit
     );
 
-    kprintf(
-        "Kernel size 0x%x, offset 0x%x\n",
+    logger_info(
+        "Kernel size 0x%x, offset 0x%x",
         kinfo.kernel_size,
         kinfo.kernel_offset
     );
@@ -49,8 +48,8 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
     for (unsigned int i = 0; i < kinfo.modules_count; ++i) {
         struct KernelMQ_Info_Module *module = &kinfo.modules[i];
 
-        kprintf(
-            "Module at 0x%x, size 0x%x, command line: %s\n",
+        logger_info(
+            "Module at 0x%x, size 0x%x, command line: %s",
             module->base,
             module->size,
             module->cmdline

@@ -14,7 +14,6 @@ OBJS += main.c.o
 
 OBJS += logger.c.o
 OBJS += console.c.o
-OBJS += kprintf.c.o
 
 OBJS += protected.c.o protected.asm.cpp.o
 
