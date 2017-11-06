@@ -12,8 +12,11 @@ OBJS += paging.c.o paging.asm.cpp.o
 OBJS += info.c.o
 OBJS += main.c.o
 
-OBJS += logger.c.o
+# Built-in drivers
 OBJS += console.c.o
+OBJS += timer.c.o
+
+OBJS += logger.c.o
 
 OBJS += protected.c.o protected.asm.cpp.o
 
@@ -25,8 +28,6 @@ OBJS += interrupt.asm.cpp.o
 OBJS += exception.c.o
 OBJS += hwint.c.o
 OBJS += syscall.c.o
-
-OBJS += timer.c.o
 
 all: kernel
 
