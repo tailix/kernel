@@ -14,6 +14,22 @@
 static unsigned char master_irq_start = 0;
 static unsigned char slave_irq_start  = 8;
 
+void pic_enable_all()
+{
+    logger_info_from("pic", "Enable all IRQs.");
+
+    outportb(MASTER_DATA, 0);
+    outportb(SLAVE_DATA,  0);
+}
+
+void pic_disable_all()
+{
+    logger_info_from("pic", "Disable all IRQs.");
+
+    outportb(MASTER_DATA, 0xFF);
+    outportb(SLAVE_DATA,  0xFF);
+}
+
 void pic_remap(const unsigned char new_master_irq_start, const unsigned char new_slave_irq_start)
 {
     logger_info_from("pic", "Remap the IRQ table.");

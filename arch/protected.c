@@ -54,6 +54,7 @@ void idt_flush(const struct IdtPointer *pointer);
 void protected_initialize(const struct KernelMQ_Info *const kinfo)
 {
     pic_remap(32, 40);
+    pic_enable_all();
 
     logger_info_from("protected", "Setup GDT.");
 
