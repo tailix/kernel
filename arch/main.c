@@ -4,6 +4,7 @@
 #include "protected.h"
 #include "paging.h"
 #include "timer.h"
+#include "keyboard.h"
 #include "tasks.h"
 
 #include <kernelmq/info.h>
@@ -18,6 +19,7 @@ static unsigned char timer_enabled = 1;
 static unsigned long timer_ticks = 0;
 
 static void on_timer();
+static void on_keyboard(char c);
 
 void main(const struct KernelMQ_Info *const kinfo_ptr)
 {
@@ -77,6 +79,8 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
     paging_mapkernel(&kinfo);
     paging_load();
 
+    keyboard_register_handler(on_keyboard);
+
     timer_initialize(TIMER_FREQ);
     timer_register_handler(on_timer);
 
@@ -102,4 +106,9 @@ void on_timer()
     }
 
     ++timer_ticks;
+}
+
+void on_keyboard(char c)
+{
+    logger_info_from("main", "Key pressed: '%c'.", c);
 }

@@ -16,6 +16,7 @@ OBJS += main.c.o
 OBJS += console.c.o
 OBJS += pic.c.o
 OBJS += timer.c.o
+OBJS += keyboard.c.o
 
 OBJS += logger.c.o
 
