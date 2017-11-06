@@ -6,25 +6,6 @@
 #include "logger.h"
 #include "pic.h"
 
-static const char *const messages[] = {
-    "Unhandled hardware interrupt: 0",
-    "Unhandled hardware interrupt: 1",
-    "Unhandled hardware interrupt: 2",
-    "Unhandled hardware interrupt: 3",
-    "Unhandled hardware interrupt: 4",
-    "Unhandled hardware interrupt: 5",
-    "Unhandled hardware interrupt: 6",
-    "Unhandled hardware interrupt: 7",
-    "Unhandled hardware interrupt: 8",
-    "Unhandled hardware interrupt: 9",
-    "Unhandled hardware interrupt: 10",
-    "Unhandled hardware interrupt: 11",
-    "Unhandled hardware interrupt: 12",
-    "Unhandled hardware interrupt: 13",
-    "Unhandled hardware interrupt: 14",
-    "Unhandled hardware interrupt: 15",
-};
-
 static hwint_handler_t handlers[INT_HWINT_COUNT] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 void hwint_handler(struct IsrRegisters regs)
@@ -38,7 +19,7 @@ void hwint_handler(struct IsrRegisters regs)
     const hwint_handler_t handler = handlers[hwint_no];
 
     if (!handler) {
-        logger_warn_from("hwint", messages[hwint_no]);
+        logger_warn_from("hwint", "Unhandled hardware interrupt: %u", hwint_no);
         return;
     }
 
