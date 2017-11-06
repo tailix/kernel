@@ -18,6 +18,7 @@ OBJS += pic.c.o
 OBJS += timer.c.o
 OBJS += keyboard.c.o
 
+# For debugging
 OBJS += logger.c.o
 
 OBJS += protected.c.o protected.asm.cpp.o
