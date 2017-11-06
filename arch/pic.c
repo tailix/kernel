@@ -13,6 +13,10 @@ void pic_remap(const unsigned char master_irq_start, const unsigned char slave_i
 {
     logger_info_from("pic", "Remap the IRQ table.");
 
+    // Save masks
+    unsigned char master_mask = inportb(PIC_MASTER_DATA);
+    unsigned char slave_mask  = inportb(PIC_SLAVE_DATA);
+
     // Start the initialization sequence
     outportb(PIC_MASTER_COMMAND, 0x11);
     outportb(PIC_SLAVE_COMMAND,  0x11);
@@ -29,6 +33,7 @@ void pic_remap(const unsigned char master_irq_start, const unsigned char slave_i
     outportb(PIC_MASTER_DATA, 0x01);
     outportb(PIC_SLAVE_DATA,  0x01);
 
-    outportb(PIC_MASTER_DATA, 0x00);
-    outportb(PIC_SLAVE_DATA,  0x00);
+    // Restore masks
+    outportb(PIC_MASTER_DATA, master_mask);
+    outportb(PIC_SLAVE_DATA,  slave_mask);
 }
