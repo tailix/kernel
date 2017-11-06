@@ -3,4 +3,6 @@
 
 void pic_remap(unsigned char master_irq_start, unsigned char slave_irq_start);
 
+void pic_end_of_interrupt(unsigned char irq);
+
 #endif

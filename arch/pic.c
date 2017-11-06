@@ -9,9 +9,18 @@
 #define SLAVE_COMMAND 0xA0
 #define SLAVE_DATA    0xA1
 
-void pic_remap(const unsigned char master_irq_start, const unsigned char slave_irq_start)
+#define IRQS_COUNT 8
+
+static unsigned char master_irq_start = 0;
+static unsigned char slave_irq_start  = 8;
+
+void pic_remap(const unsigned char new_master_irq_start, const unsigned char new_slave_irq_start)
 {
     logger_info_from("pic", "Remap the IRQ table.");
+
+    // Remember IRQ numbers
+    master_irq_start = new_master_irq_start;
+    slave_irq_start  = new_slave_irq_start;
 
     // Save masks
     unsigned char master_mask = inportb(MASTER_DATA);
@@ -22,8 +31,8 @@ void pic_remap(const unsigned char master_irq_start, const unsigned char slave_i
     outportb(SLAVE_COMMAND,  0x11);
 
     // Set IRQ vectors
-    outportb(MASTER_DATA, master_irq_start);
-    outportb(SLAVE_DATA,  slave_irq_start);
+    outportb(MASTER_DATA, new_master_irq_start);
+    outportb(SLAVE_DATA,  new_slave_irq_start);
 
     // Connect master and slave with each other
     outportb(MASTER_DATA, 0x04);
@@ -36,4 +45,20 @@ void pic_remap(const unsigned char master_irq_start, const unsigned char slave_i
     // Restore masks
     outportb(MASTER_DATA, master_mask);
     outportb(SLAVE_DATA,  slave_mask);
+}
+
+void pic_end_of_interrupt(const unsigned char irq)
+{
+    const unsigned char to_master = master_irq_start <= irq && irq < master_irq_start + IRQS_COUNT;
+    const unsigned char to_slave  = slave_irq_start  <= irq && irq < slave_irq_start  + IRQS_COUNT;
+
+    if (!(to_master || to_slave)) {
+        return;
+    }
+
+    if (to_slave) {
+        outportb(SLAVE_COMMAND, 0x20);
+    }
+
+    outportb(MASTER_COMMAND, 0x20);
 }

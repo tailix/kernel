@@ -4,6 +4,7 @@
 #include "config.h"
 #include "asm.h"
 #include "logger.h"
+#include "pic.h"
 
 static const char *const messages[] = {
     "Unhandled hardware interrupt: 0",
@@ -35,15 +36,7 @@ void hwint_handler(struct IsrRegisters regs)
         return;
     }
 
-    // Send an EOI (end of interrupt) signal to the PICs
-
-    if (regs.int_no >= 40) { // TODO: hardcoded
-        // Send reset signal to slave
-        outportb(0xA0, 0x20); // TODO: hardcoded
-    }
-
-    // Send reset signal to master
-    outportb(0x20, 0x20); // TODO: hardcoded
+    pic_end_of_interrupt(regs.int_no);
 
     const unsigned char hwint_no = regs.int_no - INT_HWINT_FIRST;
 
