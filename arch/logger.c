@@ -20,7 +20,7 @@ static const char *const level_text[LEVELS_COUNT] = {
 
 static void print_level(unsigned char level);
 
-void logger_log(unsigned char level, const char *format, ...)
+void logger_log(unsigned char level, const char *const source, const char *format, ...)
 {
     if (level >= LEVELS_COUNT) {
         level = LEVELS_COUNT - 1;
@@ -28,7 +28,11 @@ void logger_log(unsigned char level, const char *format, ...)
 
     print_level(level);
 
-    console_setcolor(VGA_COLOR_WHITE);
+    if (source) {
+        console_setcolor(VGA_COLOR_BROWN);
+        console_print(source);
+        console_print(": ");
+    }
 
     char **arg = (char **) &format;
     int c;
@@ -44,6 +48,13 @@ void logger_log(unsigned char level, const char *format, ...)
         if (c == '\n') {
             console_putc('\n');
             print_level(level);
+
+            if (source) {
+                console_setcolor(VGA_COLOR_BROWN);
+                console_print(source);
+                console_print(": ");
+            }
+
             color = VGA_COLOR_LIGHT_GREY;
         }
         else if (c != '%') {

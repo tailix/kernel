@@ -55,7 +55,7 @@ void idt_flush(const struct IdtPointer *pointer);
 
 void protected_initialize(const struct KernelMQ_Info *const kinfo)
 {
-    logger_info("Remap the IRQ table.");
+    logger_info_from("protected", "Remap the IRQ table.");
 
     outportb(0x20, 0x11);
     outportb(0xA0, 0x11);
@@ -68,7 +68,7 @@ void protected_initialize(const struct KernelMQ_Info *const kinfo)
     outportb(0x21, 0x00);
     outportb(0xA1, 0x00);
 
-    logger_info("Setup GDT.");
+    logger_info_from("protected", "Setup GDT.");
 
     gdt_set_gate(GDT_NULL_INDEX,      0, 0x00000000, 0,    0);
     gdt_set_gate(GDT_KERNEL_CS_INDEX, 0, 0xFFFFFFFF, 0x9A, 0xCF);
@@ -78,7 +78,7 @@ void protected_initialize(const struct KernelMQ_Info *const kinfo)
 
     tss_write_to_gdt(kinfo, &gdt_entries[GDT_TSS_INDEX]);
 
-    logger_info("Setup IDT.");
+    logger_info_from("protected", "Setup IDT.");
 
     kmemset(idt_entries, 0, sizeof(idt_entries));
 
@@ -134,25 +134,25 @@ void protected_initialize(const struct KernelMQ_Info *const kinfo)
 
     idt_set_gate(INT_SYSCALL, (unsigned int)interrupt_0x80, 0x08, 0x8E | 0x60);
 
-    logger_info("Load GDT.");
+    logger_info_from("protected", "Load GDT.");
 
     gdt_pointer.limit = sizeof(struct GdtEntry) * GDT_SIZE - 1;
     gdt_pointer.base  = (unsigned int)&gdt_entries;
 
     gdt_flush(&gdt_pointer);
 
-    logger_info("Load IDT.");
+    logger_info_from("protected", "Load IDT.");
 
     idt_pointer.limit = sizeof(struct IdtEntry) * IDT_SIZE - 1;
     idt_pointer.base  = (unsigned int)&idt_entries;
 
     idt_flush(&idt_pointer);
 
-    logger_info("Load TSS.");
+    logger_info_from("protected", "Load TSS.");
 
     tss_flush();
 
-    logger_info("Enable interrupts.");
+    logger_info_from("protected", "Enable interrupts.");
 
     asm volatile ("sti");
 }

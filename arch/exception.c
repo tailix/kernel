@@ -46,7 +46,7 @@ void exception_handler(struct IsrRegisters regs)
         return;
     }
 
-    logger_fail("Unhandled protected-mode exception:\n%s", messages[regs.int_no]);
+    logger_fail_from("exception", "Unhandled protected-mode exception:\n%s", messages[regs.int_no]);
 
     asm volatile("cli");
     while (1) {}

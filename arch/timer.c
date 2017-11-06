@@ -5,7 +5,7 @@
 
 void timer_initialize(unsigned int frequency)
 {
-    logger_info("Initialize timer.");
+    logger_info_from("timer", "Initialize timer.");
 
     const unsigned int divisor = 1193180 / frequency;
 

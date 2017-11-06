@@ -50,7 +50,7 @@ void hwint_handler(struct IsrRegisters regs)
     const hwint_handler_t handler = handlers[hwint_no];
 
     if (!handler) {
-        logger_warn(messages[hwint_no]);
+        logger_warn_from("hwint", messages[hwint_no]);
         return;
     }
 
