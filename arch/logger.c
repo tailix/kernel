@@ -18,22 +18,15 @@ static const char *const level_text[LEVELS_COUNT] = {
     "FAIL",
 };
 
+static void print_level(unsigned char level);
+
 void logger_log(unsigned char level, const char *format, ...)
 {
     if (level >= LEVELS_COUNT) {
         level = LEVELS_COUNT - 1;
     }
 
-    console_setcolor(VGA_COLOR_LIGHT_GREY);
-    console_putc('[');
-
-    console_setcolor(level_colors[level]);
-    console_print(level_text[level]);
-
-    console_setcolor(VGA_COLOR_LIGHT_GREY);
-    console_putc(']');
-
-    console_putc(' ');
+    print_level(level);
 
     console_setcolor(VGA_COLOR_WHITE);
 
@@ -42,9 +35,18 @@ void logger_log(unsigned char level, const char *format, ...)
     char buf[20];
     arg++;
 
+    unsigned char color = VGA_COLOR_WHITE;
+
     while ((c = *format++) != 0)
     {
-        if (c != '%') {
+        console_setcolor(color);
+
+        if (c == '\n') {
+            console_putc('\n');
+            print_level(level);
+            color = VGA_COLOR_LIGHT_GREY;
+        }
+        else if (c != '%') {
             console_putc(c);
         }
         else {
@@ -89,4 +91,18 @@ string:
     }
 
     console_putc('\n');
+}
+
+void print_level(unsigned char level)
+{
+    console_setcolor(VGA_COLOR_LIGHT_GREY);
+    console_putc('[');
+
+    console_setcolor(level_colors[level]);
+    console_print(level_text[level]);
+
+    console_setcolor(VGA_COLOR_LIGHT_GREY);
+    console_putc(']');
+
+    console_putc(' ');
 }
