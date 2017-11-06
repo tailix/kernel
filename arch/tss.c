@@ -51,8 +51,7 @@ struct tss_entry {
     unsigned int ldt;
     unsigned short trap;
     unsigned short iomap_base;
-}
-__attribute__((packed));
+};
 
 static struct tss_entry tss;
 

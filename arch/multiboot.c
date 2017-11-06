@@ -18,8 +18,7 @@ struct multiboot_mmap_entry
     unsigned long long len;
     unsigned int type;
     unsigned int zero;
-}
-__attribute__((packed));
+};
 
 typedef struct multiboot_mmap_entry multiboot_memory_map_t;
 

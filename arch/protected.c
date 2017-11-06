@@ -28,8 +28,7 @@ struct GdtEntry {
     unsigned char  access;
     unsigned char  granularity;
     unsigned char  base_high;
-}
-__attribute__((packed));
+};
 
 struct IdtEntry {
     unsigned short base_lo;
@@ -37,8 +36,7 @@ struct IdtEntry {
     unsigned char  always0;
     unsigned char  flags;
     unsigned short base_hi;
-}
-__attribute__((packed));
+};
 
 static struct GdtPointer gdt_pointer;
 static struct IdtPointer idt_pointer;
