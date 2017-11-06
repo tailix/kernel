@@ -3,37 +3,37 @@
 #include "logger.h"
 #include "asm.h"
 
-#define PIC_MASTER_COMMAND 0x20
-#define PIC_MASTER_DATA    0x21
+#define MASTER_COMMAND 0x20
+#define MASTER_DATA    0x21
 
-#define PIC_SLAVE_COMMAND 0xA0
-#define PIC_SLAVE_DATA    0xA1
+#define SLAVE_COMMAND 0xA0
+#define SLAVE_DATA    0xA1
 
 void pic_remap(const unsigned char master_irq_start, const unsigned char slave_irq_start)
 {
     logger_info_from("pic", "Remap the IRQ table.");
 
     // Save masks
-    unsigned char master_mask = inportb(PIC_MASTER_DATA);
-    unsigned char slave_mask  = inportb(PIC_SLAVE_DATA);
+    unsigned char master_mask = inportb(MASTER_DATA);
+    unsigned char slave_mask  = inportb(SLAVE_DATA);
 
     // Start the initialization sequence
-    outportb(PIC_MASTER_COMMAND, 0x11);
-    outportb(PIC_SLAVE_COMMAND,  0x11);
+    outportb(MASTER_COMMAND, 0x11);
+    outportb(SLAVE_COMMAND,  0x11);
 
     // Set IRQ vectors
-    outportb(PIC_MASTER_DATA, master_irq_start);
-    outportb(PIC_SLAVE_DATA,  slave_irq_start);
+    outportb(MASTER_DATA, master_irq_start);
+    outportb(SLAVE_DATA,  slave_irq_start);
 
     // Connect master and slave with each other
-    outportb(PIC_MASTER_DATA, 0x04);
-    outportb(PIC_SLAVE_DATA,  0x02);
+    outportb(MASTER_DATA, 0x04);
+    outportb(SLAVE_DATA,  0x02);
 
     // 8086/88 (MCS-80/85) mode
-    outportb(PIC_MASTER_DATA, 0x01);
-    outportb(PIC_SLAVE_DATA,  0x01);
+    outportb(MASTER_DATA, 0x01);
+    outportb(SLAVE_DATA,  0x01);
 
     // Restore masks
-    outportb(PIC_MASTER_DATA, master_mask);
-    outportb(PIC_SLAVE_DATA,  slave_mask);
+    outportb(MASTER_DATA, master_mask);
+    outportb(SLAVE_DATA,  slave_mask);
 }
