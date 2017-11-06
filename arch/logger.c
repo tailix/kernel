@@ -4,15 +4,17 @@
 
 #include <kernelmq/stdlib.h>
 
-#define LEVELS_COUNT 3
+#define LEVELS_COUNT 4
 
 static const enum vga_color level_colors[LEVELS_COUNT] = {
+    VGA_COLOR_DARK_GREY,
     VGA_COLOR_CYAN,
     VGA_COLOR_MAGENTA,
     VGA_COLOR_RED,
 };
 
 static const char *const level_text[LEVELS_COUNT] = {
+    "DBUG",
     "INFO",
     "WARN",
     "FAIL",
