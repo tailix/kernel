@@ -21,3 +21,8 @@ void timer_register_handler(timer_handler_t handler)
 {
     hwint_register_handler(0, handler);
 }
+
+void timer_unregister_handler()
+{
+    hwint_unregister_handler(0);
+}

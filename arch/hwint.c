@@ -52,6 +52,15 @@ void hwint_register_handler(unsigned int int_no, hwint_handler_t handler)
     }
 
     handlers[int_no] = handler;
-
     pic_enable(int_no);
+}
+
+void hwint_unregister_handler(unsigned int int_no)
+{
+    if (int_no >= INT_HWINT_COUNT) {
+        return;
+    }
+
+    pic_disable(int_no);
+    handlers[int_no] = 0;
 }

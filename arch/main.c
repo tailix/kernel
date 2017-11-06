@@ -14,7 +14,8 @@ static struct KernelMQ_Info kinfo;
 
 #define TIMER_FREQ 50
 
-static unsigned long ticks = 0;
+static unsigned char timer_enabled = 1;
+static unsigned long timer_ticks = 0;
 
 static void on_timer();
 
@@ -79,7 +80,7 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
     timer_initialize(TIMER_FREQ);
     timer_register_handler(on_timer);
 
-    while (ticks < TIMER_FREQ * 3) {}
+    while (timer_enabled) {}
 
     for (unsigned int i = 0; i < kinfo.modules_count; ++i) {
         tasks_switch_to_user(kinfo.modules[i].base);
@@ -91,9 +92,14 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
 
 void on_timer()
 {
-    if (ticks % TIMER_FREQ == 0) {
-        logger_info_from("main", "Timer tick %u.", ticks);
+    if (timer_ticks % TIMER_FREQ == 0) {
+        logger_info_from("main", "Timer tick %u.", timer_ticks);
+
+        if (timer_ticks >= TIMER_FREQ * 3) {
+            timer_unregister_handler();
+            timer_enabled = 0;
+        }
     }
 
-    ++ticks;
+    ++timer_ticks;
 }
