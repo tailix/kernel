@@ -14,6 +14,7 @@ OBJS += main.c.o
 
 # Built-in drivers
 OBJS += console.c.o
+OBJS += pic.c.o
 OBJS += timer.c.o
 
 OBJS += logger.c.o
@@ -28,8 +29,6 @@ OBJS += interrupt.asm.cpp.o
 OBJS += exception.c.o
 OBJS += hwint.c.o
 OBJS += syscall.c.o
-
-OBJS += pic.c.o
 
 all: kernel
 
