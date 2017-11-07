@@ -4,8 +4,8 @@
 [GLOBAL interrupt_%2]
 interrupt_%2:
     cli
-    push byte 0
-    push byte %2
+    push dword 0
+    push dword %2
     jmp %1_wrapper
 %endmacro
 
@@ -13,7 +13,7 @@ interrupt_%2:
 [GLOBAL interrupt_%2]
 interrupt_%2:
     cli
-    push byte %2
+    push dword %2
     jmp %1_wrapper
 %endmacro
 
