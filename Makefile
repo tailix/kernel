@@ -13,7 +13,8 @@ export MODULES = $(addprefix $(shell pwd)/modules/, dummy1.bin dummy2.bin)
 
 run: run-iso
 
-all:     all-kernel   all-iso   all-libk   all-arch   all-test   all-modules
+all: all-kernel
+
 clean: clean-kernel clean-iso clean-libk clean-arch clean-test clean-modules
 
 test: run-test
@@ -24,7 +25,6 @@ test: run-test
 
 all-kernel: all-arch all-libk
 	$(CC) -T $(LINKER) -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(LIBARCH) $(LIBK)
-	grub-file --is-x86-multiboot2 $(KERNEL)
 
 clean-kernel:
 	rm -f $(KERNEL)
