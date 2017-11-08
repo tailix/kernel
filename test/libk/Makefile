@@ -1,5 +1,3 @@
-CC = $(CCPREFIX)gcc
-
 CFLAGS = -std=gnu99 -Wall -Wextra
 
 BINS = strlen.bin memset.bin
