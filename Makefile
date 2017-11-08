@@ -5,7 +5,7 @@ export AS = $(CCPREFIX)as
 export CC = $(CCPREFIX)gcc
 
 export INCLUDE = $(shell pwd)/include
-export KERNEL  = $(shell pwd)/kernelmq.multiboot2
+export KERNEL  = $(shell pwd)/kernelmq
 export LIBK    = $(shell pwd)/libk/libk.a
 export LIBARCH = $(shell pwd)/arch/$(ARCH)/libarch.a
 export LINKER  = $(shell pwd)/arch/$(ARCH)/linker.ld
