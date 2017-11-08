@@ -17,10 +17,10 @@ test: run-test
 ##########
 
 all-kernel: all-libk
-	make all -C arch/$(ARCH)
+	make all -C arch
 
 clean-kernel:
-	make clean -C arch/$(ARCH)
+	make clean -C arch
 
 #######
 # ISO #
