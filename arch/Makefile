@@ -1,3 +1,5 @@
+export OUTPUT = kernel
+
 ARCHES = $(shell ls -d */)
 ARCHES := $(ARCHES:/=)
 

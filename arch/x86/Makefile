@@ -1,5 +1,3 @@
-OUTPUT = libarch.a
-
 # Architecture-dependent
 OBJS = start.s.o
 OBJS += init.c.o
@@ -37,7 +35,7 @@ clean:
 	rm -f $(OUTPUT) $(OBJS)
 
 $(OUTPUT): $(OBJS)
-	$(AR) -rcs $@ $(OBJS)
+	$(CC) -T linker.ld -o $(OUTPUT) -ffreestanding -nostdlib -lgcc $(OBJS) $(LIBSRC) $(LIBK)
 
 %.c.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
