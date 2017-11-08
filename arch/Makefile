@@ -10,7 +10,7 @@ OBJS += pfa.c.o
 OBJS += paging.c.o paging.asm.cpp.o
 
 # Architecture-independent
-OBJS += info.c.o
+OBJS += ../src/info.c.o
 OBJS += main.c.o
 
 # Built-in drivers
