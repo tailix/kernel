@@ -1,4 +1,4 @@
-export OUTPUT = kernel
+export OUTPUT = kernelmq
 
 ARCHES = $(shell ls -d */)
 ARCHES := $(ARCHES:/=)

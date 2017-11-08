@@ -31,7 +31,7 @@ test: run-test
 ##########
 
 all-kernel: all-arch
-	cp arch/$(ARCH)/kernel $(KERNEL)
+	cp arch/$(ARCH)/kernelmq $(KERNEL)
 
 clean-kernel:
 	rm -f $(KERNEL)
