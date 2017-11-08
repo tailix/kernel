@@ -6,7 +6,7 @@ if [ -z "$ENV" ]; then
     ENV='none'
 fi
 
-CONFIG="env/$ENV.mk"
+CONFIG="arch/$ENV/config.mk"
 
 if [ ! -f "$CONFIG" ]; then
     echo >&2 "ERROR: file "$CONFIG" does not exist"
