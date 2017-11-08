@@ -1,49 +1,32 @@
-#include "multiboot.h"
+#include "console.h"
+#include "panic.h"
+#include "pfa.h"
+#include "protected.h"
 #include "paging.h"
 
 #include <kernelmq/info.h>
 #include <kernelmq/stdlib.h>
-
-// Defined in linker script
-extern char _kernel_offset;
-extern char _kernel_size;
-extern char _kernel_phys_base;
-extern char _kernel_virt_base;
-extern char _kernel_stack_top;
+#include <kernelmq/module.h>
 
 static struct KernelMQ_Info kinfo;
 
-const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long multiboot_info_base)
+void init(const struct KernelMQ_Info *const kinfo_ptr)
 {
-    if (multiboot_magic != MULTIBOOT_MAGIC) {
-        return 0;
-    }
+    console_initialize();
 
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
-    if (!multiboot_parse(&kinfo, multiboot_info_base)) {
-        return 0;
-    }
+    assert(kernelmq_info_validate_and_copy(&kinfo, kinfo_ptr), "Invalid kernel information.");
 
-    kinfo.kernel_offset = (unsigned long)&_kernel_offset;
-    kinfo.kernel_size   = (unsigned long)&_kernel_size;
+    pfa_initialize(&kinfo);
 
-    kinfo.kernel_phys_base = (unsigned long)&_kernel_phys_base;
-    kinfo.kernel_virt_base = (unsigned long)&_kernel_virt_base;
+    protected_initialize(&kinfo);
 
-    kinfo.kernel_phys_limit = kinfo.kernel_phys_base + kinfo.kernel_size - 1;
-    kinfo.kernel_virt_limit = kinfo.kernel_virt_base + kinfo.kernel_size - 1;
-
-    kinfo.kernel_and_modules_total_size = kinfo.kernel_size + kinfo.modules_total_size;
-
-    kinfo.kernel_stack_top = (unsigned long)&_kernel_stack_top;
-
+    // Set up a new post-relocate bootstrap pagetable so that
+    // we can map in VM, and we no longer rely on pre-relocated
+    // data.
     paging_clear();
-    paging_identity();
-    /* kinfo.freepde_start = */ paging_mapkernel(&kinfo);
+    paging_identity(); // Still need 1:1 for lapic and video mem and such.
+    paging_mapkernel(&kinfo);
     paging_load();
-
-    paging_enable();
-
-    return &kinfo;
 }

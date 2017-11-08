@@ -31,12 +31,12 @@ _start:
 
     push %ebx // Multiboot information pointer
     push %eax // Multiboot magic number
-    call init
+    call main
 
     mov $_kernel_stack_top, %esp // Initialize stack
 
     push %eax // Kernel information pointer
-    call main
+    call init
 
     call halt
 
