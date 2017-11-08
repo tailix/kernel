@@ -1,6 +1,7 @@
-#include "memory.h"
+#include "pfa.h"
 
 #include "config.h"
+#include "panic.h"
 
 #include <kernelmq/stdlib.h>
 
@@ -10,7 +11,7 @@ static unsigned char frames[FRAMES_COUNT];
 
 static void mark_used(unsigned long base, unsigned long limit);
 
-void memory_initialize(const struct KernelMQ_Info *const kinfo)
+void pfa_initialize(const struct KernelMQ_Info *const kinfo)
 {
     kmemset(frames, 0, sizeof(frames));
 
@@ -33,7 +34,7 @@ void memory_initialize(const struct KernelMQ_Info *const kinfo)
     }
 }
 
-unsigned long memory_alloc_page()
+unsigned long pfa_alloc_page()
 {
     for (unsigned int i = 0; i < FRAMES_COUNT; ++i) {
         if (!frames[i]) {
@@ -45,7 +46,7 @@ unsigned long memory_alloc_page()
     return 0;
 }
 
-unsigned long memory_alloc_big_page()
+unsigned long pfa_alloc_big_page()
 {
     unsigned int start = 0;
 
@@ -71,7 +72,7 @@ unsigned long memory_alloc_big_page()
     return 0;
 }
 
-void memory_free_page(const unsigned long addr)
+void pfa_free_page(const unsigned long addr)
 {
     assert(!(addr % PAGE_SIZE), "Small page address to free is not aligned.");
 
@@ -84,7 +85,7 @@ void memory_free_page(const unsigned long addr)
     frames[i] = 0;
 }
 
-void memory_free_big_page(const unsigned long addr)
+void pfa_free_big_page(const unsigned long addr)
 {
     assert(!(addr % PAGE_BIG_SIZE), "Big page address to free is not aligned.");
 
