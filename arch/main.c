@@ -32,7 +32,4 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
     paging_identity(); // Still need 1:1 for lapic and video mem and such.
     paging_mapkernel(&kinfo);
     paging_load();
-
-    logger_warn_from("main", "Nothing to do.");
-    logger_fail_from("main", "Halt.");
 }

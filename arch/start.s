@@ -22,7 +22,6 @@ _kernel_stack_top:
 .section .text
 
 .global _start
-.global halt
 
 .type _start, @function
 .type halt,   @function
@@ -39,11 +38,6 @@ _start:
     push %eax // Kernel information pointer
     call main
 
-halt:
-    cli
-1:
-    hlt
-    jmp 1b
+    call halt
 
 .size _start, . - _start
-.size _halt,  . - halt
