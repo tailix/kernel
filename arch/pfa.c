@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include "panic.h"
+#include "logger.h"
 
 #include <kernelmq/stdlib.h>
 
@@ -13,6 +14,8 @@ static void mark_used(unsigned long base, unsigned long limit);
 
 void pfa_initialize(const struct KernelMQ_Info *const kinfo)
 {
+    logger_info_from("pfa", "Initialize page frame allocator.");
+
     kmemset(frames, 0, sizeof(frames));
 
     mark_used(0, MEM_UPPER_BASE - 1);
