@@ -102,13 +102,13 @@ unsigned char print_multiboot_tag(struct KernelMQ_Info *kinfo, const struct mult
 
 unsigned char print_multiboot_tag_cmdline(struct KernelMQ_Info *kinfo, const struct multiboot_tag_string *const tag)
 {
-    unsigned int length = kstrlen(tag->string);
+    unsigned int slen = kstrlen(tag->string);
 
-    if (length >= KERNELMQ_INFO_CMDLINE_SIZE_MAX) {
+    if (slen >= KERNELMQ_INFO_CMDLINE_SIZE_MAX) {
         return 0;
     }
 
-    kstrncpy(kinfo->cmdline, tag->string, length);
+    kstrncpy(kinfo->cmdline, tag->string, slen);
 
     return 1;
 }
@@ -119,15 +119,15 @@ unsigned char print_multiboot_tag_module(struct KernelMQ_Info *kinfo, const stru
         return 0;
     }
 
-    unsigned int cmdline_length = kstrlen(tag->cmdline);
+    unsigned int cmdline_slen = kstrlen(tag->cmdline);
 
-    if (cmdline_length >= KERNELMQ_INFO_CMDLINE_SIZE_MAX) {
+    if (cmdline_slen >= KERNELMQ_INFO_CMDLINE_SIZE_MAX) {
         return 0;
     }
 
     struct KernelMQ_Info_Module *module = &kinfo->modules[kinfo->modules_count];
 
-    kstrncpy(module->cmdline, tag->cmdline, cmdline_length);
+    kstrncpy(module->cmdline, tag->cmdline, cmdline_slen);
 
     module->base  = tag->mod_start;
     module->limit = tag->mod_end;

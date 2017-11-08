@@ -1,10 +1,10 @@
-char *kstrncpy(char *const dest, const char *const src, const unsigned long length)
+char *kstrncpy(char *const dest, const char *const src, const unsigned long slen)
 {
-    for (unsigned long i = 0; i < length; ++i) {
+    for (unsigned long i = 0; i < slen; ++i) {
         dest[i] = src[i];
     }
 
-    dest[length] = 0;
+    dest[slen] = 0;
 
     return dest;
 }

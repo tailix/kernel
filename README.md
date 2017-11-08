@@ -11,6 +11,7 @@ Glossary
 * `limit` - physical or virtual end address (included, `unsigned long`)
 * `size` - size in bytes (`unsigned long`)
 * `length` - number of entries (`unsigned int`)
+* `slen` - string length excluding the terminating null byte (`unsigned int`)
 
 Dependencies
 ------------

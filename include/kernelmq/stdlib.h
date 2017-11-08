@@ -9,7 +9,7 @@ void kmemset(void *buffer, unsigned char value, unsigned long size);
 
 unsigned int kstrlen(const char *s);
 
-char *kstrncpy(char *dest, const char *src, unsigned long length);
+char *kstrncpy(char *dest, const char *src, unsigned long slen);
 
 void kitoa(char *buf, int base, int d);
 
