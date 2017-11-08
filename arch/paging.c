@@ -5,19 +5,6 @@
 
 #include <kernelmq/stdlib.h>
 
-// i386 paging constants
-#define I386_VM_PRESENT 0x001 // Page is present
-#define I386_VM_WRITE   0x002 // Read/write access allowed
-#define I386_VM_READ    0x000 // Read access only
-#define I386_VM_USER    0x004 // User access allowed
-
-#define I386_VM_PWT 0x008 // Write through
-#define I386_VM_PCD 0x010 // Cache disable
-#define I386_VM_ACC 0x020 // Accessed
-
-// Page directory specific flags.
-#define I386_VM_BIGPAGE 0x080 // 4MB page
-
 // CR0 bits
 #define I386_CR0_PE 0x00000001 // Protected mode
 #define I386_CR0_MP 0x00000002 // Monitor Coprocessor
@@ -36,6 +23,21 @@
 #define I386_CR4_PAE 0x00000020 // Physical addr extens
 #define I386_CR4_MCE 0x00000040 // Machine check enable
 #define I386_CR4_PGE 0x00000080 // Global page flag enable
+
+struct entry {
+    unsigned int present        : 1;
+    unsigned int writable       : 1;
+    unsigned int user           : 1;
+    unsigned int write_through  : 1;
+    unsigned int cache_disabled : 1;
+    unsigned int accessed       : 1;
+    unsigned int always_0       : 1;
+    unsigned int page_size      : 1;
+    unsigned int ignored        : 1;
+    unsigned int unused         : 3;
+    unsigned int addr           : 20;
+}
+__attribute__((packed));
 
 unsigned long read_cr0();
 unsigned long read_cr4();
@@ -84,16 +86,22 @@ void paging_clear()
 void paging_identity()
 {
     for (int i = 0; i < PAGE_DIR_SIZE; ++i) {
-        unsigned int flags = I386_VM_PRESENT |
-                             I386_VM_BIGPAGE |
-                             I386_VM_USER    |
-                             I386_VM_WRITE;
+        struct entry entry;
 
-        unsigned long phys = i * PAGE_BIG_SIZE;
+        entry.addr = (i * PAGE_BIG_SIZE) >> 12;
 
-        flags |= I386_VM_PWT | I386_VM_PCD;
+        entry.unused         = 0;
+        entry.ignored        = 0;
+        entry.page_size      = 1;
+        entry.always_0       = 0;
+        entry.accessed       = 0;
+        entry.cache_disabled = 1;
+        entry.write_through  = 1;
+        entry.user           = 1;
+        entry.writable       = 1;
+        entry.present        = 1;
 
-        pagedir[i] = phys | flags;
+        pagedir[i] = *((unsigned long*)(&entry));
     }
 }
 
@@ -108,9 +116,22 @@ int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
     unsigned long kern_phys = kinfo->kernel_phys_base;
 
     while (mapped < kinfo->kernel_size) {
-        pagedir[pde] = kern_phys | I386_VM_PRESENT |
-                                   I386_VM_BIGPAGE |
-                                   I386_VM_WRITE;
+        struct entry entry;
+
+        entry.addr = kern_phys >> 12;
+
+        entry.unused         = 0;
+        entry.ignored        = 0;
+        entry.page_size      = 1;
+        entry.always_0       = 0;
+        entry.accessed       = 0;
+        entry.cache_disabled = 0;
+        entry.write_through  = 0;
+        entry.user           = 0;
+        entry.writable       = 1;
+        entry.present        = 1;
+
+        pagedir[pde] = *((unsigned long*)(&entry));
 
         mapped += PAGE_BIG_SIZE;
         kern_phys += PAGE_BIG_SIZE;
