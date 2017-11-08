@@ -10,6 +10,10 @@ unsigned char kernelmq_info_validate_and_copy(
         return 0;
     }
 
+    if (!dest) {
+        return 0;
+    }
+
     if (!cmdline_terminated(src->cmdline)) {
         return 0;
     }
