@@ -8,7 +8,7 @@ void pfa_initialize(const struct KernelMQ_Info *kinfo);
 unsigned long pfa_alloc_page();
 unsigned long pfa_alloc_big_page();
 
-void pfa_free_page(unsigned long addr);
-void pfa_free_big_page(unsigned long addr);
+void pfa_free_page(unsigned long base);
+void pfa_free_big_page(unsigned long base);
 
 #endif
