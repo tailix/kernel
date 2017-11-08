@@ -1,9 +1,7 @@
 *.o
+*.a
+*.multiboot
 *.bin
+*.iso
 
 /config.mk
-
-/arch/x86/kernel
-/libk/libk.a
-/iso/image.iso
-/iso/rootfs/boot/kernelmq

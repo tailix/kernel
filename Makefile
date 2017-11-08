@@ -1,7 +1,7 @@
 include config.mk
 
 export INCLUDE = $(shell pwd)/include
-export KERNEL  = $(shell pwd)/arch/$(ARCH)/kernel
+export KERNEL  = $(shell pwd)/arch/$(ARCH)/kernel.multiboot
 export LIBK    = $(shell pwd)/libk/libk.a
 export MODULES = $(addprefix $(shell pwd)/modules/, dummy1.bin dummy2.bin)
 

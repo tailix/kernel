@@ -33,12 +33,12 @@ OBJS += exception.c.o
 OBJS += hwint.c.o
 OBJS += syscall.c.o
 
-all: kernel
+all: kernel.multiboot
 
 clean:
-	rm -f kernel $(OBJS)
+	rm -f kernel.multiboot $(OBJS)
 
-kernel: $(OBJS)
+kernel.multiboot: $(OBJS)
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $(OBJS) $(LIBK)
 	grub-file --is-x86-multiboot2 $@
 
