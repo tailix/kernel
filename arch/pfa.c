@@ -6,7 +6,7 @@
 
 #include <kernelmq/stdlib.h>
 
-#define FRAMES_COUNT (PAGE_DIR_SIZE * PAGE_TABLE_SIZE) // / sizeof(unsigned char))
+#define FRAMES_COUNT (PAGE_DIR_LENGTH * PAGE_TABLE_LENGTH) // / sizeof(unsigned char))
 
 static unsigned char frames[FRAMES_COUNT];
 

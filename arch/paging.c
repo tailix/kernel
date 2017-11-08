@@ -46,7 +46,7 @@ void write_cr0(volatile unsigned long);
 void write_cr3(volatile unsigned long);
 void write_cr4(volatile unsigned long);
 
-static struct entry pagedir[PAGE_DIR_SIZE] __attribute__((aligned(4096)));
+static struct entry pagedir[PAGE_DIR_LENGTH] __attribute__((aligned(4096)));
 
 void paging_enable()
 {
@@ -85,7 +85,7 @@ void paging_clear()
 
 void paging_identity()
 {
-    for (int i = 0; i < PAGE_DIR_SIZE; ++i) {
+    for (int i = 0; i < PAGE_DIR_LENGTH; ++i) {
         pagedir[i].addr = (i * PAGE_BIG_SIZE) >> 12;
 
         pagedir[i].unused         = 0;

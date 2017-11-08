@@ -3,11 +3,11 @@
 
 #define MEM_UPPER_BASE ((unsigned long)(1 * 1024 * 1024)) // 1 MB
 
-#define PAGE_DIR_SIZE   1024
-#define PAGE_TABLE_SIZE 1024
+#define PAGE_DIR_LENGTH   1024
+#define PAGE_TABLE_LENGTH 1024
 
 #define PAGE_SIZE     4096
-#define PAGE_BIG_SIZE (PAGE_SIZE * PAGE_TABLE_SIZE)
+#define PAGE_BIG_SIZE (PAGE_SIZE * PAGE_TABLE_LENGTH)
 
 #define IDT_SIZE 256 // maximal size
 
