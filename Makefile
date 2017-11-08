@@ -15,7 +15,8 @@ export MODULES = $(addprefix $(shell pwd)/modules/, dummy1.bin dummy2.bin)
 export CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I $(INCLUDE)
 
 ifeq (none, $(ARCH))
-run: test
+run: all-kernel
+	@$(KERNEL)
 else
 run: run-iso
 endif
