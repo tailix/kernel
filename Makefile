@@ -6,10 +6,15 @@ export CC = $(CCPREFIX)gcc
 
 export INCLUDE = $(shell pwd)/include
 export KERNEL  = $(shell pwd)/kernelmq
-export LIBK    = $(shell pwd)/libk/libk.a
+
+export LIBSRC  = $(shell pwd)/src/libsrc.a
 export LIBARCH = $(shell pwd)/arch/$(ARCH)/libarch.a
+export LIBK    = $(shell pwd)/libk/libk.a
+
 export LINKER  = $(shell pwd)/arch/$(ARCH)/linker.ld
 export MODULES = $(addprefix $(shell pwd)/modules/, dummy1.bin dummy2.bin)
+
+export CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I $(INCLUDE)
 
 ifeq (none, $(ARCH))
 run: test
@@ -27,11 +32,21 @@ test: run-test
 # Kernel #
 ##########
 
-all-kernel: all-arch all-libk
-	$(CC) -T $(LINKER) -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(LIBARCH) $(LIBK)
+all-kernel: all-src all-arch all-libk
+	$(CC) -T $(LINKER) -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(LIBARCH) $(LIBSRC) $(LIBK)
 
 clean-kernel:
 	rm -f $(KERNEL)
+
+#######
+# src #
+#######
+
+all-src:
+	make all -C src
+
+clean-src:
+	make clean -C src
 
 ########
 # arch #

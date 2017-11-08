@@ -9,7 +9,6 @@ OBJS += pfa.c.o
 OBJS += paging.c.o paging.asm.cpp.o
 
 # Architecture-independent
-OBJS += ../../src/info.c.o
 OBJS += main.c.o
 
 # Built-in drivers
@@ -41,7 +40,7 @@ $(OUTPUT): $(OBJS)
 	$(AR) -rcs $@ $(OBJS)
 
 %.c.o: %.c
-	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I "$(INCLUDE)"
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 %.s.o: %.s
 	$(AS) $< -o $@
