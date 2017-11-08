@@ -11,7 +11,11 @@ export LIBARCH = $(shell pwd)/arch/$(ARCH)/libarch.a
 export LINKER  = $(shell pwd)/arch/$(ARCH)/linker.ld
 export MODULES = $(addprefix $(shell pwd)/modules/, dummy1.bin dummy2.bin)
 
+ifeq (none, $(ARCH))
+run: test
+else
 run: run-iso
+endif
 
 all: all-kernel
 

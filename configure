@@ -3,7 +3,7 @@
 ENV="$1"
 
 if [ -z "$ENV" ]; then
-    ENV='build-x86'
+    ENV='x86'
 fi
 
 CONFIG="env/$ENV.mk"
