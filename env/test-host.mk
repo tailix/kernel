@@ -1,2 +1,2 @@
-export CCPREFIX =
 export ARCH = none
+export CCPREFIX =
