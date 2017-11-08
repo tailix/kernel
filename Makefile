@@ -1,14 +1,20 @@
 include config.mk
 
+export AR = $(CCPREFIX)ar
+export AS = $(CCPREFIX)as
+export CC = $(CCPREFIX)gcc
+
 export INCLUDE = $(shell pwd)/include
-export KERNEL  = $(shell pwd)/arch/$(ARCH)/kernel.multiboot
+export KERNEL  = $(shell pwd)/kernelmq.multiboot
 export LIBK    = $(shell pwd)/libk/libk.a
+export LIBARCH = $(shell pwd)/arch/$(ARCH)/libarch.a
+export LINKER  = $(shell pwd)/arch/$(ARCH)/linker.ld
 export MODULES = $(addprefix $(shell pwd)/modules/, dummy1.bin dummy2.bin)
 
 run: run-iso
 
-all:     all-kernel   all-iso   all-libk   all-test   all-modules
-clean: clean-kernel clean-iso clean-libk clean-test clean-modules
+all:     all-kernel   all-iso   all-libk   all-arch   all-test   all-modules
+clean: clean-kernel clean-iso clean-libk clean-arch clean-test clean-modules
 
 test: run-test
 
@@ -16,10 +22,21 @@ test: run-test
 # Kernel #
 ##########
 
-all-kernel: all-libk
-	make all -C arch
+all-kernel: all-arch all-libk
+	$(CC) -T $(LINKER) -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(LIBARCH) $(LIBK)
+	grub-file --is-x86-multiboot2 $(KERNEL)
 
 clean-kernel:
+	rm -f $(KERNEL)
+
+########
+# arch #
+########
+
+all-arch:
+	make all -C arch
+
+clean-arch:
 	make clean -C arch
 
 #######

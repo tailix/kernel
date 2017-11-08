@@ -1,5 +1,4 @@
-AS = $(CCPREFIX)as
-CC = $(CCPREFIX)gcc
+OUTPUT = libarch.a
 
 # Architecture-dependent
 OBJS = start.s.o
@@ -33,14 +32,13 @@ OBJS += exception.c.o
 OBJS += hwint.c.o
 OBJS += syscall.c.o
 
-all: kernel.multiboot
+all: $(OUTPUT)
 
 clean:
-	rm -f kernel.multiboot $(OBJS)
+	rm -f $(OUTPUT) $(OBJS)
 
-kernel.multiboot: $(OBJS)
-	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $(OBJS) $(LIBK)
-	grub-file --is-x86-multiboot2 $@
+$(OUTPUT): $(OBJS)
+	$(AR) -rcs $@ $(OBJS)
 
 %.c.o: %.c
 	$(CC) -c $< -o $@ -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I "$(INCLUDE)"
