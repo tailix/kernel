@@ -1,6 +1,6 @@
 *.o
 *.a
-*.multiboot
+*.multiboot2
 *.bin
 *.iso
 
