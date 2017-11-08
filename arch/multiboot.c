@@ -104,7 +104,7 @@ unsigned char print_multiboot_tag_cmdline(struct KernelMQ_Info *kinfo, const str
 {
     unsigned int slen = kstrlen(tag->string);
 
-    if (slen >= KERNELMQ_INFO_CMDLINE_SIZE_MAX) {
+    if (slen > KERNELMQ_INFO_CMDLINE_SLEN_MAX) {
         return 0;
     }
 
@@ -121,7 +121,7 @@ unsigned char print_multiboot_tag_module(struct KernelMQ_Info *kinfo, const stru
 
     unsigned int cmdline_slen = kstrlen(tag->cmdline);
 
-    if (cmdline_slen >= KERNELMQ_INFO_CMDLINE_SIZE_MAX) {
+    if (cmdline_slen > KERNELMQ_INFO_CMDLINE_SLEN_MAX) {
         return 0;
     }
 
