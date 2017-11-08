@@ -3,7 +3,7 @@
 
 /config.mk
 
-/arch/kernel
+/arch/x86/kernel
 /libk/libk.a
 /iso/image.iso
 /iso/rootfs/boot/kernelmq

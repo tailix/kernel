@@ -1,7 +1,7 @@
 include config.mk
 
 export INCLUDE = $(shell pwd)/include
-export KERNEL  = $(shell pwd)/arch/kernel
+export KERNEL  = $(shell pwd)/arch/$(ARCH)/kernel
 export LIBK    = $(shell pwd)/libk/libk.a
 export MODULES = $(addprefix $(shell pwd)/modules/, dummy1.bin dummy2.bin)
 
@@ -17,10 +17,10 @@ test: run-test
 ##########
 
 all-kernel: all-libk
-	make all -C arch
+	make all -C arch/$(ARCH)
 
 clean-kernel:
-	make clean -C arch
+	make clean -C arch/$(ARCH)
 
 #######
 # ISO #
