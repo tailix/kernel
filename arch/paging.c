@@ -46,7 +46,7 @@ void write_cr0(volatile unsigned long);
 void write_cr3(volatile unsigned long);
 void write_cr4(volatile unsigned long);
 
-static unsigned long pagedir[PAGE_DIR_SIZE] __attribute__((aligned(4096)));
+static struct entry pagedir[PAGE_DIR_SIZE] __attribute__((aligned(4096)));
 
 void paging_enable()
 {
@@ -86,22 +86,18 @@ void paging_clear()
 void paging_identity()
 {
     for (int i = 0; i < PAGE_DIR_SIZE; ++i) {
-        struct entry entry;
+        pagedir[i].addr = (i * PAGE_BIG_SIZE) >> 12;
 
-        entry.addr = (i * PAGE_BIG_SIZE) >> 12;
-
-        entry.unused         = 0;
-        entry.ignored        = 0;
-        entry.page_size      = 1;
-        entry.always_0       = 0;
-        entry.accessed       = 0;
-        entry.cache_disabled = 1;
-        entry.write_through  = 1;
-        entry.user           = 1;
-        entry.writable       = 1;
-        entry.present        = 1;
-
-        pagedir[i] = *((unsigned long*)(&entry));
+        pagedir[i].unused         = 0;
+        pagedir[i].ignored        = 0;
+        pagedir[i].page_size      = 1;
+        pagedir[i].always_0       = 0;
+        pagedir[i].accessed       = 0;
+        pagedir[i].cache_disabled = 1;
+        pagedir[i].write_through  = 1;
+        pagedir[i].user           = 1;
+        pagedir[i].writable       = 1;
+        pagedir[i].present        = 1;
     }
 }
 
@@ -116,22 +112,18 @@ int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
     unsigned long kern_phys = kinfo->kernel_phys_base;
 
     while (mapped < kinfo->kernel_size) {
-        struct entry entry;
+        pagedir[pde].addr = kern_phys >> 12;
 
-        entry.addr = kern_phys >> 12;
-
-        entry.unused         = 0;
-        entry.ignored        = 0;
-        entry.page_size      = 1;
-        entry.always_0       = 0;
-        entry.accessed       = 0;
-        entry.cache_disabled = 0;
-        entry.write_through  = 0;
-        entry.user           = 0;
-        entry.writable       = 1;
-        entry.present        = 1;
-
-        pagedir[pde] = *((unsigned long*)(&entry));
+        pagedir[pde].unused         = 0;
+        pagedir[pde].ignored        = 0;
+        pagedir[pde].page_size      = 1;
+        pagedir[pde].always_0       = 0;
+        pagedir[pde].accessed       = 0;
+        pagedir[pde].cache_disabled = 0;
+        pagedir[pde].write_through  = 0;
+        pagedir[pde].user           = 0;
+        pagedir[pde].writable       = 1;
+        pagedir[pde].present        = 1;
 
         mapped += PAGE_BIG_SIZE;
         kern_phys += PAGE_BIG_SIZE;
