@@ -14,8 +14,8 @@
 
 struct multiboot_mmap_entry
 {
-    unsigned long long addr;
-    unsigned long long len;
+    unsigned long long base;
+    unsigned long long size;
     unsigned int type;
     unsigned int zero;
 };
@@ -59,19 +59,19 @@ static unsigned char print_multiboot_tag_cmdline(struct KernelMQ_Info *kinfo, co
 static unsigned char print_multiboot_tag_module (struct KernelMQ_Info *kinfo, const struct multiboot_tag_module *tag);
 static unsigned char print_multiboot_tag_mmap   (struct KernelMQ_Info *kinfo, const struct multiboot_tag_mmap   *tag);
 
-unsigned char multiboot_parse(struct KernelMQ_Info *kinfo, unsigned long addr)
+unsigned char multiboot_parse(struct KernelMQ_Info *kinfo, unsigned long base)
 {
     if (!kinfo) {
         return 0;
     }
 
     // Unaligned address
-    if (addr & 7) {
+    if (base & 7) {
         return 0;
     }
 
     for (
-        struct multiboot_tag *tag = (struct multiboot_tag*)(addr + 8);
+        struct multiboot_tag *tag = (struct multiboot_tag*)(base + 8);
         tag->type != MULTIBOOT_TAG_TYPE_END;
         tag = (struct multiboot_tag*)((unsigned char*)tag + ((tag->size + 7) & ~7))
     ) {
@@ -153,8 +153,8 @@ unsigned char print_multiboot_tag_mmap(struct KernelMQ_Info *kinfo, const struct
 
         struct KernelMQ_Info_Area *area = &kinfo->areas[kinfo->areas_count];
 
-        area->base  = mmap->addr;
-        area->size  = mmap->len;
+        area->base  = mmap->base;
+        area->size  = mmap->size;
         area->limit = area->base + area->size - 1;
 
         area->is_available = mmap->type == MULTIBOOT_MEMORY_AVAILABLE;

@@ -13,7 +13,7 @@ extern char _kernel_stack_top;
 
 static struct KernelMQ_Info kinfo;
 
-const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long multiboot_info_addr)
+const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long multiboot_info_base)
 {
     if (multiboot_magic != MULTIBOOT_MAGIC) {
         return 0;
@@ -21,7 +21,7 @@ const struct KernelMQ_Info *init(unsigned long multiboot_magic, unsigned long mu
 
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
-    if (!multiboot_parse(&kinfo, multiboot_info_addr)) {
+    if (!multiboot_parse(&kinfo, multiboot_info_base)) {
         return 0;
     }
 
