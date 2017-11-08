@@ -3,6 +3,15 @@ KernelMQ
 
 Message queue with additional IPC capabilities implemented as multiboot microkernel.
 
+Glossary
+--------
+
+* `addr` - physical address (`unsigned long`)
+* `base` - physical or virtual start address (`unsigned long`)
+* `limit` - physical or virtual end address (included, `unsigned long`)
+* `size` - size in bytes (`unsigned long`)
+* `length` - number of entries (`unsigned int`)
+
 Dependencies
 ------------
 
