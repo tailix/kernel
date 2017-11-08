@@ -30,7 +30,7 @@ Build and run
 -------------
 
 ```sh
-./configure build
+./configure build-x86
 make clean
 make run
 ```
@@ -39,7 +39,7 @@ Run tests
 ---------
 
 ```sh
-./configure test
+./configure test-host
 make clean
 make test
 ```
