@@ -1,4 +1,5 @@
 #include "console.h"
+#include "panic.h"
 #include "logger.h"
 #include "memory.h"
 #include "protected.h"
@@ -16,10 +17,7 @@ void main(const struct KernelMQ_Info *const kinfo_ptr)
 
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
-    if (!kernelmq_info_validate_and_copy(&kinfo, kinfo_ptr)) {
-        logger_fail_from("main", "Invalid kernel information. Halt.");
-        return;
-    }
+    assert(kernelmq_info_validate_and_copy(&kinfo, kinfo_ptr), "Invalid kernel information.");
 
     memory_initialize(&kinfo);
 

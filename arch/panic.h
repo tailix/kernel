@@ -3,4 +3,6 @@
 
 void panic(const char *s);
 
+#define assert(cond, s) { if (!(cond)) { panic(s); } }
+
 #endif

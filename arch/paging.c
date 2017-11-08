@@ -1,6 +1,7 @@
 #include "paging.h"
 
 #include "config.h"
+#include "panic.h"
 
 #include <kernelmq/stdlib.h>
 
@@ -36,9 +37,6 @@
 #define I386_CR4_MCE 0x00000040 // Machine check enable
 #define I386_CR4_PGE 0x00000080 // Global page flag enable
 
-// TODO: implement this
-#define assert(n) if (n) {}
-
 unsigned long read_cr0();
 unsigned long read_cr4();
 
@@ -53,8 +51,7 @@ void paging_enable()
     unsigned long cr0 = read_cr0();
     unsigned long cr4 = read_cr4();
 
-    // The boot loader should have put us in protected mode.
-    assert(cr0 & I386_CR0_PE);
+    assert(cr0 & I386_CR0_PE, "The boot loader should have put us in protected mode.");
 
     // First clear PG and PGE flag, as PGE must be enabled after PG.
     write_cr0(cr0 & ~I386_CR0_PG);
@@ -102,8 +99,8 @@ void paging_identity()
 
 int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
 {
-    assert(!(kinfo->kernel_phys_base % PAGE_BIG_SIZE));
-    assert(!(kinfo->kernel_virt_base % PAGE_BIG_SIZE));
+    assert(!(kinfo->kernel_phys_base % PAGE_BIG_SIZE), "Kernel physical address is not aligned.");
+    assert(!(kinfo->kernel_virt_base % PAGE_BIG_SIZE), "Kernel virtual address is not aligned.");
 
     int pde = kinfo->kernel_virt_base / PAGE_BIG_SIZE;
 
