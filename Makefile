@@ -23,7 +23,7 @@ endif
 
 all: all-kernel
 
-clean: clean-kernel clean-iso clean-libk clean-arch clean-test clean-modules
+clean: clean-kernel clean-iso clean-libk clean-arch clean-src clean-test clean-modules
 
 test: run-test
 
