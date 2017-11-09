@@ -22,6 +22,8 @@ OBJS += pagedir.c.o
 
 # Architecture-independent
 OBJS += info.c.o
+
+# Stdlib
 OBJS += memset.c.o
 OBJS += strlen.c.o
 OBJS += itoa.c.o
