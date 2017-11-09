@@ -5,20 +5,26 @@ export AS = $(CCPREFIX)as
 export CC = $(CCPREFIX)gcc
 
 export INCLUDE = $(shell pwd)/include
-export KERNEL  = $(shell pwd)/kernelmq
+export KERNEL  = $(shell pwd)/rootfs/boot/kernelmq.multiboot2
 
 export LIBSRC  = $(shell pwd)/src/libsrc.a
 export LIBK    = $(shell pwd)/libk/libk.a
 
 export CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I $(INCLUDE)
 
-SUBDIRS = arch iso libk src
+SUBDIRS = arch libk src
 
-run: run-iso
+IMAGE = $(shell pwd)/image.iso
+
+run: all-kernel
+	grub-file --is-x86-multiboot2 $(KERNEL)
+	grub-mkrescue rootfs -o $(IMAGE)
+	qemu-system-i386 -cdrom $(IMAGE)
 
 all: all-kernel
 
 clean: clean-kernel $(addprefix clean-, $(SUBDIRS))
+	rm -f $(IMAGE)
 
 ##########
 # Kernel #
@@ -49,19 +55,6 @@ all-arch: all-src all-libk
 
 clean-arch:
 	make clean -C arch
-
-#######
-# ISO #
-#######
-
-run-iso: all-iso
-	make run -C iso
-
-all-iso: all-kernel
-	make all -C iso
-
-clean-iso:
-	make clean -C iso
 
 ########
 # libk #
