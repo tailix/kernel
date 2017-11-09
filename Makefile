@@ -8,11 +8,9 @@ export CC = $(CCPREFIX)gcc
 export INCLUDE = $(shell pwd)/include
 export KERNEL  = $(shell pwd)/rootfs/boot/kernelmq.multiboot2
 
-export LIBSRC  = $(shell pwd)/src/libsrc.a
-
 export CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I $(INCLUDE)
 
-SUBDIRS = arch src
+SUBDIRS = arch
 
 IMAGE = $(shell pwd)/image.iso
 
@@ -27,21 +25,11 @@ clean: $(addprefix clean-, $(SUBDIRS))
 	rm -f $(IMAGE)
 	rm -f $(KERNEL)
 
-#######
-# src #
-#######
-
-all-src:
-	make all -C src
-
-clean-src:
-	make clean -C src
-
 ########
 # arch #
 ########
 
-all-arch: all-src
+all-arch:
 	make all -C arch
 
 clean-arch:

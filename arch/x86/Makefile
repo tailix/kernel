@@ -8,6 +8,13 @@ OBJS += pfa.c.o
 OBJS += paging.c.o paging.asm.cpp.o
 OBJS += pagedir.c.o
 
+# Architecture-independent
+OBJS += info.c.o
+OBJS += memset.c.o
+OBJS += strlen.c.o
+OBJS += itoa.c.o
+OBJS += strncpy.c.o
+
 # Built-in drivers
 OBJS += console.c.o
 OBJS += pic.c.o
@@ -34,7 +41,7 @@ clean:
 	rm -f $(OBJS)
 
 $(KERNEL): $(OBJS)
-	$(CC) -T linker.ld -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(OBJS) $(LIBSRC)
+	$(CC) -T linker.ld -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(OBJS)
 
 %.c.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
