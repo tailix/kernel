@@ -47,9 +47,8 @@ OBJS += exception.c.o
 OBJS += hwint.c.o
 OBJS += syscall.c.o
 
-run: $(KERNEL)
-	grub-mkrescue rootfs -o $(IMAGE)
-	qemu-system-i386 -cdrom $(IMAGE)
+run: $(IMAGE)
+	qemu-system-i386 -cdrom $<
 
 all: $(KERNEL)
 
@@ -57,6 +56,9 @@ clean:
 	rm -f $(OBJS)
 	rm -f $(IMAGE)
 	rm -f $(KERNEL)
+
+$(IMAGE): $(KERNEL)
+	grub-mkrescue rootfs -o $@
 
 $(KERNEL): $(OBJS)
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $^
