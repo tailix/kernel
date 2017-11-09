@@ -10,11 +10,9 @@ export KERNEL  = $(shell pwd)/kernelmq
 export LIBSRC  = $(shell pwd)/src/libsrc.a
 export LIBK    = $(shell pwd)/libk/libk.a
 
-export MODULES = $(addprefix $(shell pwd)/modules/, dummy1.bin dummy2.bin)
-
 export CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I $(INCLUDE)
 
-SUBDIRS = arch iso libk modules src
+SUBDIRS = arch iso libk src
 
 run: run-iso
 
@@ -59,7 +57,7 @@ clean-arch:
 run-iso: all-iso
 	make run -C iso
 
-all-iso: all-kernel all-modules
+all-iso: all-kernel
 	make all -C iso
 
 clean-iso:
@@ -74,13 +72,3 @@ all-libk:
 
 clean-libk:
 	make clean -C libk
-
-###########
-# Modules #
-###########
-
-all-modules:
-	make all -C modules
-
-clean-modules:
-	make clean -C modules
