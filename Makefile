@@ -59,8 +59,8 @@ clean:
 	rm -f $(KERNEL)
 
 $(KERNEL): $(OBJS)
-	$(CC) -T linker.ld -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(OBJS)
-	grub-file --is-x86-multiboot2 $(KERNEL)
+	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $^
+	grub-file --is-x86-multiboot2 $@
 
 %.c.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
