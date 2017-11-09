@@ -1,8 +1,8 @@
-SUITES = libk
+SUBDIRS = libk
 
-run:   $(addprefix run-,   $(SUITES))
-all:   $(addprefix all-,   $(SUITES))
-clean: $(addprefix clean-, $(SUITES))
+run:   $(addprefix run-,   $(SUBDIRS))
+all:   $(addprefix all-,   $(SUBDIRS))
+clean: $(addprefix clean-, $(SUBDIRS))
 
 run-%: all-%
 	make run -C $*

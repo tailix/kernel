@@ -1,12 +1,11 @@
 export OUTPUT = kernelmq
 
-ARCHES = $(shell ls -d */)
-ARCHES := $(ARCHES:/=)
+SUBDIRS = none x86
 
 all:
 	make all -C $(ARCH)
 
-clean: $(addprefix clean-, $(ARCHES))
+clean: $(addprefix clean-, $(SUBDIRS))
 
 clean-%:
 	make clean -C $*

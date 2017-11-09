@@ -14,6 +14,8 @@ export MODULES = $(addprefix $(shell pwd)/modules/, dummy1.bin dummy2.bin)
 
 export CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I $(INCLUDE)
 
+SUBDIRS = arch iso libk modules src test
+
 ifeq (none, $(ARCH))
 run: all-kernel
 	@$(KERNEL)
@@ -23,7 +25,7 @@ endif
 
 all: all-kernel
 
-clean: clean-kernel clean-iso clean-libk clean-arch clean-src clean-test clean-modules
+clean: clean-kernel $(addprefix clean-, $(SUBDIRS))
 
 test: run-test
 
