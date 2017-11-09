@@ -52,7 +52,7 @@ OBJS += syscall.c.o
 OBJS := $(addprefix src/, $(OBJS))
 
 run: $(IMAGE)
-	qemu-system-i386 -cdrom $<
+	qemu-system-i386 -cdrom $< -serial stdio
 
 all: $(KERNEL)
 

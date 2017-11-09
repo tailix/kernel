@@ -1,6 +1,7 @@
 #include "console.h"
 
 #include "stdlib.h"
+#include "asm.h"
 
 static unsigned short *const console_buffer = (unsigned short*)0xB8000;
 
@@ -37,6 +38,8 @@ void console_print(const char *const s)
 }
 
 void console_putc(const char c) {
+    outportb(0x3F8, c);
+
     if (c == '\n') {
         console_column = 0;
 
