@@ -1,6 +1,6 @@
 #include "paging.h"
 
-#include "config.h"
+#include "pagedir.h"
 #include "panic.h"
 
 #include <kernelmq/stdlib.h>
@@ -26,21 +26,6 @@
 
 #define BIG_PAGE_BASE_TO_ADDR(base) ((base) >> 12)
 
-struct entry {
-    unsigned int present        : 1;
-    unsigned int writable       : 1;
-    unsigned int user           : 1;
-    unsigned int write_through  : 1;
-    unsigned int cache_disabled : 1;
-    unsigned int accessed       : 1;
-    unsigned int always_0       : 1;
-    unsigned int page_size      : 1;
-    unsigned int ignored        : 1;
-    unsigned int unused         : 3;
-    unsigned int addr           : 20;
-}
-__attribute__((packed));
-
 unsigned long read_cr0();
 unsigned long read_cr4();
 
@@ -48,7 +33,7 @@ void write_cr0(volatile unsigned long);
 void write_cr3(volatile unsigned long);
 void write_cr4(volatile unsigned long);
 
-static struct entry pagedir[PAGE_DIR_LENGTH] __attribute__((aligned(4096)));
+static PageDir pagedir;
 
 void paging_enable()
 {
