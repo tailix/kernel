@@ -12,25 +12,3 @@ Glossary
 * (`unsigned long`) `size`   - size in bytes
 * (`unsigned int`)  `length` - number of entries
 * (`unsigned int`)  `slen`   - string length excluding the terminating null byte
-
-Dependencies
-------------
-
-### Build youself:
-
-* Cross-compiler for i686-elf
-
-### Debian 9.2 packages:
-
-* make
-* grub-pc-bin
-* qemu-system-x86
-
-Build and run
--------------
-
-```sh
-./configure
-make clean
-make run
-```

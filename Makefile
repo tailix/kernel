@@ -1,4 +1,5 @@
-include config.mk
+export ARCH = x86
+export CCPREFIX = i686-elf-
 
 export AR = $(CCPREFIX)ar
 export AS = $(CCPREFIX)as
