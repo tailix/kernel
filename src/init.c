@@ -1,4 +1,3 @@
-#include "console.h"
 #include "panic.h"
 #include "pfa.h"
 #include "protected.h"
@@ -12,8 +11,6 @@ static struct KernelMQ_Info kinfo;
 
 void init(const struct KernelMQ_Info *const kinfo_ptr)
 {
-    console_initialize();
-
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
     assert(kernelmq_info_validate_and_copy(&kinfo, kinfo_ptr), "Invalid kernel information.");
