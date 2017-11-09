@@ -47,6 +47,8 @@ OBJS += exception.c.o
 OBJS += hwint.c.o
 OBJS += syscall.c.o
 
+OBJS := $(addprefix src/, $(OBJS))
+
 run: $(IMAGE)
 	qemu-system-i386 -cdrom $<
 
