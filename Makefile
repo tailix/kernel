@@ -48,7 +48,6 @@ OBJS += hwint.c.o
 OBJS += syscall.c.o
 
 run: $(KERNEL)
-	grub-file --is-x86-multiboot2 $(KERNEL)
 	grub-mkrescue rootfs -o $(IMAGE)
 	qemu-system-i386 -cdrom $(IMAGE)
 
@@ -61,6 +60,7 @@ clean:
 
 $(KERNEL): $(OBJS)
 	$(CC) -T linker.ld -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(OBJS)
+	grub-file --is-x86-multiboot2 $(KERNEL)
 
 %.c.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
