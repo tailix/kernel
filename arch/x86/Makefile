@@ -34,7 +34,7 @@ clean:
 	rm -f $(OBJS)
 
 $(KERNEL): $(OBJS)
-	$(CC) -T linker.ld -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(OBJS) $(LIBSRC) $(LIBK)
+	$(CC) -T linker.ld -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(OBJS) $(LIBSRC)
 
 %.c.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)

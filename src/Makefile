@@ -1,6 +1,6 @@
 OUTPUT = libsrc.a
 
-OBJS = info.o
+OBJS = info.o memset.o strlen.o itoa.o strncpy.o
 
 all: $(OUTPUT)
 

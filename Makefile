@@ -9,11 +9,10 @@ export INCLUDE = $(shell pwd)/include
 export KERNEL  = $(shell pwd)/rootfs/boot/kernelmq.multiboot2
 
 export LIBSRC  = $(shell pwd)/src/libsrc.a
-export LIBK    = $(shell pwd)/libk/libk.a
 
 export CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I $(INCLUDE)
 
-SUBDIRS = arch libk src
+SUBDIRS = arch src
 
 IMAGE = $(shell pwd)/image.iso
 
@@ -42,18 +41,8 @@ clean-src:
 # arch #
 ########
 
-all-arch: all-src all-libk
+all-arch: all-src
 	make all -C arch
 
 clean-arch:
 	make clean -C arch
-
-########
-# libk #
-########
-
-all-libk:
-	make all -C libk
-
-clean-libk:
-	make clean -C libk
