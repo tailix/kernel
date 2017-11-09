@@ -24,8 +24,6 @@
 #define I386_CR4_MCE 0x00000040 // Machine check enable
 #define I386_CR4_PGE 0x00000080 // Global page flag enable
 
-#define BIG_PAGE_BASE_TO_ADDR(base) ((base) >> 12)
-
 unsigned long read_cr0();
 unsigned long read_cr4();
 
@@ -73,7 +71,7 @@ void paging_clear()
 void paging_identity()
 {
     for (int i = 0; i < PAGE_DIR_LENGTH; ++i) {
-        pagedir[i].addr = BIG_PAGE_BASE_TO_ADDR(i * PAGE_BIG_SIZE);
+        pagedir[i].addr = PAGE_DIR_ADDR(i * PAGE_BIG_SIZE);
 
         pagedir[i].unused         = 0;
         pagedir[i].ignored        = 0;
@@ -99,7 +97,7 @@ int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
     unsigned long kern_phys = kinfo->kernel_phys_base;
 
     while (mapped < kinfo->kernel_size) {
-        pagedir[pde].addr = BIG_PAGE_BASE_TO_ADDR(kern_phys);
+        pagedir[pde].addr = PAGE_DIR_ADDR(kern_phys);
 
         pagedir[pde].unused         = 0;
         pagedir[pde].ignored        = 0;

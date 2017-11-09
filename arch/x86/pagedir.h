@@ -5,6 +5,8 @@
 
 #define PAGE_DIR_ALIGN 4096
 
+#define PAGE_DIR_ADDR(base) ((base) >> 12)
+
 struct PageDir_Entry {
     unsigned int present        : 1;
     unsigned int writable       : 1;
