@@ -4,10 +4,9 @@ AR = $(CCPREFIX)ar
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
 
-INCLUDE = include
-KERNEL  = rootfs/boot/kernelmq.multiboot2
+KERNEL = rootfs/boot/kernelmq.multiboot2
 
-CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I $(INCLUDE)
+CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
 
 IMAGE = image.iso
 

@@ -7,7 +7,7 @@
 #include "tss.h"
 #include "pic.h"
 
-#include <kernelmq/stdlib.h>
+#include "stdlib.h"
 
 struct GdtPointer {
     unsigned short limit;

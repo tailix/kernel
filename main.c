@@ -1,8 +1,8 @@
 #include "multiboot.h"
 #include "paging.h"
 
-#include <kernelmq/info.h>
-#include <kernelmq/stdlib.h>
+#include "info.h"
+#include "stdlib.h"
 
 // Defined in linker script
 extern char _kernel_offset;

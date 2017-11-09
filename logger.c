@@ -2,7 +2,7 @@
 
 #include "console.h"
 
-#include <kernelmq/stdlib.h>
+#include "stdlib.h"
 
 #define LEVELS_COUNT 4
 

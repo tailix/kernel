@@ -4,9 +4,9 @@
 #include "protected.h"
 #include "paging.h"
 
-#include <kernelmq/info.h>
-#include <kernelmq/stdlib.h>
-#include <kernelmq/module.h>
+#include "info.h"
+#include "stdlib.h"
+#include "module.h"
 
 static struct KernelMQ_Info kinfo;
 

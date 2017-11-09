@@ -1,6 +1,6 @@
 #include "multiboot.h"
 
-#include <kernelmq/stdlib.h>
+#include "stdlib.h"
 
 #define MULTIBOOT_TAG_TYPE_END     0
 #define MULTIBOOT_TAG_TYPE_CMDLINE 1

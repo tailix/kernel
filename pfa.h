@@ -1,7 +1,7 @@
 #ifndef KERNELMQ_INCLUDED_PFA
 #define KERNELMQ_INCLUDED_PFA 1
 
-#include <kernelmq/info.h>
+#include "info.h"
 
 void pfa_initialize(const struct KernelMQ_Info *kinfo);
 

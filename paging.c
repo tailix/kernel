@@ -3,7 +3,7 @@
 #include "pagedir.h"
 #include "panic.h"
 
-#include <kernelmq/stdlib.h>
+#include "stdlib.h"
 
 // CR0 bits
 #define I386_CR0_PE 0x00000001 // Protected mode

@@ -1,4 +1,4 @@
-#include <kernelmq/info.h>
+#include "info.h"
 
 static unsigned char cmdline_terminated(const char *s);
 

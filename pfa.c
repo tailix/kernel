@@ -4,7 +4,7 @@
 #include "panic.h"
 #include "logger.h"
 
-#include <kernelmq/stdlib.h>
+#include "stdlib.h"
 
 #define FRAMES_COUNT (PAGE_DIR_LENGTH * PAGE_TABLE_LENGTH)
 

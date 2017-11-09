@@ -1,7 +1,7 @@
 #include "interrupt.h"
 #include "logger.h"
 
-#include <kernelmq/syscall.h>
+#include "syscall.h"
 
 static void syscall_do_exit(struct IsrRegisters regs);
 

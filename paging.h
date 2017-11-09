@@ -1,7 +1,7 @@
 #ifndef KERNELMQ_INCLUDED_PAGING
 #define KERNELMQ_INCLUDED_PAGING 1
 
-#include <kernelmq/info.h>
+#include "info.h"
 
 void paging_enable();
 

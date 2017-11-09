@@ -2,7 +2,7 @@
 
 #include "config.h"
 
-#include <kernelmq/stdlib.h>
+#include "stdlib.h"
 
 struct gdt_entry_bits {
     unsigned int limit_low              : 16;
