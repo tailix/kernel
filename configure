@@ -3,7 +3,7 @@
 ENV="$1"
 
 if [ -z "$ENV" ]; then
-    ENV='none'
+    ENV='x86'
 fi
 
 CONFIG="arch/$ENV/config.mk"

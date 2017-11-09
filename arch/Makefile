@@ -1,6 +1,6 @@
 export OUTPUT = kernelmq
 
-SUBDIRS = none x86
+SUBDIRS = x86
 
 all:
 	make all -C $(ARCH)
