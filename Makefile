@@ -17,8 +17,7 @@ export CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-prot
 SUBDIRS = arch iso libk modules src test
 
 ifeq (none, $(ARCH))
-run: all-kernel
-	@$(KERNEL)
+run: test
 else
 run: run-iso
 endif
