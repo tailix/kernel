@@ -1,6 +1,6 @@
 OUTPUT = libsrc.a
 
-OBJS = info.o memset.o strlen.o itoa.o strncpy.o
+OBJS = info.c.o memset.c.o strlen.c.o itoa.c.o strncpy.c.o
 
 all: $(OUTPUT)
 
@@ -10,5 +10,5 @@ clean:
 $(OUTPUT): $(OBJS)
 	$(AR) -rcs $@ $(OBJS)
 
-%.o: %.c
+%.c.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
