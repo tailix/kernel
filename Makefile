@@ -1,15 +1,15 @@
-export CCPREFIX = i686-elf-
+CCPREFIX = i686-elf-
 
-export AR = $(CCPREFIX)ar
-export AS = $(CCPREFIX)as
-export CC = $(CCPREFIX)gcc
+AR = $(CCPREFIX)ar
+AS = $(CCPREFIX)as
+CC = $(CCPREFIX)gcc
 
-export INCLUDE = $(shell pwd)/include
-export KERNEL  = $(shell pwd)/rootfs/boot/kernelmq.multiboot2
+INCLUDE = include
+KERNEL  = rootfs/boot/kernelmq.multiboot2
 
-export CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I $(INCLUDE)
+CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I $(INCLUDE)
 
-IMAGE = $(shell pwd)/image.iso
+IMAGE = image.iso
 
 # Architecture-dependent
 OBJS = start.s.o
