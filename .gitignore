@@ -5,4 +5,3 @@
 *.iso
 
 /config.mk
-/arch/*/kernelmq

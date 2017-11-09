@@ -16,24 +16,15 @@ SUBDIRS = arch libk src
 
 IMAGE = $(shell pwd)/image.iso
 
-run: all-kernel
+run: all-arch
 	grub-file --is-x86-multiboot2 $(KERNEL)
 	grub-mkrescue rootfs -o $(IMAGE)
 	qemu-system-i386 -cdrom $(IMAGE)
 
-all: all-kernel
+all: all-arch
 
-clean: clean-kernel $(addprefix clean-, $(SUBDIRS))
+clean: $(addprefix clean-, $(SUBDIRS))
 	rm -f $(IMAGE)
-
-##########
-# Kernel #
-##########
-
-all-kernel: all-arch
-	cp arch/$(ARCH)/kernelmq $(KERNEL)
-
-clean-kernel:
 	rm -f $(KERNEL)
 
 #######

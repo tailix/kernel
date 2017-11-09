@@ -28,13 +28,13 @@ OBJS += exception.c.o
 OBJS += hwint.c.o
 OBJS += syscall.c.o
 
-all: $(OUTPUT)
+all: $(KERNEL)
 
 clean:
-	rm -f $(OUTPUT) $(OBJS)
+	rm -f $(OBJS)
 
-$(OUTPUT): $(OBJS)
-	$(CC) -T linker.ld -o $(OUTPUT) -ffreestanding -nostdlib -lgcc $(OBJS) $(LIBSRC) $(LIBK)
+$(KERNEL): $(OBJS)
+	$(CC) -T linker.ld -o $(KERNEL) -ffreestanding -nostdlib -lgcc $(OBJS) $(LIBSRC) $(LIBK)
 
 %.c.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)

@@ -1,5 +1,3 @@
-export OUTPUT = kernelmq
-
 SUBDIRS = x86
 
 all:
