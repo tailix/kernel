@@ -5,3 +5,5 @@
 *.iso
 
 /config.mk
+/vendor/*
+!/vendor/.keep
