@@ -48,7 +48,10 @@ void init(const struct KernelMQ_Info *const kinfo_ptr)
             elf_header->header_size    == 52;
 
         if (is_elf_header_valid) {
-            tasks_switch_to_user(elf_header->entrypoint);
+            const unsigned long real_entrypoint =
+                kinfo.modules[0].base + elf_header->entrypoint;
+
+            tasks_switch_to_user(real_entrypoint);
         }
         else {
             logger_warn_from("init", "Invalid ELF header");
