@@ -62,7 +62,7 @@ $(KERNEL): $(OBJS)
 	$(AS) $< -o $@
 
 %.asm.cpp.o: %.asm.cpp
-	nasm -felf32 -o $@ $<
+	nasm -f elf32 -o $@ $<
 
 %.asm.cpp: %.asm
 	cpp -P $< $@
