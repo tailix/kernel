@@ -5,6 +5,8 @@ MEMGR   = rootfs/boot/memgr
 
 IMAGE = image.iso
 
+.PHONY: kernelmq/kernelmq.multiboot2 procman/procman memgr/memgr
+
 run: $(IMAGE)
 	qemu-system-i386 -cdrom $< -display none -serial stdio
 
