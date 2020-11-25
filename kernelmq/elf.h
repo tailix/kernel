@@ -58,9 +58,17 @@ struct KernelMQ_ELF_SectionEntry {
 }
 __attribute__((packed));
 
+struct KernelMQ_ELF_RelocationEntry {
+    unsigned long virt_addr : 32;
+    unsigned long info      : 32;
+}
+__attribute__((packed));
+
 typedef struct KernelMQ_ELF_ProgramEntry KernelMQ_ELF_ProgramTable[];
 
 typedef struct KernelMQ_ELF_SectionEntry KernelMQ_ELF_SectionTable[];
+
+typedef struct KernelMQ_ELF_RelocationEntry KernelMQ_ELF_RelocationTable[];
 
 inline static unsigned char KernelMQ_ELF_Header_is_valid(
     const struct KernelMQ_ELF_Header *header
