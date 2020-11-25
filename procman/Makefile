@@ -6,13 +6,15 @@ CC = $(CCPREFIX)gcc
 
 PROCMAN = procman
 
+CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
+
 all: $(PROCMAN)
 
 clean:
-	rm -f $(PROCMAN) main.o
+	rm -f $(PROCMAN) start.o
 
-$(PROCMAN): main.o
+$(PROCMAN): start.o
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $^
 
-main.o: main.asm
-	nasm -f elf32 $< -o $@
+start.o: start.c
+	$(CC) -c $< -o $@ $(CFLAGS)

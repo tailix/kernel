@@ -6,13 +6,15 @@ CC = $(CCPREFIX)gcc
 
 MEMGR = memgr
 
+CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
+
 all: $(MEMGR)
 
 clean:
-	rm -f $(MEMGR) main.o
+	rm -f $(MEMGR) start.o
 
-$(MEMGR): main.o
+$(MEMGR): start.o
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $^
 
-main.o: main.asm
-	nasm -f elf32 $< -o $@
+start.o: start.c
+	$(CC) -c $< -o $@ $(CFLAGS)
