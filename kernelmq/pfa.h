@@ -9,6 +9,8 @@ extern "C" {
 
 void pfa_initialize(const struct KernelMQ_Info *kinfo);
 
+void pfa_print_info();
+
 unsigned long pfa_alloc_page();
 unsigned long pfa_alloc_big_page();
 

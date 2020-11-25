@@ -20,6 +20,7 @@ void init(const struct KernelMQ_Info *const kinfo_ptr)
     assert(kernelmq_info_validate_and_copy(&kinfo, kinfo_ptr), "Invalid kernel information.");
 
     pfa_initialize(&kinfo);
+    pfa_print_info();
 
     protected_initialize(&kinfo);
 

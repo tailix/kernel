@@ -37,6 +37,44 @@ void pfa_initialize(const struct KernelMQ_Info *const kinfo)
     }
 }
 
+void pfa_print_info()
+{
+    unsigned char started = 0;
+    unsigned int start = 0;
+
+    for (unsigned int index = 0; index <= FRAMES_COUNT; ++index) {
+        if (frames[index]) {
+            if (!started) {
+                started = 1;
+                start = index;
+            }
+        }
+        else {
+            if (started) {
+                const unsigned int end = index - 1;
+
+                if (start < end) {
+                    logger_debug_from(
+                        "pfa",
+                        "Pages allocated: %u-%u",
+                        start * PAGE_SIZE,
+                        end * PAGE_SIZE
+                    );
+                }
+                else {
+                    logger_debug_from(
+                        "pfa",
+                        "Page allocated: %u",
+                        start * PAGE_SIZE
+                    );
+                }
+            }
+
+            started = 0;
+        }
+    }
+}
+
 unsigned long pfa_alloc_page()
 {
     for (unsigned int i = 0; i < FRAMES_COUNT; ++i) {
