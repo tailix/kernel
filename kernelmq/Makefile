@@ -15,7 +15,7 @@ OBJS += init.c.o
 OBJS += multiboot.c.o
 OBJS += panic.c.o  panic.asm.cpp.o
 OBJS += paging.c.o paging.asm.cpp.o
-OBJS += pagedir.c.o
+OBJS += page_dir.c.o
 
 # Architecture-independent
 OBJS += info.c.o

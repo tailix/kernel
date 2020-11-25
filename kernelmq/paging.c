@@ -1,6 +1,6 @@
 #include "paging.h"
 
-#include "pagedir.h"
+#include "page_dir.h"
 #include "panic.h"
 
 #include "stdlib.h"
@@ -31,7 +31,7 @@ void write_cr0(volatile unsigned long);
 void write_cr3(volatile unsigned long);
 void write_cr4(volatile unsigned long);
 
-static PageDir pagedir;
+static PageDir page_dir;
 
 void paging_enable()
 {
@@ -65,24 +65,24 @@ void paging_enable()
 
 void paging_clear()
 {
-    kmemset(pagedir, 0, sizeof(pagedir));
+    kmemset(page_dir, 0, sizeof(page_dir));
 }
 
 void paging_identity()
 {
     for (int i = 0; i < PAGE_DIR_LENGTH; ++i) {
-        pagedir[i].addr = PAGE_DIR_ADDR(i * PAGE_BIG_SIZE);
+        page_dir[i].addr = PAGE_DIR_ADDR(i * PAGE_BIG_SIZE);
 
-        pagedir[i].unused         = 0;
-        pagedir[i].ignored        = 0;
-        pagedir[i].page_size      = 1;
-        pagedir[i].always_0       = 0;
-        pagedir[i].accessed       = 0;
-        pagedir[i].cache_disabled = 1;
-        pagedir[i].write_through  = 1;
-        pagedir[i].user           = 1;
-        pagedir[i].writable       = 1;
-        pagedir[i].present        = 1;
+        page_dir[i].unused         = 0;
+        page_dir[i].ignored        = 0;
+        page_dir[i].page_size      = 1;
+        page_dir[i].always_0       = 0;
+        page_dir[i].accessed       = 0;
+        page_dir[i].cache_disabled = 1;
+        page_dir[i].write_through  = 1;
+        page_dir[i].user           = 1;
+        page_dir[i].writable       = 1;
+        page_dir[i].present        = 1;
     }
 }
 
@@ -97,18 +97,18 @@ int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
     unsigned long kern_phys = kinfo->kernel_phys_base;
 
     while (mapped < kinfo->kernel_size) {
-        pagedir[pde].addr = PAGE_DIR_ADDR(kern_phys);
+        page_dir[pde].addr = PAGE_DIR_ADDR(kern_phys);
 
-        pagedir[pde].unused         = 0;
-        pagedir[pde].ignored        = 0;
-        pagedir[pde].page_size      = 1;
-        pagedir[pde].always_0       = 0;
-        pagedir[pde].accessed       = 0;
-        pagedir[pde].cache_disabled = 0;
-        pagedir[pde].write_through  = 0;
-        pagedir[pde].user           = 0;
-        pagedir[pde].writable       = 1;
-        pagedir[pde].present        = 1;
+        page_dir[pde].unused         = 0;
+        page_dir[pde].ignored        = 0;
+        page_dir[pde].page_size      = 1;
+        page_dir[pde].always_0       = 0;
+        page_dir[pde].accessed       = 0;
+        page_dir[pde].cache_disabled = 0;
+        page_dir[pde].write_through  = 0;
+        page_dir[pde].user           = 0;
+        page_dir[pde].writable       = 1;
+        page_dir[pde].present        = 1;
 
         mapped += PAGE_BIG_SIZE;
         kern_phys += PAGE_BIG_SIZE;
@@ -121,7 +121,7 @@ int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
 
 unsigned long paging_load()
 {
-    unsigned long pagedir_phys = (unsigned long)pagedir;
-    write_cr3(pagedir_phys);
-    return pagedir_phys;
+    unsigned long page_dir_phys = (unsigned long)page_dir;
+    write_cr3(page_dir_phys);
+    return page_dir_phys;
 }
