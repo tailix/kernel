@@ -19,13 +19,17 @@ $(IMAGE): $(GRUBCFG) $(KERNEL) $(PROCMAN) $(MEMGR)
 $(KERNEL): kernelmq/kernelmq.multiboot2
 	cp $< $@
 
-$(PROCMAN):
-	make -C procman procman
-	cp procman/procman $@
+$(PROCMAN): procman/procman
+	cp $< $@
 
-$(MEMGR):
-	make -C memgr memgr
-	cp memgr/memgr $@
+$(MEMGR): memgr/memgr
+	cp $< $@
 
 kernelmq/kernelmq.multiboot2:
 	make -C kernelmq kernelmq.multiboot2
+
+procman/procman:
+	make -C procman procman
+
+memgr/memgr:
+	make -C memgr memgr
