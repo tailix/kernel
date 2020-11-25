@@ -1,5 +1,7 @@
-procman: main.asm
-	nasm -f bin $< -o procman
+PROCMAN = procman
+
+$(PROCMAN): main.asm
+	nasm -f bin $< -o $@
 
 clean:
-	rm -f procman
+	rm -f $(PROCMAN)
