@@ -7,6 +7,8 @@
 #include "stdlib.h"
 #include "module.h"
 
+#include "tasks.h"
+
 static struct KernelMQ_Info kinfo;
 
 void init(const struct KernelMQ_Info *const kinfo_ptr)
