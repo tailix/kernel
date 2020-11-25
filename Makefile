@@ -4,7 +4,9 @@ AR = $(CCPREFIX)ar
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
 
-KERNEL = rootfs/boot/kernelmq.multiboot2
+GRUBCFG     = rootfs/boot/grub/grub.cfg
+KERNEL      = rootfs/boot/kernelmq.multiboot2
+SYSCALLPROC = rootfs/boot/syscallproc
 
 CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
 
@@ -53,19 +55,21 @@ OBJS := $(addprefix src/, $(OBJS))
 run: $(IMAGE)
 	qemu-system-i386 -cdrom $< -display none -serial stdio
 
-all: $(KERNEL)
-
 clean:
 	rm -f $(OBJS)
 	rm -f $(IMAGE)
 	rm -f $(KERNEL)
+	rm -f $(SYSCALLPROC)
 
-$(IMAGE): $(KERNEL)
+$(IMAGE): $(GRUBCFG) $(KERNEL) $(SYSCALLPROC)
 	grub-mkrescue rootfs -o $@
 
 $(KERNEL): $(OBJS)
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $^
 	grub-file --is-x86-multiboot2 $@
+
+$(SYSCALLPROC): syscallproc.asm
+	nasm -f bin syscallproc.asm -o $@
 
 %.c.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)

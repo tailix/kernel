@@ -1,9 +1,10 @@
 *.o
 *.a
-*.multiboot2
 *.bin
 *.iso
 
 /config.mk
+/rootfs/boot/kernelmq.multiboot2
+/rootfs/boot/syscallproc
 /vendor/*
 !/vendor/.keep

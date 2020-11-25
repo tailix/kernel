@@ -26,4 +26,8 @@ void init(const struct KernelMQ_Info *const kinfo_ptr)
     paging_identity(); // Still need 1:1 for lapic and video mem and such.
     paging_mapkernel(&kinfo);
     paging_load();
+
+    if (kinfo.modules_count > 0) {
+        tasks_switch_to_user(kinfo.modules[0].base);
+    }
 }
