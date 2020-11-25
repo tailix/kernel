@@ -32,6 +32,30 @@ struct KernelMQ_ELF_Header {
 }
 __attribute__((packed));
 
+inline static unsigned char KernelMQ_ELF_Header_is_valid(
+    const struct KernelMQ_ELF_Header *header
+);
+
+unsigned char KernelMQ_ELF_Header_is_valid(
+    const struct KernelMQ_ELF_Header *const header
+) {
+    return (
+        header->magic_0x7F     == 0x7F &&
+        header->magic_E        == 'E'  &&
+        header->magic_L        == 'L'  &&
+        header->magic_F        == 'F'  &&
+        header->bitness        == 1    &&
+        header->endianness     == 1    &&
+        header->header_version == 1    &&
+        header->os_abi         == 0    &&
+        header->obj_type       == 2    &&
+        header->isa            == 3    &&
+        header->elf_version    == 1    &&
+        header->arch_flags     == 0    &&
+        header->header_size    == 52
+    );
+}
+
 #ifdef __cplusplus
 }
 #endif

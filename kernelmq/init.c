@@ -32,22 +32,7 @@ void init(const struct KernelMQ_Info *const kinfo_ptr)
         const struct KernelMQ_ELF_Header *const elf_header =
             (void*)kinfo.modules[0].base;
 
-        const unsigned char is_elf_header_valid =
-            elf_header->magic_0x7F     == 0x7F &&
-            elf_header->magic_E        == 'E'  &&
-            elf_header->magic_L        == 'L'  &&
-            elf_header->magic_F        == 'F'  &&
-            elf_header->bitness        == 1    &&
-            elf_header->endianness     == 1    &&
-            elf_header->header_version == 1    &&
-            elf_header->os_abi         == 0    &&
-            elf_header->obj_type       == 2    &&
-            elf_header->isa            == 3    &&
-            elf_header->elf_version    == 1    &&
-            elf_header->arch_flags     == 0    &&
-            elf_header->header_size    == 52;
-
-        if (is_elf_header_valid) {
+        if (KernelMQ_ELF_Header_is_valid(elf_header)) {
             const unsigned long real_entrypoint =
                 kinfo.modules[0].base + elf_header->entrypoint;
 
