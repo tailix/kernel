@@ -32,6 +32,36 @@ struct KernelMQ_ELF_Header {
 }
 __attribute__((packed));
 
+struct KernelMQ_ELF_ProgramEntry {
+    unsigned long type       : 32;
+    unsigned long offset     : 32;
+    unsigned long virt_addr  : 32;
+    unsigned long phys_addr  : 32;
+    unsigned long file_size  : 32;
+    unsigned long mem_size   : 32;
+    unsigned long flags      : 32;
+    unsigned long align      : 32;
+}
+__attribute__((packed));
+
+struct KernelMQ_ELF_SectionEntry {
+    unsigned long name        : 32;
+    unsigned long type        : 32;
+    unsigned long flags       : 32;
+    unsigned long vaddr       : 32;
+    unsigned long file_offset : 32;
+    unsigned long file_size   : 32;
+    unsigned long link        : 32;
+    unsigned long info        : 32;
+    unsigned long alignment   : 32;
+    unsigned long ent_size    : 32;
+}
+__attribute__((packed));
+
+typedef struct KernelMQ_ELF_ProgramEntry KernelMQ_ELF_ProgramTable[];
+
+typedef struct KernelMQ_ELF_SectionEntry KernelMQ_ELF_SectionTable[];
+
 inline static unsigned char KernelMQ_ELF_Header_is_valid(
     const struct KernelMQ_ELF_Header *header
 );
