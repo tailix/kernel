@@ -4,9 +4,9 @@ AR = $(CCPREFIX)ar
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
 
-GRUBCFG     = rootfs/boot/grub/grub.cfg
-KERNEL      = rootfs/boot/kernelmq.multiboot2
-SYSCALLPROC = rootfs/boot/syscallproc
+GRUBCFG = rootfs/boot/grub/grub.cfg
+KERNEL  = rootfs/boot/kernelmq.multiboot2
+PROCMAN = rootfs/boot/procman
 
 CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
 
@@ -59,17 +59,21 @@ clean:
 	rm -f $(OBJS)
 	rm -f $(IMAGE)
 	rm -f $(KERNEL)
-	rm -f $(SYSCALLPROC)
+	rm -f $(PROCMAN)
+	make -C procman clean
 
-$(IMAGE): $(GRUBCFG) $(KERNEL) $(SYSCALLPROC)
+$(IMAGE): $(GRUBCFG) $(KERNEL) $(PROCMAN)
 	grub-mkrescue rootfs -o $@
 
 $(KERNEL): $(OBJS)
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $^
 	grub-file --is-x86-multiboot2 $@
 
-$(SYSCALLPROC): syscallproc.asm
-	nasm -f bin syscallproc.asm -o $@
+$(PROCMAN): procman/procman
+	cp procman/procman $(PROCMAN)
+
+procman/procman:
+	make -C procman procman
 
 %.c.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)

@@ -5,6 +5,6 @@
 
 /config.mk
 /rootfs/boot/kernelmq.multiboot2
-/rootfs/boot/syscallproc
+/rootfs/boot/procman
 /vendor/*
 !/vendor/.keep
