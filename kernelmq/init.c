@@ -1,5 +1,4 @@
 #include "panic.h"
-#include "pfa.h"
 #include "protected.h"
 #include "paging.h"
 
@@ -18,8 +17,6 @@ void init(const struct KernelMQ_Info *const kinfo_ptr)
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
     assert(kernelmq_info_validate_and_copy(&kinfo, kinfo_ptr), "Invalid kernel information.");
-
-    pfa_initialize(&kinfo);
 
     protected_initialize(&kinfo);
 
