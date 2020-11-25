@@ -9,7 +9,7 @@ run: $(IMAGE)
 
 clean:
 	rm -f $(KERNEL) $(PROCMAN)
-	make -C kernel clean
+	make -C kernelmq clean
 	make -C procman clean
 
 $(IMAGE): $(GRUBCFG) $(KERNEL) $(PROCMAN)
@@ -19,14 +19,14 @@ $(KERNEL): $(OBJS)
 	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $^
 	grub-file --is-x86-multiboot2 $@
 
-$(KERNEL): kernel/kernelmq.multiboot2
+$(KERNEL): kernelmq/kernelmq.multiboot2
 	cp $< $@
 
 $(PROCMAN): procman/procman
 	cp $< $@
 
-kernel/kernelmq.multiboot2:
-	make -C kernel kernelmq.multiboot2
+kernelmq/kernelmq.multiboot2:
+	make -C kernelmq kernelmq.multiboot2
 
 procman/procman:
 	make -C procman procman
