@@ -1,8 +1,8 @@
 CCPREFIX = i686-elf-
 
-AR = $(CCPREFIX)ar
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
+LD = $(CCPREFIX)ld
 
 MEMGR = memgr
 
@@ -14,7 +14,7 @@ clean:
 	rm -f $(MEMGR) start.o
 
 $(MEMGR): start.o
-	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $^
+	$(LD) -o $@ -T linker.ld $^
 
 start.o: start.c
 	$(CC) -c $< -o $@ $(CFLAGS)

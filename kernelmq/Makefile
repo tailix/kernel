@@ -1,8 +1,8 @@
 CCPREFIX = i686-elf-
 
-AR = $(CCPREFIX)ar
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
+LD = $(CCPREFIX)ld
 
 KERNEL = kernelmq.multiboot2
 
