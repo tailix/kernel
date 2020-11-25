@@ -20,12 +20,12 @@ struct KernelMQ_ELF_Header {
     unsigned short isa            : 16; // Must be 3 (x86).
     unsigned long  elf_version    : 32; // Must be 1.
     unsigned long  entrypoint     : 32;
-    unsigned long  prog_table_pos : 32;
+    unsigned long  prog_table_pos : 32; // Must not be 0.
     unsigned long  sect_table_pos : 32;
     unsigned long  arch_flags     : 32; // Must be 0.
     unsigned short header_size    : 16; // Must be 52.
-    unsigned short prog_entr_size : 16;
-    unsigned short prog_entr_num  : 16;
+    unsigned short prog_entr_size : 16; // Must not be 0.
+    unsigned short prog_entr_num  : 16; // Must not be 0.
     unsigned short sect_entr_size : 16;
     unsigned short sect_entr_num  : 16;
     unsigned short sect_names_idx : 16;
@@ -82,7 +82,10 @@ unsigned char KernelMQ_ELF_Header_is_valid(
         header->isa            == 3    &&
         header->elf_version    == 1    &&
         header->arch_flags     == 0    &&
-        header->header_size    == 52
+        header->header_size    == 52   &&
+        header->prog_table_pos != 0    &&
+        header->prog_entr_size != 0    &&
+        header->prog_entr_num  != 0
     );
 }
 
