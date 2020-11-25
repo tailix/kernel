@@ -8,6 +8,7 @@
 #include "module.h"
 
 #include "tasks.h"
+#include "elf.h"
 
 static struct KernelMQ_Info kinfo;
 
