@@ -28,13 +28,13 @@ static KernelMQ_Process_List process_list;
 void main(unsigned long multiboot_magic, unsigned long multiboot_info_base)
 {
     if (multiboot_magic != MULTIBOOT_MAGIC) {
-        return;
+        panic("Multiboot 2 magic number is invalid.");
     }
 
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
     if (!multiboot_parse(&kinfo, multiboot_info_base)) {
-        return;
+        panic("Can not parse Multiboot 2 info.");
     }
 
     kinfo.kernel_offset = (unsigned long)&_kernel_offset;
