@@ -61,8 +61,7 @@ __attribute__((nonnull));
 
 enum KernelMQ_Process_List_InitResult KernelMQ_Process_create_from_module(
     struct KernelMQ_Process *process,
-    const struct KernelMQ_Info *kinfo,
-    unsigned int module_index
+    const struct KernelMQ_Info_Module *kinfo_module
 )
 __attribute__((nonnull));
 

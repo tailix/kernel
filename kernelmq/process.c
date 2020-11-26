@@ -27,8 +27,7 @@ enum KernelMQ_Process_List_InitResult KernelMQ_Process_List_init(
         const enum KernelMQ_Process_List_InitResult create_mod_process_result =
             KernelMQ_Process_create_from_module(
                 &(*process_list)[mod_index + 1],
-                kinfo,
-                mod_index
+                &kinfo->modules[mod_index]
             );
 
         if (create_mod_process_result != KERNELMQ_PROCESS_LIST_INIT_RESULT_OK) {
@@ -82,13 +81,12 @@ enum KernelMQ_Process_List_InitResult KernelMQ_Process_create_from_kernel(
 
 enum KernelMQ_Process_List_InitResult KernelMQ_Process_create_from_module(
     struct KernelMQ_Process *const process,
-    const struct KernelMQ_Info *const kinfo,
-    const unsigned int module_index
+    const struct KernelMQ_Info_Module *const kinfo_module
 ) {
     process->is_present = 1;
     process->created_from = KERNELMQ_PROCESS_CREATED_FROM_MODULE;
 
-    const unsigned int cmdline_slen = kstrlen(kinfo->modules[module_index].cmdline);
+    const unsigned int cmdline_slen = kstrlen(kinfo_module->cmdline);
 
     if (cmdline_slen > KERNELMQ_PROCESS_CMDLINE_SLEN_MAX) {
         return KERNELMQ_PROCESS_LIST_INIT_RESULT_CMDLINE_TOO_LONG;
@@ -96,15 +94,15 @@ enum KernelMQ_Process_List_InitResult KernelMQ_Process_create_from_module(
 
     kstrncpy(
         process->cmdline,
-        kinfo->modules[module_index].cmdline,
+        kinfo_module->cmdline,
         cmdline_slen
     );
 
     process->areas_length = 1;
 
-    const unsigned long long base  = kinfo->modules[module_index].base;
-    const unsigned long long size  = kinfo->modules[module_index].size;
-    const unsigned long long limit = kinfo->modules[module_index].limit;
+    const unsigned long long base  = kinfo_module->base;
+    const unsigned long long size  = kinfo_module->size;
+    const unsigned long long limit = kinfo_module->limit;
 
     if (base > 0xFFFFFFFF || size > 0xFFFFFFFF || limit > 0xFFFFFFFF) {
         return KERNELMQ_PROCESS_LIST_INIT_RESULT_ADDR_TOO_BIG;
