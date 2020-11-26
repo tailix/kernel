@@ -19,6 +19,7 @@ OBJS += page_dir.c.o
 
 # Architecture-independent
 OBJS += info.c.o
+OBJS += process.c.o
 
 # Stdlib
 OBJS += memset.c.o

@@ -5,12 +5,15 @@
 #include "info.h"
 #include "stdlib.h"
 #include "module.h"
+#include "process.h"
 
 #include "tasks.h"
 #include "elf.h"
 #include "logger.h"
 
 static struct KernelMQ_Info kinfo;
+
+static KernelMQ_Process_List process_list;
 
 void init(const struct KernelMQ_Info *const kinfo_ptr)
 {
@@ -27,6 +30,21 @@ void init(const struct KernelMQ_Info *const kinfo_ptr)
     paging_identity(); // Still need 1:1 for lapic and video mem and such.
     paging_mapkernel(&kinfo);
     paging_load();
+
+    const enum KernelMQ_Process_List_InitResult process_list_init_result =
+        KernelMQ_Process_List_init(&process_list);
+
+    if (process_list_init_result != KERNELMQ_PROCESS_LIST_INIT_RESULT_OK) {
+        logger_fail_from(
+            "init",
+            "Process list initialization failed with %u.",
+            process_list_init_result
+        );
+
+        panic("Can not initialize process list.");
+    }
+
+    logger_debug_from("init", "Process list initialized.");
 
     if (kinfo.modules_count > 0) {
         const struct KernelMQ_ELF_Header *const elf_header =
