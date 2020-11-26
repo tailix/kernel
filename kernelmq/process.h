@@ -14,12 +14,12 @@
 extern "C" {
 #endif
 
-enum KernelMQ_Process_List_InitResult {
-    KERNELMQ_PROCESS_LIST_INIT_RESULT_OK = 0,
-    KERNELMQ_PROCESS_LIST_INIT_RESULT_CMDLINE_TOO_LONG = 1,
-    KERNELMQ_PROCESS_LIST_INIT_RESULT_ADDR_TOO_BIG = 2,
-    KERNELMQ_PROCESS_LIST_INIT_RESULT_KERNEL_AREAS_LENGTH_TOO_LONG = 3,
-    KERNELMQ_PROCESS_LIST_INIT_RESULT_MODULES_TOO_MANY = 4,
+enum KernelMQ_Process_Error {
+    KERNELMQ_PROCESS_ERROR_OK = 0,
+    KERNELMQ_PROCESS_ERROR_CMDLINE_TOO_LONG = 1,
+    KERNELMQ_PROCESS_ERROR_ADDR_TOO_BIG = 2,
+    KERNELMQ_PROCESS_ERROR_KERNEL_AREAS_LENGTH_TOO_LONG = 3,
+    KERNELMQ_PROCESS_ERROR_MODULES_TOO_MANY = 4,
 };
 
 enum KernelMQ_Process_CreatedFrom {
@@ -47,19 +47,19 @@ struct KernelMQ_Process {
 typedef struct KernelMQ_Process
     KernelMQ_Process_List[KERNELMQ_PROCESS_LIST_LENGTH];
 
-enum KernelMQ_Process_List_InitResult KernelMQ_Process_List_init(
+enum KernelMQ_Process_Error KernelMQ_Process_List_init(
     KernelMQ_Process_List *process_list,
     const struct KernelMQ_Info *kinfo
 )
 __attribute__((nonnull));
 
-enum KernelMQ_Process_List_InitResult KernelMQ_Process_create_from_kernel(
+enum KernelMQ_Process_Error KernelMQ_Process_create_from_kernel(
     struct KernelMQ_Process *process,
     const struct KernelMQ_Info *kinfo
 )
 __attribute__((nonnull));
 
-enum KernelMQ_Process_List_InitResult KernelMQ_Process_create_from_module(
+enum KernelMQ_Process_Error KernelMQ_Process_create_from_module(
     struct KernelMQ_Process *process,
     const struct KernelMQ_Info_Module *kinfo_module
 )
