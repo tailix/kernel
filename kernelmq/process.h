@@ -53,6 +53,19 @@ enum KernelMQ_Process_List_InitResult KernelMQ_Process_List_init(
 )
 __attribute__((nonnull));
 
+enum KernelMQ_Process_List_InitResult KernelMQ_Process_create_from_kernel(
+    struct KernelMQ_Process *process,
+    const struct KernelMQ_Info *kinfo
+)
+__attribute__((nonnull));
+
+enum KernelMQ_Process_List_InitResult KernelMQ_Process_create_from_module(
+    struct KernelMQ_Process *process,
+    const struct KernelMQ_Info *kinfo,
+    unsigned int module_index
+)
+__attribute__((nonnull));
+
 #ifdef __cplusplus
 }
 #endif

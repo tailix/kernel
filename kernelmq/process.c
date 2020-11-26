@@ -2,19 +2,6 @@
 
 #include "stdlib.h"
 
-static enum KernelMQ_Process_List_InitResult create_kernel_process(
-    struct KernelMQ_Process *process,
-    const struct KernelMQ_Info *kinfo
-)
-__attribute__((nonnull));
-
-static enum KernelMQ_Process_List_InitResult create_module_process(
-    struct KernelMQ_Process *process,
-    const struct KernelMQ_Info *kinfo,
-    unsigned int module_index
-)
-__attribute__((nonnull));
-
 enum KernelMQ_Process_List_InitResult KernelMQ_Process_List_init(
     KernelMQ_Process_List *const process_list,
     const struct KernelMQ_Info *const kinfo
@@ -22,7 +9,7 @@ enum KernelMQ_Process_List_InitResult KernelMQ_Process_List_init(
     kmemset(process_list, 0, sizeof(*process_list));
 
     const enum KernelMQ_Process_List_InitResult create_kernel_process_result =
-        create_kernel_process(&(*process_list)[0], kinfo);
+        KernelMQ_Process_create_from_kernel(&(*process_list)[0], kinfo);
 
     if (create_kernel_process_result != KERNELMQ_PROCESS_LIST_INIT_RESULT_OK) {
         kmemset(process_list, 0, sizeof(*process_list));
@@ -38,7 +25,7 @@ enum KernelMQ_Process_List_InitResult KernelMQ_Process_List_init(
 
     for (unsigned int mod_index = 0; mod_index < modules_length; ++mod_index) {
         const enum KernelMQ_Process_List_InitResult create_mod_process_result =
-            create_module_process(
+            KernelMQ_Process_create_from_module(
                 &(*process_list)[mod_index + 1],
                 kinfo,
                 mod_index
@@ -53,7 +40,7 @@ enum KernelMQ_Process_List_InitResult KernelMQ_Process_List_init(
     return KERNELMQ_PROCESS_LIST_INIT_RESULT_OK;
 }
 
-enum KernelMQ_Process_List_InitResult create_kernel_process(
+enum KernelMQ_Process_List_InitResult KernelMQ_Process_create_from_kernel(
     struct KernelMQ_Process *const process,
     const struct KernelMQ_Info *const kinfo
 ) {
@@ -93,7 +80,7 @@ enum KernelMQ_Process_List_InitResult create_kernel_process(
     return KERNELMQ_PROCESS_LIST_INIT_RESULT_OK;
 }
 
-enum KernelMQ_Process_List_InitResult create_module_process(
+enum KernelMQ_Process_List_InitResult KernelMQ_Process_create_from_module(
     struct KernelMQ_Process *const process,
     const struct KernelMQ_Info *const kinfo,
     const unsigned int module_index
