@@ -32,7 +32,7 @@ void init(const struct KernelMQ_Info *const kinfo_ptr)
     paging_load();
 
     const enum KernelMQ_Process_List_InitResult process_list_init_result =
-        KernelMQ_Process_List_init(&process_list);
+        KernelMQ_Process_List_init(&process_list, &kinfo);
 
     if (process_list_init_result != KERNELMQ_PROCESS_LIST_INIT_RESULT_OK) {
         logger_fail_from(

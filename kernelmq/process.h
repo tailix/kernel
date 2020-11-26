@@ -1,6 +1,8 @@
 #ifndef KERNELMQ_INCLUDED_PROCESS
 #define KERNELMQ_INCLUDED_PROCESS 1
 
+#include "info.h"
+
 #define KERNELMQ_PROCESS_LIST_LENGTH 20
 
 #define KERNELMQ_PROCESS_CMDLINE_SIZE_MAX 256
@@ -14,6 +16,9 @@ extern "C" {
 
 enum KernelMQ_Process_List_InitResult {
     KERNELMQ_PROCESS_LIST_INIT_RESULT_OK = 0,
+    KERNELMQ_PROCESS_LIST_INIT_RESULT_KERNEL_CMDLINE_TOO_LONG = 1,
+    KERNELMQ_PROCESS_LIST_INIT_RESULT_KERNEL_AREAS_LENGTH_TOO_LONG = 2,
+    KERNELMQ_PROCESS_LIST_INIT_RESULT_KERNEL_ADDR_TOO_BIG = 3,
 };
 
 enum KernelMQ_Process_CreatedFrom {
@@ -42,8 +47,10 @@ typedef struct KernelMQ_Process
     KernelMQ_Process_List[KERNELMQ_PROCESS_LIST_LENGTH];
 
 enum KernelMQ_Process_List_InitResult KernelMQ_Process_List_init(
-    KernelMQ_Process_List *process_list
-);
+    KernelMQ_Process_List *process_list,
+    const struct KernelMQ_Info *kinfo
+)
+__attribute__((nonnull));
 
 #ifdef __cplusplus
 }
