@@ -2,54 +2,48 @@
 
 static unsigned char cmdline_terminated(const char *s);
 
-unsigned char kernelmq_info_validate_and_copy(
-    struct KernelMQ_Info *const dest,
-    const struct KernelMQ_Info *const src
-) {
-    if (!src) {
+unsigned char kernelmq_info_validate(const struct KernelMQ_Info *const kinfo)
+{
+    if (!kinfo) {
         return 0;
     }
 
-    if (!dest) {
+    if (!cmdline_terminated(kinfo->cmdline)) {
         return 0;
     }
 
-    if (!cmdline_terminated(src->cmdline)) {
+    if (kinfo->modules_count > KERNELMQ_INFO_MODULES_MAX) {
         return 0;
     }
 
-    if (src->modules_count > KERNELMQ_INFO_MODULES_MAX) {
+    if (kinfo->areas_count > KERNELMQ_INFO_AREAS_MAX) {
         return 0;
     }
 
-    if (src->areas_count > KERNELMQ_INFO_AREAS_MAX) {
+    if (kinfo->kernel_size == 0) {
         return 0;
     }
 
-    if (src->kernel_size == 0) {
+    if (kinfo->kernel_offset == 0) {
         return 0;
     }
 
-    if (src->kernel_offset == 0) {
+    if (kinfo->kernel_phys_base + kinfo->kernel_size != kinfo->kernel_phys_limit + 1) {
         return 0;
     }
 
-    if (src->kernel_phys_base + src->kernel_size != src->kernel_phys_limit + 1) {
+    if (kinfo->kernel_virt_base + kinfo->kernel_size != kinfo->kernel_virt_limit + 1) {
         return 0;
     }
 
-    if (src->kernel_virt_base + src->kernel_size != src->kernel_virt_limit + 1) {
-        return 0;
-    }
-
-    if (src->kernel_virt_base - src->kernel_phys_base != src->kernel_offset) {
+    if (kinfo->kernel_virt_base - kinfo->kernel_phys_base != kinfo->kernel_offset) {
         return 0;
     }
 
     unsigned long modules_total_size = 0;
 
-    for (unsigned int i = 0; i < src->modules_count; ++i) {
-        const struct KernelMQ_Info_Module *const module = &src->modules[i];
+    for (unsigned int i = 0; i < kinfo->modules_count; ++i) {
+        const struct KernelMQ_Info_Module *const module = &kinfo->modules[i];
 
         modules_total_size += module->size;
 
@@ -66,18 +60,18 @@ unsigned char kernelmq_info_validate_and_copy(
         }
     }
 
-    if (src->modules_total_size != modules_total_size) {
+    if (kinfo->modules_total_size != modules_total_size) {
         return 0;
     }
 
-    if (src->kernel_and_modules_total_size != src->kernel_size + src->modules_total_size) {
+    if (kinfo->kernel_and_modules_total_size != kinfo->kernel_size + kinfo->modules_total_size) {
         return 0;
     }
 
     unsigned long long last = 0;
 
-    for (unsigned int i = 0; i < src->areas_count; ++i) {
-        const struct KernelMQ_Info_Area *const area = &src->areas[i];
+    for (unsigned int i = 0; i < kinfo->areas_count; ++i) {
+        const struct KernelMQ_Info_Area *const area = &kinfo->areas[i];
         if (last > area->base) {
             return 0;
         }
@@ -93,18 +87,18 @@ unsigned char kernelmq_info_validate_and_copy(
         last = area->limit + 1;
 
         if (!area->is_available) {
-            if (src->kernel_phys_base >= area->base &&
-                src->kernel_phys_base <= area->limit) {
+            if (kinfo->kernel_phys_base >= area->base &&
+                kinfo->kernel_phys_base <= area->limit) {
                 return 0;
             }
 
-            if (src->kernel_phys_limit >= area->base &&
-                src->kernel_phys_limit <= area->limit) {
+            if (kinfo->kernel_phys_limit >= area->base &&
+                kinfo->kernel_phys_limit <= area->limit) {
                 return 0;
             }
 
-            for (unsigned int j = 0; j < src->modules_count; ++j) {
-                const struct KernelMQ_Info_Module *const module = &src->modules[j];
+            for (unsigned int j = 0; j < kinfo->modules_count; ++j) {
+                const struct KernelMQ_Info_Module *const module = &kinfo->modules[j];
 
                 if (module->base >= area->base &&
                     module->base <= area->limit) {
@@ -118,8 +112,6 @@ unsigned char kernelmq_info_validate_and_copy(
             }
         }
     }
-
-    *dest = *src;
 
     return 1;
 }

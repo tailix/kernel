@@ -4,6 +4,16 @@
 #include "info.h"
 #include "stdlib.h"
 
+#include "panic.h"
+#include "protected.h"
+
+#include "module.h"
+#include "process.h"
+
+#include "tasks.h"
+#include "elf.h"
+#include "logger.h"
+
 // Defined in linker script
 extern char _kernel_offset;
 extern char _kernel_size;
@@ -13,16 +23,18 @@ extern char _kernel_stack_top;
 
 static struct KernelMQ_Info kinfo;
 
-const struct KernelMQ_Info *main(unsigned long multiboot_magic, unsigned long multiboot_info_base)
+static KernelMQ_Process_List process_list;
+
+void main(unsigned long multiboot_magic, unsigned long multiboot_info_base)
 {
     if (multiboot_magic != MULTIBOOT_MAGIC) {
-        return 0;
+        return;
     }
 
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
     if (!multiboot_parse(&kinfo, multiboot_info_base)) {
-        return 0;
+        return;
     }
 
     kinfo.kernel_offset = (unsigned long)&_kernel_offset;
@@ -45,5 +57,47 @@ const struct KernelMQ_Info *main(unsigned long multiboot_magic, unsigned long mu
 
     paging_enable();
 
-    return &kinfo;
+    assert(kernelmq_info_validate(&kinfo), "Invalid kernel information.");
+
+    protected_initialize(&kinfo);
+
+    // Set up a new post-relocate bootstrap pagetable so that
+    // we can map in VM, and we no longer rely on pre-relocated
+    // data.
+    paging_clear();
+    paging_identity(); // Still need 1:1 for lapic and video mem and such.
+    paging_mapkernel(&kinfo);
+    paging_load();
+
+    const enum KernelMQ_Process_Error process_list_init_result =
+        KernelMQ_Process_List_init(&process_list, &kinfo);
+
+    if (process_list_init_result != KERNELMQ_PROCESS_ERROR_OK) {
+        logger_fail_from(
+            "init",
+            "Process list initialization failed with %u.",
+            process_list_init_result
+        );
+
+        panic("Can not initialize process list.");
+    }
+
+    logger_debug_from("init", "Process list initialized.");
+
+    KernelMQ_Process_List_print(&process_list);
+
+    if (kinfo.modules_count > 0) {
+        const struct KernelMQ_ELF_Header *const elf_header =
+            (void*)kinfo.modules[0].base;
+
+        if (KernelMQ_ELF_Header_is_valid(elf_header)) {
+            const unsigned long real_entrypoint =
+                kinfo.modules[0].base + elf_header->entrypoint;
+
+            tasks_switch_to_user(real_entrypoint);
+        }
+        else {
+            logger_warn_from("init", "Invalid ELF header");
+        }
+    }
 }

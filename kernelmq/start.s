@@ -33,11 +33,6 @@ _start:
     push %eax // Multiboot magic number
     call main
 
-    mov $_kernel_stack_top, %esp // Initialize stack
-
-    push %eax // Kernel information pointer
-    call init
-
     call halt
 
 .size _start, . - _start

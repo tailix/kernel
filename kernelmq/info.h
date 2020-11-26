@@ -52,7 +52,7 @@ struct KernelMQ_Info {
     unsigned long kernel_stack_top;
 };
 
-unsigned char kernelmq_info_validate_and_copy(struct KernelMQ_Info *dest, const struct KernelMQ_Info *src);
+unsigned char kernelmq_info_validate(const struct KernelMQ_Info *kinfo);
 
 #ifdef __cplusplus
 }
