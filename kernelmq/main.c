@@ -37,6 +37,12 @@ void main(unsigned long multiboot_magic, unsigned long multiboot_info_base)
         panic("Can not parse Multiboot 2 info.");
     }
 
+    const unsigned long multiboot_flags = *(unsigned long*)multiboot_info_base;
+
+    if (!(multiboot_flags & (1 << 6))) {
+        panic("Multiboot 2 doesn't give us memory map.");
+    }
+
     kinfo.kernel_offset = (unsigned long)&_kernel_offset;
     kinfo.kernel_size   = (unsigned long)&_kernel_size;
 
