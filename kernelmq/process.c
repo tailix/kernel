@@ -71,6 +71,10 @@ enum KernelMQ_Process_Error KernelMQ_Process_create_from_kernel(
             return KERNELMQ_PROCESS_ERROR_ADDR_TOO_BIG;
         }
 
+        if (base + size - 1 != limit) {
+            return KERNELMQ_PROCESS_ERROR_INVALID_AREA;
+        }
+
         process->areas[area_index].base  = base;
         process->areas[area_index].size  = size;
         process->areas[area_index].limit = limit;
@@ -106,6 +110,10 @@ enum KernelMQ_Process_Error KernelMQ_Process_create_from_module(
 
     if (base > 0xFFFFFFFF || size > 0xFFFFFFFF || limit > 0xFFFFFFFF) {
         return KERNELMQ_PROCESS_ERROR_ADDR_TOO_BIG;
+    }
+
+    if (base + size - 1 != limit) {
+        return KERNELMQ_PROCESS_ERROR_INVALID_AREA;
     }
 
     process->areas[0].base  = base;
