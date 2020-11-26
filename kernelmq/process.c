@@ -1,6 +1,51 @@
 #include "process.h"
 
+#include "logger.h"
 #include "stdlib.h"
+
+void KernelMQ_Process_List_print(
+    const KernelMQ_Process_List *const process_list
+) {
+    for (
+        unsigned int proc_index = 0;
+        proc_index < KERNELMQ_PROCESS_LIST_LENGTH;
+        ++proc_index
+    ) {
+        const struct KernelMQ_Process *const process = &(*process_list)[proc_index];
+
+        if (process->is_present) {
+            logger_debug("Process %u", proc_index);
+
+            switch (process->created_from) {
+            case KERNELMQ_PROCESS_CREATED_FROM_KERNEL:
+                logger_debug("  Created from kernel");
+                break;
+            case KERNELMQ_PROCESS_CREATED_FROM_MODULE:
+                logger_debug("  Created from module");
+                break;
+            }
+
+            logger_debug("  Command line: \"%s\"", process->cmdline);
+
+            for (
+                unsigned int area_index = 0;
+                area_index < process->areas_length;
+                ++area_index
+            ) {
+                const struct KernelMQ_Process_Area *const area =
+                    &process->areas[area_index];
+
+                logger_debug(
+                    "  Area %u (base: %u, size: %u, limit: %u)",
+                    area_index,
+                    area->base,
+                    area->size,
+                    area->limit
+                );
+            }
+        }
+    }
+}
 
 enum KernelMQ_Process_Error KernelMQ_Process_List_init(
     KernelMQ_Process_List *const process_list,

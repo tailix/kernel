@@ -48,6 +48,9 @@ struct KernelMQ_Process {
 typedef struct KernelMQ_Process
     KernelMQ_Process_List[KERNELMQ_PROCESS_LIST_LENGTH];
 
+void KernelMQ_Process_List_print(const KernelMQ_Process_List *process_list)
+__attribute__((nonnull));
+
 enum KernelMQ_Process_Error KernelMQ_Process_List_init(
     KernelMQ_Process_List *process_list,
     const struct KernelMQ_Info *kinfo

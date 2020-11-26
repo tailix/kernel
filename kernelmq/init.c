@@ -46,6 +46,8 @@ void init(const struct KernelMQ_Info *const kinfo_ptr)
 
     logger_debug_from("init", "Process list initialized.");
 
+    KernelMQ_Process_List_print(&process_list);
+
     if (kinfo.modules_count > 0) {
         const struct KernelMQ_ELF_Header *const elf_header =
             (void*)kinfo.modules[0].base;
