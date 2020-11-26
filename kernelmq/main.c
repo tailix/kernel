@@ -61,14 +61,6 @@ void main(unsigned long multiboot_magic, unsigned long multiboot_info_base)
 
     protected_initialize(&kinfo);
 
-    // Set up a new post-relocate bootstrap pagetable so that
-    // we can map in VM, and we no longer rely on pre-relocated
-    // data.
-    paging_clear();
-    paging_identity(); // Still need 1:1 for lapic and video mem and such.
-    paging_mapkernel(&kinfo);
-    paging_load();
-
     const enum KernelMQ_Process_Error process_list_init_result =
         KernelMQ_Process_List_init(&process_list, &kinfo);
 
