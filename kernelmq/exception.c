@@ -1,6 +1,7 @@
 #include "interrupt.h"
 #include "config.h"
 #include "logger.h"
+#include "panic.h"
 
 static const char *const messages[] = {
     "0  #DE - Divide Error Exception",
@@ -48,6 +49,5 @@ void exception_handler(struct IsrRegisters regs)
 
     logger_fail_from("exception", "Unhandled protected-mode exception:\n%s", messages[regs.int_no]);
 
-    asm volatile("cli");
-    while (1) {}
+    panic("Can not continue.");
 }
