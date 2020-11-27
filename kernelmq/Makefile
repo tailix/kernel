@@ -6,14 +6,14 @@ LD = $(CCPREFIX)ld
 
 KERNEL = kernelmq.multiboot2
 
-CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra
+CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I/usr/local/include
 
 # Architecture-dependent
 OBJS = start.s.o
 OBJS += main.c.o
 OBJS += multiboot.c.o
-OBJS += panic.c.o  panic.asm.cpp.o
-OBJS += paging.c.o paging.asm.cpp.o
+OBJS += panic.c.o panic.asm.cpp.o
+OBJS += paging.c.o
 OBJS += page_dir.c.o
 
 # Architecture-independent
@@ -51,7 +51,7 @@ clean:
 	rm -f $(KERNEL) $(OBJS)
 
 $(KERNEL): $(OBJS)
-	$(CC) -T linker.ld -o $@ -ffreestanding -nostdlib -lgcc $^
+	$(CC) -T linker.ld -o $@ $^ -ffreestanding -nostdlib -lgcc -lkernaux -Wl,-L/usr/local/lib
 	grub-file --is-x86-multiboot2 $@
 
 %.c.o: %.c

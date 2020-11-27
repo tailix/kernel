@@ -5,6 +5,8 @@
 
 #include "stdlib.h"
 
+#include <kernaux/arch/i386.h>
+
 // CR0 bits
 #define I386_CR0_PE 0x00000001 // Protected mode
 #define I386_CR0_MP 0x00000002 // Monitor Coprocessor
@@ -24,43 +26,36 @@
 #define I386_CR4_MCE 0x00000040 // Machine check enable
 #define I386_CR4_PGE 0x00000080 // Global page flag enable
 
-unsigned long read_cr0();
-unsigned long read_cr4();
-
-void write_cr0(volatile unsigned long);
-void write_cr3(volatile unsigned long);
-void write_cr4(volatile unsigned long);
-
 static PageDir page_dir;
 
 void paging_enable()
 {
-    unsigned long cr0 = read_cr0();
-    unsigned long cr4 = read_cr4();
+    unsigned long cr0 = kernaux_arch_i386_read_cr0();
+    unsigned long cr4 = kernaux_arch_i386_read_cr4();
 
     assert(cr0 & I386_CR0_PE, "The boot loader should have put us in protected mode.");
 
     // First clear PG and PGE flag, as PGE must be enabled after PG.
-    write_cr0(cr0 & ~I386_CR0_PG);
-    write_cr4(cr4 & ~(I386_CR4_PGE | I386_CR4_PSE));
+    kernaux_arch_i386_write_cr0(cr0 & ~I386_CR0_PG);
+    kernaux_arch_i386_write_cr4(cr4 & ~(I386_CR4_PGE | I386_CR4_PSE));
 
-    cr0 = read_cr0();
-    cr4 = read_cr4();
+    cr0 = kernaux_arch_i386_read_cr0();
+    cr4 = kernaux_arch_i386_read_cr4();
 
     // Our page table contains 4MB entries.
     cr4 |= I386_CR4_PSE;
 
-    write_cr4(cr4);
+    kernaux_arch_i386_write_cr4(cr4);
 
     // First enable paging, then enable global page flag.
     cr0 |= I386_CR0_PG;
 
-    write_cr0(cr0);
+    kernaux_arch_i386_write_cr0(cr0);
 
     cr0 |= I386_CR0_WP;
 
-    write_cr0(cr0);
-    write_cr4(cr4);
+    kernaux_arch_i386_write_cr0(cr0);
+    kernaux_arch_i386_write_cr4(cr4);
 }
 
 void paging_clear()
@@ -122,6 +117,6 @@ int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
 unsigned long paging_load()
 {
     unsigned long page_dir_phys = (unsigned long)page_dir;
-    write_cr3(page_dir_phys);
+    kernaux_arch_i386_write_cr3(page_dir_phys);
     return page_dir_phys;
 }
