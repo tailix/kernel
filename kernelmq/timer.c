@@ -1,7 +1,8 @@
 #include "timer.h"
 
 #include "logger.h"
-#include "asm.h"
+
+#include <kernaux/arch/i386.h>
 
 void timer_initialize(unsigned int frequency)
 {
@@ -12,9 +13,9 @@ void timer_initialize(unsigned int frequency)
     const unsigned char l = divisor & 0xFF;
     const unsigned char h = (divisor >> 8) & 0xFF;
 
-    outportb(0x43, 0x36);
-    outportb(0x40, l);
-    outportb(0x40, h);
+    kernaux_arch_i386_outportb(0x43, 0x36);
+    kernaux_arch_i386_outportb(0x40, l);
+    kernaux_arch_i386_outportb(0x40, h);
 }
 
 void timer_register_handler(timer_handler_t handler)

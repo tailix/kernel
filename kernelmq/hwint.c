@@ -2,7 +2,6 @@
 
 #include "interrupt.h"
 #include "config.h"
-#include "asm.h"
 #include "logger.h"
 #include "pic.h"
 
