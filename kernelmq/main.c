@@ -14,6 +14,8 @@
 #include "elf.h"
 #include "logger.h"
 
+#include <kernaux/multiboot2.h>
+
 // Defined in linker script
 extern char _kernel_offset;
 extern char _kernel_size;
@@ -27,7 +29,7 @@ static KernelMQ_Process_List process_list;
 
 void main(unsigned long multiboot_magic, unsigned long multiboot_info_base)
 {
-    if (multiboot_magic != MULTIBOOT_MAGIC) {
+    if (multiboot_magic != KERNAUX_MULTIBOOT2_MAGIC) {
         panic("Multiboot 2 magic number is invalid.");
     }
 
