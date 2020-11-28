@@ -38,6 +38,12 @@ void main(unsigned long multiboot_magic, unsigned long multiboot_info_base)
         print
     );
 
+    if (!KernAux_Multiboot2_is_valid(
+        (struct KernAux_Multiboot2*)multiboot_info_base
+    )) {
+        panic("Multiboot 2 info is invalid.");
+    }
+
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
     if (!multiboot_parse(&kinfo, multiboot_info_base)) {
