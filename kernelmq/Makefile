@@ -11,7 +11,6 @@ CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -
 # Architecture-dependent
 OBJS = start.s.o
 OBJS += main.c.o
-OBJS += multiboot.c.o
 OBJS += panic.c.o
 OBJS += paging.c.o
 OBJS += page_dir.c.o

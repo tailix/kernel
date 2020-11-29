@@ -1,4 +1,3 @@
-#include "multiboot.h"
 #include "paging.h"
 
 #include "info.h"
@@ -95,8 +94,41 @@ void main(
         }
     }
 
-    if (!multiboot_parse(&kinfo, (unsigned long)multiboot2_info)) {
-        panic("Can not parse Multiboot 2 info.");
+    for (
+        const struct KernAux_Multiboot2_Tag_Module *tag =
+            (struct KernAux_Multiboot2_Tag_Module*)
+            KernAux_Multiboot2_first_tag_with_type(
+                multiboot2_info,
+                KERNAUX_MULTIBOOT2_TAGTYPE_MODULE
+            );
+        tag;
+        tag = (struct KernAux_Multiboot2_Tag_Module*)
+            KernAux_Multiboot2_tag_with_type_after(
+                multiboot2_info,
+                KERNAUX_MULTIBOOT2_TAGTYPE_MODULE,
+                (struct KernAux_Multiboot2_TagBase*)tag
+            )
+    ) {
+        if (kinfo.modules_count >= KERNELMQ_INFO_MODULES_MAX) {
+            panic("Too many modules in Multiboot 2 info.");
+        }
+
+        unsigned int slen = kstrlen(tag->cmdline);
+
+        if (slen > KERNELMQ_INFO_CMDLINE_SLEN_MAX) {
+            panic("Multiboot 2 module cmd line is too long.");
+        }
+
+        struct KernelMQ_Info_Module *const module =
+            &kinfo.modules[kinfo.modules_count];
+
+        module->base = tag->mod_start;
+        module->limit = tag->mod_end;
+        module->size = module->limit - module->base + 1;
+
+        ++kinfo.modules_count;
+
+        kinfo.modules_total_size += module->size;
     }
 
     kinfo.kernel_offset = (unsigned long)&_kernel_offset;
