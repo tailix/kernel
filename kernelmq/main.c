@@ -58,6 +58,43 @@ void main(
         }
     }
 
+    {
+        const struct KernAux_Multiboot2_Tag_MemoryMap *const tag =
+            (struct KernAux_Multiboot2_Tag_MemoryMap*)
+            KernAux_Multiboot2_first_tag_with_type(
+                multiboot2_info,
+                KERNAUX_MULTIBOOT2_TAGTYPE_MEMORY_MAP
+            );
+
+        if (!tag) {
+            panic("No memory map provided in Multiboot 2 info.");
+        }
+
+        for (
+            const struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase *entry =
+                (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)tag->data;
+            (unsigned char*)entry < (unsigned char*)tag + tag->base.size;
+            entry =
+                (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)
+                ((unsigned char*)entry + tag->entry_size)
+        ) {
+            if (kinfo.areas_count >= KERNELMQ_INFO_AREAS_MAX) {
+                panic("Too many memory map entries in Multiboot 2 info.");
+            }
+
+            struct KernelMQ_Info_Area *const area =
+                &kinfo.areas[kinfo.areas_count];
+
+            area->base = entry->base_addr;
+            area->size = entry->length;
+            area->limit = area->base + area->size - 1;
+
+            area->is_available = entry->type == 1;
+
+            ++kinfo.areas_count;
+        }
+    }
+
     if (!multiboot_parse(&kinfo, (unsigned long)multiboot2_info)) {
         panic("Can not parse Multiboot 2 info.");
     }

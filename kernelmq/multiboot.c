@@ -2,24 +2,8 @@
 
 #include "stdlib.h"
 
-#define MULTIBOOT_TAG_TYPE_END     0
-#define MULTIBOOT_TAG_TYPE_MODULE  3
-#define MULTIBOOT_TAG_TYPE_MMAP    6
-
-#define MULTIBOOT_MEMORY_AVAILABLE        1
-#define MULTIBOOT_MEMORY_RESERVED         2
-#define MULTIBOOT_MEMORY_ACPI_RECLAIMABLE 3
-#define MULTIBOOT_MEMORY_NVS              4
-
-struct multiboot_mmap_entry
-{
-    unsigned long long base;
-    unsigned long long size;
-    unsigned int type;
-    unsigned int zero;
-};
-
-typedef struct multiboot_mmap_entry multiboot_memory_map_t;
+#define MULTIBOOT_TAG_TYPE_END    0
+#define MULTIBOOT_TAG_TYPE_MODULE 3
 
 struct multiboot_tag
 {
@@ -43,19 +27,9 @@ struct multiboot_tag_module
     char cmdline[0];
 };
 
-struct multiboot_tag_mmap
-{
-    unsigned int type;
-    unsigned int size;
-    unsigned int entry_size;
-    unsigned int entry_version;
-    struct multiboot_mmap_entry entries[0];
-};
-
 static unsigned char print_multiboot_tag(struct KernelMQ_Info *kinfo, const struct multiboot_tag *tag);
 
-static unsigned char print_multiboot_tag_module (struct KernelMQ_Info *kinfo, const struct multiboot_tag_module *tag);
-static unsigned char print_multiboot_tag_mmap   (struct KernelMQ_Info *kinfo, const struct multiboot_tag_mmap   *tag);
+static unsigned char print_multiboot_tag_module(struct KernelMQ_Info *kinfo, const struct multiboot_tag_module *tag);
 
 unsigned char multiboot_parse(struct KernelMQ_Info *kinfo, unsigned long base)
 {
@@ -87,9 +61,6 @@ unsigned char print_multiboot_tag(struct KernelMQ_Info *kinfo, const struct mult
     {
         case MULTIBOOT_TAG_TYPE_MODULE:
             return print_multiboot_tag_module(kinfo, (struct multiboot_tag_module*)tag);
-
-        case MULTIBOOT_TAG_TYPE_MMAP:
-            return print_multiboot_tag_mmap(kinfo, (struct multiboot_tag_mmap*)tag);
     }
 
     return 1;
@@ -118,31 +89,6 @@ unsigned char print_multiboot_tag_module(struct KernelMQ_Info *kinfo, const stru
     ++kinfo->modules_count;
 
     kinfo->modules_total_size += module->size;
-
-    return 1;
-}
-
-unsigned char print_multiboot_tag_mmap(struct KernelMQ_Info *kinfo, const struct multiboot_tag_mmap *const tag)
-{
-    for (
-        const multiboot_memory_map_t *mmap = tag->entries;
-        (unsigned char*)mmap < (unsigned char*)tag + tag->size;
-        mmap = (multiboot_memory_map_t*)((unsigned long) mmap + tag->entry_size)
-    ) {
-        if (kinfo->areas_count >= KERNELMQ_INFO_AREAS_MAX) {
-            return 0;
-        }
-
-        struct KernelMQ_Info_Area *area = &kinfo->areas[kinfo->areas_count];
-
-        area->base  = mmap->base;
-        area->size  = mmap->size;
-        area->limit = area->base + area->size - 1;
-
-        area->is_available = mmap->type == MULTIBOOT_MEMORY_AVAILABLE;
-
-        ++kinfo->areas_count;
-    }
 
     return 1;
 }
