@@ -122,6 +122,8 @@ void main(
         struct KernelMQ_Info_Module *const module =
             &kinfo.modules[kinfo.modules_count];
 
+        kstrncpy(module->cmdline, tag->cmdline, slen);
+
         module->base = tag->mod_start;
         module->limit = tag->mod_end;
         module->size = module->limit - module->base + 1;
