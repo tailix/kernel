@@ -43,6 +43,21 @@ void main(
 
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
+    {
+        const char *const cmdline =
+            KernAux_Multiboot2_boot_cmd_line(multiboot2_info);
+
+        if (cmdline) {
+            unsigned int slen = kstrlen(cmdline);
+
+            if (slen > KERNELMQ_INFO_CMDLINE_SLEN_MAX) {
+                panic("Multiboot 2 boot cmd line is too long.");
+            }
+
+            kstrncpy(kinfo.cmdline, cmdline, slen);
+        }
+    }
+
     if (!multiboot_parse(&kinfo, (unsigned long)multiboot2_info)) {
         panic("Can not parse Multiboot 2 info.");
     }

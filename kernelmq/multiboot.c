@@ -3,7 +3,6 @@
 #include "stdlib.h"
 
 #define MULTIBOOT_TAG_TYPE_END     0
-#define MULTIBOOT_TAG_TYPE_CMDLINE 1
 #define MULTIBOOT_TAG_TYPE_MODULE  3
 #define MULTIBOOT_TAG_TYPE_MMAP    6
 
@@ -55,7 +54,6 @@ struct multiboot_tag_mmap
 
 static unsigned char print_multiboot_tag(struct KernelMQ_Info *kinfo, const struct multiboot_tag *tag);
 
-static unsigned char print_multiboot_tag_cmdline(struct KernelMQ_Info *kinfo, const struct multiboot_tag_string *tag);
 static unsigned char print_multiboot_tag_module (struct KernelMQ_Info *kinfo, const struct multiboot_tag_module *tag);
 static unsigned char print_multiboot_tag_mmap   (struct KernelMQ_Info *kinfo, const struct multiboot_tag_mmap   *tag);
 
@@ -87,28 +85,12 @@ unsigned char print_multiboot_tag(struct KernelMQ_Info *kinfo, const struct mult
 {
     switch (tag->type)
     {
-        case MULTIBOOT_TAG_TYPE_CMDLINE:
-            return print_multiboot_tag_cmdline(kinfo, (struct multiboot_tag_string*)tag);
-
         case MULTIBOOT_TAG_TYPE_MODULE:
             return print_multiboot_tag_module(kinfo, (struct multiboot_tag_module*)tag);
 
         case MULTIBOOT_TAG_TYPE_MMAP:
             return print_multiboot_tag_mmap(kinfo, (struct multiboot_tag_mmap*)tag);
     }
-
-    return 1;
-}
-
-unsigned char print_multiboot_tag_cmdline(struct KernelMQ_Info *kinfo, const struct multiboot_tag_string *const tag)
-{
-    unsigned int slen = kstrlen(tag->string);
-
-    if (slen > KERNELMQ_INFO_CMDLINE_SLEN_MAX) {
-        return 0;
-    }
-
-    kstrncpy(kinfo->cmdline, tag->string, slen);
 
     return 1;
 }
