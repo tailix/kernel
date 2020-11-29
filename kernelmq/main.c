@@ -27,26 +27,23 @@ static struct KernelMQ_Info kinfo;
 
 static KernelMQ_Process_List process_list;
 
-void main(unsigned long multiboot_magic, unsigned long multiboot_info_base)
-{
-    if (multiboot_magic != KERNAUX_MULTIBOOT2_MAGIC) {
+void main(
+    const unsigned long multiboot2_magic,
+    const struct KernAux_Multiboot2 *const multiboot2_info
+) {
+    if (multiboot2_magic != KERNAUX_MULTIBOOT2_MAGIC) {
         panic("Multiboot 2 magic number is invalid.");
     }
 
-    KernAux_Multiboot2_print(
-        (struct KernAux_Multiboot2*)multiboot_info_base,
-        print
-    );
+    KernAux_Multiboot2_print(multiboot2_info, print);
 
-    if (!KernAux_Multiboot2_is_valid(
-        (struct KernAux_Multiboot2*)multiboot_info_base
-    )) {
+    if (!KernAux_Multiboot2_is_valid(multiboot2_info)) {
         panic("Multiboot 2 info is invalid.");
     }
 
     kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
-    if (!multiboot_parse(&kinfo, multiboot_info_base)) {
+    if (!multiboot_parse(&kinfo, (unsigned long)multiboot2_info)) {
         panic("Can not parse Multiboot 2 info.");
     }
 
