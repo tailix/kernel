@@ -1,7 +1,6 @@
 #include "logger.h"
 
-#include "console.h"
-
+#include <kernaux/console.h>
 #include <kernaux/stdlib.h>
 
 #define LEVELS_COUNT 4
@@ -31,11 +30,11 @@ void logger_log(unsigned char level, const char *const source, const char *forma
     while ((c = *format++) != 0)
     {
         if (c == '\n') {
-            console_putc('\n');
+            kernaux_console_putc('\n');
             print_prefix(level, source);
         }
         else if (c != '%') {
-            console_putc(c);
+            kernaux_console_putc(c);
         }
         else {
             char *p, *p2;
@@ -67,30 +66,30 @@ void logger_log(unsigned char level, const char *const source, const char *forma
 string:
                     for (p2 = p; *p2; p2++);
                     for (; p2 < p + pad; p2++)
-                        console_putc(pad0 ? '0' : ' ');
+                        kernaux_console_putc(pad0 ? '0' : ' ');
                     while (*p)
-                        console_putc(*p++);
+                        kernaux_console_putc(*p++);
                     break;
                 default:
-                    console_putc(*((int *) arg++));
+                    kernaux_console_putc(*((int *) arg++));
                     break;
             }
         }
     }
 
-    console_putc('\n');
+    kernaux_console_putc('\n');
 }
 
 void print_prefix(const unsigned char level, const char *const source)
 {
-    console_putc('[');
-    console_print(level_text[level]);
-    console_putc(']');
-    console_putc(' ');
+    kernaux_console_putc('[');
+    kernaux_console_print(level_text[level]);
+    kernaux_console_putc(']');
+    kernaux_console_putc(' ');
 
     if (source) {
-        console_print(source);
-        console_print(": ");
+        kernaux_console_print(source);
+        kernaux_console_print(": ");
     }
 }
 
@@ -105,11 +104,11 @@ void print(const char *format, ...)
     {
         if (c == '\n') {
             if (*format != 0) {
-                console_putc('\n');
+                kernaux_console_putc('\n');
             }
         }
         else if (c != '%') {
-            console_putc(c);
+            kernaux_console_putc(c);
         }
         else {
             char *p, *p2;
@@ -141,16 +140,16 @@ void print(const char *format, ...)
 string:
                     for (p2 = p; *p2; p2++);
                     for (; p2 < p + pad; p2++)
-                        console_putc(pad0 ? '0' : ' ');
+                        kernaux_console_putc(pad0 ? '0' : ' ');
                     while (*p)
-                        console_putc(*p++);
+                        kernaux_console_putc(*p++);
                     break;
                 default:
-                    console_putc(*((int *) arg++));
+                    kernaux_console_putc(*((int *) arg++));
                     break;
             }
         }
     }
 
-    console_putc('\n');
+    kernaux_console_putc('\n');
 }

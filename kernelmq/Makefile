@@ -20,7 +20,6 @@ OBJS += info.c.o
 OBJS += process.c.o
 
 # Built-in drivers
-OBJS += console.c.o
 OBJS += pic.c.o
 OBJS += timer.c.o
 
