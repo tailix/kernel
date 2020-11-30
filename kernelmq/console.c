@@ -1,6 +1,6 @@
 #include "console.h"
 
-#include <kernaux/arch/i386.h>
+#include <kernaux/arch/x86.h>
 #include <kernaux/stdlib.h>
 
 void console_print(const char *const s)
@@ -9,7 +9,7 @@ void console_print(const char *const s)
 }
 
 void console_putc(const char c) {
-    kernaux_arch_i386_outportb(0x3F8, c);
+    kernaux_arch_x86_outportb(0x3F8, c);
 }
 
 void console_puts(const char *const s)

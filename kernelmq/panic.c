@@ -2,12 +2,12 @@
 
 #include "logger.h"
 
-#include <kernaux/arch/i386.h>
+#include <kernaux/arch/x86.h>
 
 void panic(const char *const s)
 {
     logger_fail_from("panic", s);
-    kernaux_arch_i386_hang();
+    kernaux_arch_x86_hang();
 }
 
 void halt()

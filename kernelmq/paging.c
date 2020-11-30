@@ -3,7 +3,7 @@
 #include "page_dir.h"
 #include "panic.h"
 
-#include <kernaux/arch/i386.h>
+#include <kernaux/arch/x86.h>
 #include <kernaux/stdlib.h>
 
 // CR0 bits
@@ -29,32 +29,32 @@ static PageDir page_dir;
 
 void paging_enable()
 {
-    unsigned long cr0 = kernaux_arch_i386_read_cr0();
-    unsigned long cr4 = kernaux_arch_i386_read_cr4();
+    unsigned long cr0 = kernaux_arch_x86_read_cr0();
+    unsigned long cr4 = kernaux_arch_x86_read_cr4();
 
     assert(cr0 & I386_CR0_PE, "The boot loader should have put us in protected mode.");
 
     // First clear PG and PGE flag, as PGE must be enabled after PG.
-    kernaux_arch_i386_write_cr0(cr0 & ~I386_CR0_PG);
-    kernaux_arch_i386_write_cr4(cr4 & ~(I386_CR4_PGE | I386_CR4_PSE));
+    kernaux_arch_x86_write_cr0(cr0 & ~I386_CR0_PG);
+    kernaux_arch_x86_write_cr4(cr4 & ~(I386_CR4_PGE | I386_CR4_PSE));
 
-    cr0 = kernaux_arch_i386_read_cr0();
-    cr4 = kernaux_arch_i386_read_cr4();
+    cr0 = kernaux_arch_x86_read_cr0();
+    cr4 = kernaux_arch_x86_read_cr4();
 
     // Our page table contains 4MB entries.
     cr4 |= I386_CR4_PSE;
 
-    kernaux_arch_i386_write_cr4(cr4);
+    kernaux_arch_x86_write_cr4(cr4);
 
     // First enable paging, then enable global page flag.
     cr0 |= I386_CR0_PG;
 
-    kernaux_arch_i386_write_cr0(cr0);
+    kernaux_arch_x86_write_cr0(cr0);
 
     cr0 |= I386_CR0_WP;
 
-    kernaux_arch_i386_write_cr0(cr0);
-    kernaux_arch_i386_write_cr4(cr4);
+    kernaux_arch_x86_write_cr0(cr0);
+    kernaux_arch_x86_write_cr4(cr4);
 }
 
 void paging_clear()
@@ -116,6 +116,6 @@ int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
 unsigned long paging_load()
 {
     unsigned long page_dir_phys = (unsigned long)page_dir;
-    kernaux_arch_i386_write_cr3(page_dir_phys);
+    kernaux_arch_x86_write_cr3(page_dir_phys);
     return page_dir_phys;
 }
