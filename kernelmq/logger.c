@@ -2,7 +2,7 @@
 
 #include "console.h"
 
-#include "stdlib.h"
+#include <kernaux/stdlib.h>
 
 #define LEVELS_COUNT 4
 
@@ -56,7 +56,7 @@ void logger_log(unsigned char level, const char *const source, const char *forma
                 case 'd':
                 case 'u':
                 case 'x':
-                    kitoa (buf, c, *((int *) arg++));
+                    kernaux_itoa(*((int*)arg++), buf, c);
                     p = buf;
                     goto string;
                     break;
@@ -130,7 +130,7 @@ void print(const char *format, ...)
                 case 'd':
                 case 'u':
                 case 'x':
-                    kitoa (buf, c, *((int *) arg++));
+                    kernaux_itoa(*((int*)arg++), buf, c);
                     p = buf;
                     goto string;
                     break;

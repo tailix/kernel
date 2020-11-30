@@ -2,7 +2,7 @@
 
 #include "config.h"
 
-#include "stdlib.h"
+#include <kernaux/stdlib.h>
 
 struct gdt_entry_bits {
     unsigned int limit_low              : 16;
@@ -80,7 +80,7 @@ void tss_write_to_gdt(const struct KernelMQ_Info *const kinfo, void *gdt_entry_p
     g->big                    = 0;
     g->gran                   = 0;
 
-    kmemset(&tss, 0, sizeof(tss));
+    kernaux_memset(&tss, 0, sizeof(tss));
 
     tss.ss0 = GDT_KERNEL_DS_SELECTOR;
     tss.esp0 = kinfo->kernel_stack_top;

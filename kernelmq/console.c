@@ -1,12 +1,11 @@
 #include "console.h"
 
-#include "stdlib.h"
-
 #include <kernaux/arch/i386.h>
+#include <kernaux/stdlib.h>
 
 void console_print(const char *const s)
 {
-    console_write(s, kstrlen(s));
+    console_write(s, kernaux_strlen(s));
 }
 
 void console_putc(const char c) {

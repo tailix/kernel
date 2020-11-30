@@ -1,7 +1,8 @@
 #include "process.h"
 
 #include "logger.h"
-#include "stdlib.h"
+
+#include <kernaux/stdlib.h>
 
 void KernelMQ_Process_List_print(
     const KernelMQ_Process_List *const process_list
@@ -51,20 +52,20 @@ enum KernelMQ_Process_Error KernelMQ_Process_List_init(
     KernelMQ_Process_List *const process_list,
     const struct KernelMQ_Info *const kinfo
 ) {
-    kmemset(process_list, 0, sizeof(*process_list));
+    kernaux_memset(process_list, 0, sizeof(*process_list));
 
     const enum KernelMQ_Process_Error create_kernel_process_result =
         KernelMQ_Process_create_from_kernel(&(*process_list)[0], kinfo);
 
     if (create_kernel_process_result != KERNELMQ_PROCESS_ERROR_OK) {
-        kmemset(process_list, 0, sizeof(*process_list));
+        kernaux_memset(process_list, 0, sizeof(*process_list));
         return create_kernel_process_result;
     }
 
     const unsigned int modules_length = kinfo->modules_count;
 
     if (modules_length > KERNELMQ_PROCESS_LIST_LENGTH - 1) {
-        kmemset(process_list, 0, sizeof(*process_list));
+        kernaux_memset(process_list, 0, sizeof(*process_list));
         return KERNELMQ_PROCESS_ERROR_MODULES_TOO_MANY;
     }
 
@@ -76,7 +77,7 @@ enum KernelMQ_Process_Error KernelMQ_Process_List_init(
             );
 
         if (create_mod_process_result != KERNELMQ_PROCESS_ERROR_OK) {
-            kmemset(process_list, 0, sizeof(*process_list));
+            kernaux_memset(process_list, 0, sizeof(*process_list));
             return create_mod_process_result;
         }
     }
@@ -91,13 +92,13 @@ enum KernelMQ_Process_Error KernelMQ_Process_create_from_kernel(
     process->is_present = 1;
     process->created_from = KERNELMQ_PROCESS_CREATED_FROM_KERNEL;
 
-    const unsigned int cmdline_slen = kstrlen(kinfo->cmdline);
+    const unsigned int cmdline_slen = kernaux_strlen(kinfo->cmdline);
 
     if (cmdline_slen > KERNELMQ_PROCESS_CMDLINE_SLEN_MAX) {
         return KERNELMQ_PROCESS_ERROR_CMDLINE_TOO_LONG;
     }
 
-    kstrncpy(process->cmdline, kinfo->cmdline, cmdline_slen);
+    kernaux_strncpy(process->cmdline, kinfo->cmdline, cmdline_slen);
 
     if (kinfo->areas_count > KERNELMQ_PROCESS_AREAS_LENGTH_MAX) {
         return KERNELMQ_PROCESS_ERROR_KERNEL_AREAS_LENGTH_TOO_LONG;
@@ -135,13 +136,13 @@ enum KernelMQ_Process_Error KernelMQ_Process_create_from_module(
     process->is_present = 1;
     process->created_from = KERNELMQ_PROCESS_CREATED_FROM_MODULE;
 
-    const unsigned int cmdline_slen = kstrlen(kinfo_module->cmdline);
+    const unsigned int cmdline_slen = kernaux_strlen(kinfo_module->cmdline);
 
     if (cmdline_slen > KERNELMQ_PROCESS_CMDLINE_SLEN_MAX) {
         return KERNELMQ_PROCESS_ERROR_CMDLINE_TOO_LONG;
     }
 
-    kstrncpy(
+    kernaux_strncpy(
         process->cmdline,
         kinfo_module->cmdline,
         cmdline_slen

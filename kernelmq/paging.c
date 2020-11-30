@@ -3,9 +3,8 @@
 #include "page_dir.h"
 #include "panic.h"
 
-#include "stdlib.h"
-
 #include <kernaux/arch/i386.h>
+#include <kernaux/stdlib.h>
 
 // CR0 bits
 #define I386_CR0_PE 0x00000001 // Protected mode
@@ -60,7 +59,7 @@ void paging_enable()
 
 void paging_clear()
 {
-    kmemset(page_dir, 0, sizeof(page_dir));
+    kernaux_memset(page_dir, 0, sizeof(page_dir));
 }
 
 void paging_identity()

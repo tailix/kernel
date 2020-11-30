@@ -7,7 +7,7 @@
 #include "tss.h"
 #include "pic.h"
 
-#include "stdlib.h"
+#include <kernaux/stdlib.h>
 
 struct GdtPointer {
     unsigned short limit;
@@ -68,7 +68,7 @@ void protected_initialize(const struct KernelMQ_Info *const kinfo)
 
     logger_info_from("protected", "Setup IDT.");
 
-    kmemset(idt_entries, 0, sizeof(idt_entries));
+    kernaux_memset(idt_entries, 0, sizeof(idt_entries));
 
     idt_set_gate(0,  (unsigned int)interrupt_0,  0x08, 0x8E);
     idt_set_gate(1,  (unsigned int)interrupt_1,  0x08, 0x8E);

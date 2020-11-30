@@ -1,7 +1,6 @@
 #include "paging.h"
 
 #include "info.h"
-#include "stdlib.h"
 
 #include "panic.h"
 #include "protected.h"
@@ -14,6 +13,7 @@
 #include "logger.h"
 
 #include <kernaux/multiboot2.h>
+#include <kernaux/stdlib.h>
 
 // Defined in linker script
 extern char _kernel_offset;
@@ -40,20 +40,20 @@ void main(
         panic("Multiboot 2 info is invalid.");
     }
 
-    kmemset(&kinfo, 0, sizeof(struct KernelMQ_Info));
+    kernaux_memset(&kinfo, 0, sizeof(struct KernelMQ_Info));
 
     {
         const char *const cmdline =
             KernAux_Multiboot2_boot_cmd_line(multiboot2_info);
 
         if (cmdline) {
-            unsigned int slen = kstrlen(cmdline);
+            unsigned int slen = kernaux_strlen(cmdline);
 
             if (slen > KERNELMQ_INFO_CMDLINE_SLEN_MAX) {
                 panic("Multiboot 2 boot cmd line is too long.");
             }
 
-            kstrncpy(kinfo.cmdline, cmdline, slen);
+            kernaux_strncpy(kinfo.cmdline, cmdline, slen);
         }
     }
 
@@ -113,7 +113,7 @@ void main(
             panic("Too many modules in Multiboot 2 info.");
         }
 
-        unsigned int slen = kstrlen(tag->cmdline);
+        unsigned int slen = kernaux_strlen(tag->cmdline);
 
         if (slen > KERNELMQ_INFO_CMDLINE_SLEN_MAX) {
             panic("Multiboot 2 module cmd line is too long.");
@@ -122,7 +122,7 @@ void main(
         struct KernelMQ_Info_Module *const module =
             &kinfo.modules[kinfo.modules_count];
 
-        kstrncpy(module->cmdline, tag->cmdline, slen);
+        kernaux_strncpy(module->cmdline, tag->cmdline, slen);
 
         module->base = tag->mod_start;
         module->limit = tag->mod_end;

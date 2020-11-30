@@ -19,12 +19,6 @@ OBJS += page_dir.c.o
 OBJS += info.c.o
 OBJS += process.c.o
 
-# Stdlib
-OBJS += memset.c.o
-OBJS += strlen.c.o
-OBJS += itoa.c.o
-OBJS += strncpy.c.o
-
 # Built-in drivers
 OBJS += console.c.o
 OBJS += pic.c.o
