@@ -6,7 +6,6 @@
 #include "protected.h"
 
 #include "module.h"
-#include "process.h"
 
 #include "tasks.h"
 #include "elf.h"
@@ -23,8 +22,6 @@ extern char _kernel_virt_base;
 extern char _kernel_stack_top;
 
 static struct KernelMQ_Info kinfo;
-
-static KernelMQ_Process_List process_list;
 
 void main(
     const unsigned long multiboot2_magic,
@@ -156,23 +153,6 @@ void main(
     assert(kernelmq_info_validate(&kinfo), "Invalid kernel information.");
 
     protected_initialize(&kinfo);
-
-    const enum KernelMQ_Process_Error process_list_init_result =
-        KernelMQ_Process_List_init(&process_list, &kinfo);
-
-    if (process_list_init_result != KERNELMQ_PROCESS_ERROR_OK) {
-        logger_fail_from(
-            "init",
-            "Process list initialization failed with %u.",
-            process_list_init_result
-        );
-
-        panic("Can not initialize process list.");
-    }
-
-    logger_debug_from("init", "Process list initialized.");
-
-    KernelMQ_Process_List_print(&process_list);
 
     if (kinfo.modules_count > 0) {
         const struct KernelMQ_ELF_Header *const elf_header =

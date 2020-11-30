@@ -17,7 +17,6 @@ OBJS += page_dir.c.o
 
 # Architecture-independent
 OBJS += info.c.o
-OBJS += process.c.o
 
 # Built-in drivers
 OBJS += pic.c.o
