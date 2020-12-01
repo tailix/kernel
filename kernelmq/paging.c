@@ -1,6 +1,5 @@
 #include "paging.h"
 
-#include "page_dir.h"
 #include "panic.h"
 
 #include <kernaux/arch/x86.h>
