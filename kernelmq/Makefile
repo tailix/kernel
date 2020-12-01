@@ -13,7 +13,6 @@ OBJS = start.s.o
 OBJS += main.c.o
 OBJS += panic.c.o
 OBJS += paging.c.o
-OBJS += page_dir.c.o
 
 # Architecture-independent
 OBJS += info.c.o
