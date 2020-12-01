@@ -12,6 +12,7 @@
 #include "logger.h"
 
 #include <kernaux/multiboot2.h>
+#include <kernaux/pfa.h>
 #include <kernaux/stdlib.h>
 
 // Defined in linker script
@@ -22,6 +23,8 @@ extern char _kernel_virt_base;
 extern char _kernel_stack_top;
 
 static struct KernelMQ_Info kinfo;
+
+static struct KernAux_PFA pfa;
 
 void main(
     const unsigned long multiboot2_magic,
@@ -38,6 +41,8 @@ void main(
     }
 
     kernaux_memset(&kinfo, 0, sizeof(struct KernelMQ_Info));
+
+    KernAux_PFA_initialize(&pfa);
 
     {
         const char *const cmdline =
@@ -74,6 +79,14 @@ void main(
                 (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)
                 ((unsigned char*)entry + tag->entry_size)
         ) {
+            if (entry->type == 1) {
+                KernAux_PFA_mark_available(
+                    &pfa,
+                    entry->base_addr,
+                    entry->base_addr + entry->length - 1
+                );
+            }
+
             if (kinfo.areas_count >= KERNELMQ_INFO_AREAS_MAX) {
                 panic("Too many memory map entries in Multiboot 2 info.");
             }
