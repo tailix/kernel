@@ -5,8 +5,6 @@
 #include "panic.h"
 #include "protected.h"
 
-#include "module.h"
-
 #include "tasks.h"
 #include "elf.h"
 #include "logger.h"
