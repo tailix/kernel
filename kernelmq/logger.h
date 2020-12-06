@@ -13,6 +13,4 @@
 
 void logger_log(unsigned char level, const char *source, const char *format, ...);
 
-void print(const char *format, ...);
-
 #endif

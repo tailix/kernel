@@ -9,6 +9,7 @@
 #include "elf.h"
 #include "logger.h"
 
+#include <kernaux/console.h>
 #include <kernaux/multiboot2.h>
 #include <kernaux/pfa.h>
 #include <kernaux/stdlib.h>
@@ -32,7 +33,7 @@ void main(
         panic("Multiboot 2 magic number is invalid.");
     }
 
-    KernAux_Multiboot2_print(multiboot2_info, print);
+    KernAux_Multiboot2_print(multiboot2_info, kernaux_console_printf);
 
     if (!KernAux_Multiboot2_is_valid(multiboot2_info)) {
         panic("Multiboot 2 info is invalid.");
