@@ -6,7 +6,7 @@ LD = $(CCPREFIX)ld
 
 KERNEL = kernelmq.multiboot2
 
-CFLAGS = -std=gnu99 -ffreestanding -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -I/usr/local/include
+CFLAGS = -std=gnu99 -ffreestanding -fno-builtin -fno-stack-protector -Wall -Wextra -I/usr/local/include
 
 # Architecture-dependent
 OBJS = start.s.o
