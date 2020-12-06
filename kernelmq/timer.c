@@ -1,12 +1,11 @@
 #include "timer.h"
 
-#include "logger.h"
-
 #include <kernaux/arch/x86.h>
+#include <kernaux/console.h>
 
 void timer_initialize(unsigned int frequency)
 {
-    logger_info_from("timer", "Initialize timer.");
+    kernaux_console_print("[INFO] timer: Initialize timer.\n");
 
     const unsigned int divisor = 1193180 / frequency;
 

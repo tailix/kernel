@@ -1,8 +1,7 @@
 #include "pic.h"
 
-#include "logger.h"
-
 #include <kernaux/arch/x86.h>
+#include <kernaux/console.h>
 
 #define MASTER_COMMAND 0x20
 #define MASTER_DATA    0x21
@@ -18,7 +17,7 @@ static unsigned char slave_irq_start  = 8;
 
 void pic_enable_all()
 {
-    logger_info_from("pic", "Enable all IRQs.");
+    kernaux_console_print("[INFO] pic: Enable all IRQs.\n");
 
     kernaux_arch_x86_outportb(MASTER_DATA, 0);
     kernaux_arch_x86_outportb(SLAVE_DATA,  0);
@@ -26,7 +25,7 @@ void pic_enable_all()
 
 void pic_disable_all()
 {
-    logger_info_from("pic", "Disable all IRQs.");
+    kernaux_console_print("[INFO] pic: Disable all IRQs.\n");
 
     kernaux_arch_x86_outportb(MASTER_DATA, 0xFF);
     kernaux_arch_x86_outportb(SLAVE_DATA,  0xFF);
@@ -35,11 +34,11 @@ void pic_disable_all()
 void pic_enable(const unsigned char line)
 {
     if (line >= IRQS_TOTAL) {
-        logger_warn_from("pic", "Invalid line %u.", line);
+        kernaux_console_printf("[WARN] pic: Invalid line %u.\n", line);
         return;
     }
 
-    logger_info_from("pic", "Enable line %u.", line);
+    kernaux_console_printf("[INFO] pic: Enable line %u.\n", line);
 
     if (line < IRQS_COUNT) {
         const unsigned char mask = kernaux_arch_x86_inportb(MASTER_DATA);
@@ -54,11 +53,11 @@ void pic_enable(const unsigned char line)
 void pic_disable(const unsigned char line)
 {
     if (line >= IRQS_TOTAL) {
-        logger_warn_from("pic", "Invalid line %u.", line);
+        kernaux_console_printf("[WARN] pic: Invalid line %u.\n", line);
         return;
     }
 
-    logger_info_from("pic", "Disable line %u.", line);
+    kernaux_console_printf("[INFO] pic: Disable line %u.\n", line);
 
     if (line < IRQS_COUNT) {
         const unsigned char mask = kernaux_arch_x86_inportb(MASTER_DATA);
@@ -73,7 +72,7 @@ void pic_disable(const unsigned char line)
 
 void pic_remap(const unsigned char new_master_irq_start, const unsigned char new_slave_irq_start)
 {
-    logger_info_from("pic", "Remap the IRQ table.");
+    kernaux_console_print("[INFO] pic: Remap the IRQ table.\n");
 
     // Remember IRQ numbers
     master_irq_start = new_master_irq_start;

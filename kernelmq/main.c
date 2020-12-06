@@ -7,7 +7,6 @@
 
 #include "tasks.h"
 #include "elf.h"
-#include "logger.h"
 
 #include <kernaux/console.h>
 #include <kernaux/multiboot2.h>
@@ -177,7 +176,7 @@ void main(
             tasks_switch_to_user(real_entrypoint);
         }
         else {
-            logger_warn_from("init", "Invalid ELF header");
+            kernaux_console_print("[WARN] init: Invalid ELF header.\n");
         }
     }
 }

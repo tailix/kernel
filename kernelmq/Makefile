@@ -21,9 +21,6 @@ OBJS += info.c.o
 OBJS += pic.c.o
 OBJS += timer.c.o
 
-# For debugging
-OBJS += logger.c.o
-
 OBJS += protected.c.o protected.asm.cpp.o
 
 OBJS += tss.c.o tss.asm.cpp.o
