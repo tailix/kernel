@@ -1,4 +1,4 @@
-CCPREFIX = i686-elf-
+CCPREFIX = i386-elf-
 
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc

@@ -5,5 +5,3 @@
 
 /config.mk
 /rootfs/boot/kernelmq.multiboot2
-/vendor/*
-!/vendor/.keep
