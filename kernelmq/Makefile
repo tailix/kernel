@@ -1,4 +1,4 @@
-CCPREFIX = i386-elf-
+CCPREFIX = i386-elfkernelmq-
 
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
