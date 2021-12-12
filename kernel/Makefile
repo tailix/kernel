@@ -6,7 +6,15 @@ LD = $(CCPREFIX)ld
 
 KERNEL = tailix.multiboot2
 
-CFLAGS = -std=gnu99 -ffreestanding -fno-builtin -fno-stack-protector -Wall -Wextra -I/usr/local/include
+CFLAGS = \
+	-std=gnu99           \
+	-Wall                \
+	-Wextra              \
+	-pedantic            \
+	-ffreestanding       \
+	-fno-builtin         \
+	-fno-stack-protector \
+	-I/usr/local/include
 
 # Architecture-dependent
 OBJS = start.s.o
