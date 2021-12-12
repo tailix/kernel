@@ -4,7 +4,7 @@ AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
 LD = $(CCPREFIX)ld
 
-KERNEL = kernelmq.multiboot2
+KERNEL = tailix.multiboot2
 
 CFLAGS = -std=gnu99 -ffreestanding -fno-builtin -fno-stack-protector -Wall -Wextra -I/usr/local/include
 

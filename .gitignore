@@ -4,4 +4,4 @@
 *.iso
 
 /config.mk
-/rootfs/boot/kernelmq.multiboot2
+/rootfs/boot/tailix.multiboot2
