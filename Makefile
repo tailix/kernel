@@ -3,20 +3,20 @@ KERNEL  = rootfs/boot/tailix.multiboot2
 
 IMAGE = image.iso
 
-.PHONY: kernelmq/tailix.multiboot2
+.PHONY: kernel/tailix.multiboot2
 
 run: $(IMAGE)
 	qemu-system-i386 -cdrom $< -display none -serial stdio
 
 clean:
 	rm -f $(KERNEL)
-	make -C kernelmq clean
+	make -C kernel clean
 
 $(IMAGE): $(GRUBCFG) $(KERNEL)
 	grub-mkrescue rootfs -o $@
 
-$(KERNEL): kernelmq/tailix.multiboot2
+$(KERNEL): kernel/tailix.multiboot2
 	cp $< $@
 
-kernelmq/tailix.multiboot2:
-	make -C kernelmq tailix.multiboot2
+kernel/tailix.multiboot2:
+	make -C kernel tailix.multiboot2

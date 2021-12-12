@@ -1,5 +1,5 @@
-#ifndef KERNELMQ_INCLUDED_PANIC
-#define KERNELMQ_INCLUDED_PANIC 1
+#ifndef KERNEL_INCLUDED_PANIC
+#define KERNEL_INCLUDED_PANIC 1
 
 void panic(const char *s);
 

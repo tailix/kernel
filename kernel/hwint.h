@@ -1,5 +1,5 @@
-#ifndef KERNELMQ_INCLUDED_HWINT
-#define KERNELMQ_INCLUDED_HWINT 1
+#ifndef KERNEL_INCLUDED_HWINT
+#define KERNEL_INCLUDED_HWINT 1
 
 typedef void(*hwint_handler_t)();
 

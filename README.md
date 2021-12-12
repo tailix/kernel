@@ -1,5 +1,5 @@
-KernelMQ
-========
+Tailix kernel
+=============
 
 Message queue with additional IPC capabilities implemented as microkernel.
 

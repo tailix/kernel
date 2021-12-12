@@ -79,7 +79,7 @@ void paging_identity()
     }
 }
 
-int paging_mapkernel(const struct KernelMQ_Info *const kinfo)
+int paging_mapkernel(const struct Kernel_Info *const kinfo)
 {
     assert(!(kinfo->kernel_phys_base % PAGE_BIG_SIZE), "Kernel physical address is not aligned.");
     assert(!(kinfo->kernel_virt_base % PAGE_BIG_SIZE), "Kernel virtual address is not aligned.");

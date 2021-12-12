@@ -1,5 +1,5 @@
-#ifndef KERNELMQ_INCLUDED_INTERRUPT
-#define KERNELMQ_INCLUDED_INTERRUPT 1
+#ifndef KERNEL_INCLUDED_INTERRUPT
+#define KERNEL_INCLUDED_INTERRUPT 1
 
 struct IsrRegisters {
     unsigned int ds;                                     // Data segment selector

@@ -51,7 +51,7 @@ static void idt_set_gate(unsigned char num, unsigned int base, unsigned short se
 void gdt_flush(const struct GdtPointer *pointer);
 void idt_flush(const struct IdtPointer *pointer);
 
-void protected_initialize(const struct KernelMQ_Info *const kinfo)
+void protected_initialize(const struct Kernel_Info *const kinfo)
 {
     pic_remap(32, 40);
     pic_disable_all();

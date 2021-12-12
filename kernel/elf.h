@@ -1,11 +1,11 @@
-#ifndef KERNELMQ_INCLUDED_ELF
-#define KERNELMQ_INCLUDED_ELF 1
+#ifndef KERNEL_INCLUDED_ELF
+#define KERNEL_INCLUDED_ELF 1
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-struct KernelMQ_ELF_Header {
+struct Kernel_ELF_Header {
     unsigned char  magic_0x7F     : 8; // Must be 0x7F.
     unsigned char  magic_E        : 8; // Must be 'E'.
     unsigned char  magic_L        : 8; // Must be 'L'.
@@ -32,7 +32,7 @@ struct KernelMQ_ELF_Header {
 }
 __attribute__((packed));
 
-struct KernelMQ_ELF_ProgramEntry {
+struct Kernel_ELF_ProgramEntry {
     unsigned long type       : 32;
     unsigned long offset     : 32;
     unsigned long virt_addr  : 32;
@@ -44,7 +44,7 @@ struct KernelMQ_ELF_ProgramEntry {
 }
 __attribute__((packed));
 
-struct KernelMQ_ELF_SectionEntry {
+struct Kernel_ELF_SectionEntry {
     unsigned long name        : 32;
     unsigned long type        : 32;
     unsigned long flags       : 32;
@@ -58,24 +58,24 @@ struct KernelMQ_ELF_SectionEntry {
 }
 __attribute__((packed));
 
-struct KernelMQ_ELF_RelocationEntry {
+struct Kernel_ELF_RelocationEntry {
     unsigned long virt_addr : 32;
     unsigned long info      : 32;
 }
 __attribute__((packed));
 
-typedef struct KernelMQ_ELF_ProgramEntry KernelMQ_ELF_ProgramTable[];
+typedef struct Kernel_ELF_ProgramEntry Kernel_ELF_ProgramTable[];
 
-typedef struct KernelMQ_ELF_SectionEntry KernelMQ_ELF_SectionTable[];
+typedef struct Kernel_ELF_SectionEntry Kernel_ELF_SectionTable[];
 
-typedef struct KernelMQ_ELF_RelocationEntry KernelMQ_ELF_RelocationTable[];
+typedef struct Kernel_ELF_RelocationEntry Kernel_ELF_RelocationTable[];
 
-inline static unsigned char KernelMQ_ELF_Header_is_valid(
-    const struct KernelMQ_ELF_Header *header
+inline static unsigned char Kernel_ELF_Header_is_valid(
+    const struct Kernel_ELF_Header *header
 );
 
-unsigned char KernelMQ_ELF_Header_is_valid(
-    const struct KernelMQ_ELF_Header *const header
+unsigned char Kernel_ELF_Header_is_valid(
+    const struct Kernel_ELF_Header *const header
 ) {
     return (
         header->magic_0x7F     == 0x7F &&

@@ -13,7 +13,7 @@ void syscall_handler(const struct IsrRegisters regs)
     kernaux_console_printf("[INFO] syscall: number %u\n", id);
 
     switch (id) {
-        case KERNELMQ_SYSCALL_EXIT: return syscall_do_exit(regs);
+        case KERNEL_SYSCALL_EXIT: return syscall_do_exit(regs);
     }
 }
 

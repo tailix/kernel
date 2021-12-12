@@ -1,5 +1,5 @@
-#ifndef KERNELMQ_INCLUDED_TIMER
-#define KERNELMQ_INCLUDED_TIMER 1
+#ifndef KERNEL_INCLUDED_TIMER
+#define KERNEL_INCLUDED_TIMER 1
 
 #include "hwint.h"
 

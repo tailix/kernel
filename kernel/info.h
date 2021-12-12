@@ -1,25 +1,25 @@
-#ifndef KERNELMQ_INCLUDED_INFO
-#define KERNELMQ_INCLUDED_INFO 1
+#ifndef KERNEL_INCLUDED_INFO
+#define KERNEL_INCLUDED_INFO 1
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define KERNELMQ_INFO_CMDLINE_SIZE_MAX 256
-#define KERNELMQ_INFO_CMDLINE_SLEN_MAX (KERNELMQ_INFO_CMDLINE_SIZE_MAX - 1)
+#define KERNEL_INFO_CMDLINE_SIZE_MAX 256
+#define KERNEL_INFO_CMDLINE_SLEN_MAX (KERNEL_INFO_CMDLINE_SIZE_MAX - 1)
 
-#define KERNELMQ_INFO_MODULES_MAX 20
-#define KERNELMQ_INFO_AREAS_MAX 20
+#define KERNEL_INFO_MODULES_MAX 20
+#define KERNEL_INFO_AREAS_MAX 20
 
-struct KernelMQ_Info_Module {
+struct Kernel_Info_Module {
     unsigned long base;
     unsigned long size;
     unsigned long limit;
 
-    char cmdline[KERNELMQ_INFO_CMDLINE_SIZE_MAX];
+    char cmdline[KERNEL_INFO_CMDLINE_SIZE_MAX];
 };
 
-struct KernelMQ_Info_Area {
+struct Kernel_Info_Area {
     unsigned long long base;
     unsigned long long size;
     unsigned long long limit;
@@ -27,13 +27,13 @@ struct KernelMQ_Info_Area {
     unsigned char is_available;
 };
 
-struct KernelMQ_Info {
-    char cmdline[KERNELMQ_INFO_CMDLINE_SIZE_MAX];
+struct Kernel_Info {
+    char cmdline[KERNEL_INFO_CMDLINE_SIZE_MAX];
 
-    struct KernelMQ_Info_Module modules[KERNELMQ_INFO_MODULES_MAX];
+    struct Kernel_Info_Module modules[KERNEL_INFO_MODULES_MAX];
     unsigned int modules_count;
 
-    struct KernelMQ_Info_Area areas[KERNELMQ_INFO_AREAS_MAX];
+    struct Kernel_Info_Area areas[KERNEL_INFO_AREAS_MAX];
     unsigned int areas_count;
 
     unsigned long kernel_offset;
@@ -52,7 +52,7 @@ struct KernelMQ_Info {
     unsigned long kernel_stack_top;
 };
 
-unsigned char kernelmq_info_validate(const struct KernelMQ_Info *kinfo);
+unsigned char kernel_info_validate(const struct Kernel_Info *kinfo);
 
 #ifdef __cplusplus
 }

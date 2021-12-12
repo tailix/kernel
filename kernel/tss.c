@@ -55,7 +55,7 @@ struct tss_entry {
 
 static struct tss_entry tss;
 
-void tss_write_to_gdt(const struct KernelMQ_Info *const kinfo, void *gdt_entry_ptr)
+void tss_write_to_gdt(const struct Kernel_Info *const kinfo, void *gdt_entry_ptr)
 {
     struct gdt_entry_bits *const g = gdt_entry_ptr;
 

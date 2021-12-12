@@ -2,7 +2,7 @@
 
 static unsigned char cmdline_terminated(const char *s);
 
-unsigned char kernelmq_info_validate(const struct KernelMQ_Info *const kinfo)
+unsigned char kernel_info_validate(const struct Kernel_Info *const kinfo)
 {
     if (!kinfo) {
         return 0;
@@ -12,11 +12,11 @@ unsigned char kernelmq_info_validate(const struct KernelMQ_Info *const kinfo)
         return 0;
     }
 
-    if (kinfo->modules_count > KERNELMQ_INFO_MODULES_MAX) {
+    if (kinfo->modules_count > KERNEL_INFO_MODULES_MAX) {
         return 0;
     }
 
-    if (kinfo->areas_count > KERNELMQ_INFO_AREAS_MAX) {
+    if (kinfo->areas_count > KERNEL_INFO_AREAS_MAX) {
         return 0;
     }
 
@@ -43,7 +43,7 @@ unsigned char kernelmq_info_validate(const struct KernelMQ_Info *const kinfo)
     unsigned long modules_total_size = 0;
 
     for (unsigned int i = 0; i < kinfo->modules_count; ++i) {
-        const struct KernelMQ_Info_Module *const module = &kinfo->modules[i];
+        const struct Kernel_Info_Module *const module = &kinfo->modules[i];
 
         modules_total_size += module->size;
 
@@ -71,7 +71,7 @@ unsigned char kernelmq_info_validate(const struct KernelMQ_Info *const kinfo)
     unsigned long long last = 0;
 
     for (unsigned int i = 0; i < kinfo->areas_count; ++i) {
-        const struct KernelMQ_Info_Area *const area = &kinfo->areas[i];
+        const struct Kernel_Info_Area *const area = &kinfo->areas[i];
         if (last > area->base) {
             return 0;
         }
@@ -98,7 +98,7 @@ unsigned char kernelmq_info_validate(const struct KernelMQ_Info *const kinfo)
             }
 
             for (unsigned int j = 0; j < kinfo->modules_count; ++j) {
-                const struct KernelMQ_Info_Module *const module = &kinfo->modules[j];
+                const struct Kernel_Info_Module *const module = &kinfo->modules[j];
 
                 if (module->base >= area->base &&
                     module->base <= area->limit) {
@@ -118,7 +118,7 @@ unsigned char kernelmq_info_validate(const struct KernelMQ_Info *const kinfo)
 
 unsigned char cmdline_terminated(const char *const s)
 {
-    for (unsigned int i = 0; i < KERNELMQ_INFO_CMDLINE_SIZE_MAX; ++i) {
+    for (unsigned int i = 0; i < KERNEL_INFO_CMDLINE_SIZE_MAX; ++i) {
         if (s[i] == 0) {
             return 1;
         }

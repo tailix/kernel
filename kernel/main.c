@@ -20,7 +20,7 @@ extern char _kernel_phys_base;
 extern char _kernel_virt_base;
 extern char _kernel_stack_top;
 
-static struct KernelMQ_Info kinfo;
+static struct Kernel_Info kinfo;
 
 static struct KernAux_PFA pfa;
 
@@ -38,7 +38,7 @@ void main(
         panic("Multiboot 2 info is invalid.");
     }
 
-    kernaux_memset(&kinfo, 0, sizeof(struct KernelMQ_Info));
+    kernaux_memset(&kinfo, 0, sizeof(struct Kernel_Info));
 
     KernAux_PFA_initialize(&pfa);
 
@@ -49,7 +49,7 @@ void main(
         if (cmdline) {
             unsigned int slen = kernaux_strlen(cmdline);
 
-            if (slen > KERNELMQ_INFO_CMDLINE_SLEN_MAX) {
+            if (slen > KERNEL_INFO_CMDLINE_SLEN_MAX) {
                 panic("Multiboot 2 boot cmd line is too long.");
             }
 
@@ -85,11 +85,11 @@ void main(
                 );
             }
 
-            if (kinfo.areas_count >= KERNELMQ_INFO_AREAS_MAX) {
+            if (kinfo.areas_count >= KERNEL_INFO_AREAS_MAX) {
                 panic("Too many memory map entries in Multiboot 2 info.");
             }
 
-            struct KernelMQ_Info_Area *const area =
+            struct Kernel_Info_Area *const area =
                 &kinfo.areas[kinfo.areas_count];
 
             area->base = entry->base_addr;
@@ -117,17 +117,17 @@ void main(
                 (struct KernAux_Multiboot2_TagBase*)tag
             )
     ) {
-        if (kinfo.modules_count >= KERNELMQ_INFO_MODULES_MAX) {
+        if (kinfo.modules_count >= KERNEL_INFO_MODULES_MAX) {
             panic("Too many modules in Multiboot 2 info.");
         }
 
         unsigned int slen = kernaux_strlen(tag->cmdline);
 
-        if (slen > KERNELMQ_INFO_CMDLINE_SLEN_MAX) {
+        if (slen > KERNEL_INFO_CMDLINE_SLEN_MAX) {
             panic("Multiboot 2 module cmd line is too long.");
         }
 
-        struct KernelMQ_Info_Module *const module =
+        struct Kernel_Info_Module *const module =
             &kinfo.modules[kinfo.modules_count];
 
         kernaux_strncpy(module->cmdline, tag->cmdline, slen);
@@ -161,15 +161,15 @@ void main(
 
     paging_enable();
 
-    assert(kernelmq_info_validate(&kinfo), "Invalid kernel information.");
+    assert(kernel_info_validate(&kinfo), "Invalid kernel information.");
 
     protected_initialize(&kinfo);
 
     if (kinfo.modules_count > 0) {
-        const struct KernelMQ_ELF_Header *const elf_header =
+        const struct Kernel_ELF_Header *const elf_header =
             (void*)kinfo.modules[0].base;
 
-        if (KernelMQ_ELF_Header_is_valid(elf_header)) {
+        if (Kernel_ELF_Header_is_valid(elf_header)) {
             const unsigned long real_entrypoint =
                 kinfo.modules[0].base + elf_header->entrypoint;
 
