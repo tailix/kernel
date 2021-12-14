@@ -8,9 +8,9 @@ KERNEL = tailix.multiboot2
 
 CFLAGS = \
 	-std=gnu99           \
+	-pedantic            \
 	-Wall                \
 	-Wextra              \
-	-pedantic            \
 	-ffreestanding       \
 	-fno-builtin         \
 	-fno-stack-protector \
