@@ -28,6 +28,8 @@ void main(
     const unsigned long multiboot2_magic,
     const struct KernAux_Multiboot2 *const multiboot2_info
 ) {
+    kernaux_assert_cb = kernaux_assert_fn;
+
     if (multiboot2_magic != KERNAUX_MULTIBOOT2_MAGIC) {
         panic("Multiboot 2 magic number is invalid.");
     }
