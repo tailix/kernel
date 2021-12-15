@@ -9,6 +9,7 @@
 #include "elf.h"
 
 #include <kernaux/console.h>
+#include <kernaux/libc.h>
 #include <kernaux/multiboot2.h>
 #include <kernaux/pfa.h>
 #include <kernaux/stdlib.h>
@@ -40,7 +41,7 @@ void main(
         panic("Multiboot 2 info is invalid.");
     }
 
-    kernaux_memset(&kinfo, 0, sizeof(struct Kernel_Info));
+    memset(&kinfo, 0, sizeof(struct Kernel_Info));
 
     KernAux_PFA_initialize(&pfa);
 
@@ -49,13 +50,13 @@ void main(
             KernAux_Multiboot2_boot_cmd_line(multiboot2_info);
 
         if (cmdline) {
-            unsigned int slen = kernaux_strlen(cmdline);
+            unsigned int slen = strlen(cmdline);
 
             if (slen > KERNEL_INFO_CMDLINE_SLEN_MAX) {
                 panic("Multiboot 2 boot cmd line is too long.");
             }
 
-            kernaux_strncpy(kinfo.cmdline, cmdline, slen);
+            strcpy(kinfo.cmdline, cmdline);
         }
     }
 
@@ -123,7 +124,7 @@ void main(
             panic("Too many modules in Multiboot 2 info.");
         }
 
-        unsigned int slen = kernaux_strlen(tag->cmdline);
+        unsigned int slen = strlen(tag->cmdline);
 
         if (slen > KERNEL_INFO_CMDLINE_SLEN_MAX) {
             panic("Multiboot 2 module cmd line is too long.");
@@ -132,7 +133,7 @@ void main(
         struct Kernel_Info_Module *const module =
             &kinfo.modules[kinfo.modules_count];
 
-        kernaux_strncpy(module->cmdline, tag->cmdline, slen);
+        strcpy(module->cmdline, tag->cmdline);
 
         module->base = tag->mod_start;
         module->limit = tag->mod_end;

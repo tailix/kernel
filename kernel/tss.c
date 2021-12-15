@@ -2,6 +2,7 @@
 
 #include "config.h"
 
+#include <kernaux/libc.h>
 #include <kernaux/stdlib.h>
 
 struct gdt_entry_bits {
@@ -80,7 +81,7 @@ void tss_write_to_gdt(const struct Kernel_Info *const kinfo, void *gdt_entry_ptr
     g->big                    = 0;
     g->gran                   = 0;
 
-    kernaux_memset(&tss, 0, sizeof(tss));
+    memset(&tss, 0, sizeof(tss));
 
     tss.ss0 = GDT_KERNEL_DS_SELECTOR;
     tss.esp0 = kinfo->kernel_stack_top;

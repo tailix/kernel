@@ -3,6 +3,7 @@
 #include "panic.h"
 
 #include <kernaux/arch/i386.h>
+#include <kernaux/libc.h>
 #include <kernaux/stdlib.h>
 
 // CR0 bits
@@ -58,7 +59,7 @@ void paging_enable()
 
 void paging_clear()
 {
-    kernaux_memset(page_dir, 0, sizeof(page_dir));
+    memset(page_dir, 0, sizeof(page_dir));
 }
 
 void paging_identity()

@@ -7,6 +7,7 @@
 #include "pic.h"
 
 #include <kernaux/console.h>
+#include <kernaux/libc.h>
 #include <kernaux/stdlib.h>
 
 struct GdtPointer {
@@ -68,7 +69,7 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
 
     kernaux_console_print("[INFO] protected: Setup IDT.\n");
 
-    kernaux_memset(idt_entries, 0, sizeof(idt_entries));
+    memset(idt_entries, 0, sizeof(idt_entries));
 
     idt_set_gate(0,  (unsigned int)interrupt_0,  0x08, 0x8E);
     idt_set_gate(1,  (unsigned int)interrupt_1,  0x08, 0x8E);
