@@ -1,7 +1,9 @@
 all: run
 
-GRUBCFG = rootfs/boot/grub/grub.cfg
-KERNEL  = rootfs/boot/tailix.multiboot2
+ROOTFS = rootfs
+
+GRUBCFG = $(ROOTFS)/boot/grub/grub.cfg
+KERNEL  = $(ROOTFS)/boot/tailix.multiboot2
 
 IMAGE = image.iso
 
@@ -20,7 +22,7 @@ clean:
 	make -C kernel clean
 
 $(IMAGE): $(GRUBCFG) $(KERNEL)
-	grub-mkrescue rootfs -o $@
+	grub-mkrescue $(ROOTFS) -o $@
 
 $(KERNEL): kernel/tailix.multiboot2
 	cp $< $@
