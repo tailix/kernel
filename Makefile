@@ -1,15 +1,12 @@
-all: run
-
+IMAGE = image.iso
 ROOTFS = rootfs
 
 GRUBCFG = $(ROOTFS)/boot/grub/grub.cfg
 KERNEL  = $(ROOTFS)/boot/tailix.multiboot2
 
-IMAGE = image.iso
-
 .PHONY: kernel/tailix.multiboot2
 
-run: run0
+all: run0
 
 run0: $(IMAGE)
 	qemu-system-i386 -cdrom $< -serial stdio -display none
