@@ -1,5 +1,6 @@
 #include "info.h"
 
+#include <kernaux/console.h>
 #include <kernaux/libc.h>
 
 static bool cmdline_terminated(const char *s);
@@ -24,6 +25,28 @@ void kernel_info_initialize(
     kinfo->kernel_virt_limit = virt_base + size - 1;
 
     kinfo->kernel_stack_top = stack_top;
+}
+
+void kernel_info_print(const struct Kernel_Info *const kinfo)
+{
+    kernaux_console_printf("Kernel info\n");
+    kernaux_console_printf("  cmdline: %s\n", kinfo->cmdline);
+    kernaux_console_printf("  modules: %lu\n", kinfo->modules_count);
+    kernaux_console_printf("  areas: %lu\n", kinfo->areas_count);
+    kernaux_console_printf("\n");
+    kernaux_console_printf("  offset: %lu\n", kinfo->kernel_offset);
+    kernaux_console_printf("  size: %lu\n", kinfo->kernel_size);
+    kernaux_console_printf("\n");
+    kernaux_console_printf("  phys base: %lu\n", kinfo->kernel_phys_base);
+    kernaux_console_printf("  phys limit: %lu\n", kinfo->kernel_phys_limit);
+    kernaux_console_printf("\n");
+    kernaux_console_printf("  virt base: %lu\n", kinfo->kernel_virt_base);
+    kernaux_console_printf("  virt limit: %lu\n", kinfo->kernel_virt_limit);
+    kernaux_console_printf("\n");
+    kernaux_console_printf("  modules size: %lu\n", kinfo->modules_total_size);
+    kernaux_console_printf("  kernel & modules sizet: %lu\n", kinfo->kernel_and_modules_total_size);
+    kernaux_console_printf("\n");
+    kernaux_console_printf("  stack top: %lu\n", kinfo->kernel_stack_top);
 }
 
 bool kernel_info_validate(const struct Kernel_Info *const kinfo)

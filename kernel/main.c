@@ -153,6 +153,8 @@ void main(
 
     kinfo.kernel_and_modules_total_size = kinfo.kernel_size + kinfo.modules_total_size;
 
+    kernel_info_print(&kinfo);
+
     paging_clear();
     paging_identity();
     /* kinfo.freepde_start = */ paging_mapkernel(&kinfo);

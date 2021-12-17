@@ -67,6 +67,7 @@ void kernel_info_initialize(
 );
 
 bool kernel_info_validate(const struct Kernel_Info *kinfo);
+void kernel_info_print(const struct Kernel_Info *kinfo);
 
 #ifdef __cplusplus
 }
