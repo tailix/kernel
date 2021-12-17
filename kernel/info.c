@@ -4,9 +4,26 @@
 
 static bool cmdline_terminated(const char *s);
 
-void kernel_info_initialize(struct Kernel_Info *const kinfo)
-{
+void kernel_info_initialize(
+    struct Kernel_Info *const kinfo,
+    const size_t offset,
+    const size_t size,
+    const size_t phys_base,
+    const size_t virt_base,
+    const size_t stack_top
+) {
     memset(kinfo, 0, sizeof(*kinfo));
+
+    kinfo->kernel_offset = offset;
+    kinfo->kernel_size   = size;
+
+    kinfo->kernel_phys_base = phys_base;
+    kinfo->kernel_virt_base = virt_base;
+
+    kinfo->kernel_phys_limit = phys_base + size - 1;
+    kinfo->kernel_virt_limit = virt_base + size - 1;
+
+    kinfo->kernel_stack_top = stack_top;
 }
 
 bool kernel_info_validate(const struct Kernel_Info *const kinfo)

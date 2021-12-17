@@ -41,19 +41,16 @@ void main(
         panic("Multiboot 2 info is invalid.");
     }
 
-    kernel_info_initialize(&kinfo);
+    kernel_info_initialize(
+        &kinfo,
+        (size_t)&_kernel_offset,
+        (size_t)&_kernel_size,
+        (size_t)&_kernel_phys_base,
+        (size_t)&_kernel_virt_base,
+        (size_t)&_kernel_stack_top
+    );
+
     KernAux_PFA_initialize(&pfa);
-
-    kinfo.kernel_offset = (unsigned long)&_kernel_offset;
-    kinfo.kernel_size   = (unsigned long)&_kernel_size;
-
-    kinfo.kernel_phys_base = (unsigned long)&_kernel_phys_base;
-    kinfo.kernel_virt_base = (unsigned long)&_kernel_virt_base;
-
-    kinfo.kernel_phys_limit = kinfo.kernel_phys_base + kinfo.kernel_size - 1;
-    kinfo.kernel_virt_limit = kinfo.kernel_virt_base + kinfo.kernel_size - 1;
-
-    kinfo.kernel_stack_top = (unsigned long)&_kernel_stack_top;
 
     {
         const char *const cmdline =
