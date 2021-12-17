@@ -1,6 +1,13 @@
 #include "info.h"
 
+#include <kernaux/libc.h>
+
 static bool cmdline_terminated(const char *s);
+
+void kernel_info_initialize(struct Kernel_Info *const kinfo)
+{
+    memset(kinfo, 0, sizeof(*kinfo));
+}
 
 bool kernel_info_validate(const struct Kernel_Info *const kinfo)
 {

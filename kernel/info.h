@@ -57,6 +57,7 @@ struct Kernel_Info {
     size_t kernel_stack_top;
 };
 
+void kernel_info_initialize(struct Kernel_Info *kinfo);
 bool kernel_info_validate(const struct Kernel_Info *kinfo);
 
 #ifdef __cplusplus

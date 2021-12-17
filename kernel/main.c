@@ -41,8 +41,7 @@ void main(
         panic("Multiboot 2 info is invalid.");
     }
 
-    memset(&kinfo, 0, sizeof(struct Kernel_Info));
-
+    kernel_info_initialize(&kinfo);
     KernAux_PFA_initialize(&pfa);
 
     {
