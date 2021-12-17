@@ -5,7 +5,7 @@
 
 static bool cmdline_terminated(const char *s);
 
-void kernel_info_initialize(
+void kernel_info_init_start(
     struct Kernel_Info *const kinfo,
     const size_t offset,
     const size_t size,
@@ -49,7 +49,7 @@ void kernel_info_print(const struct Kernel_Info *const kinfo)
     kernaux_console_printf("  stack top: %lu\n", kinfo->kernel_stack_top);
 }
 
-bool kernel_info_validate(const struct Kernel_Info *const kinfo)
+bool kernel_info_init_finish(const struct Kernel_Info *const kinfo)
 {
     if (!kinfo) return false;
 

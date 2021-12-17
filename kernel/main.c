@@ -41,7 +41,7 @@ void main(
         panic("Multiboot 2 info is invalid.");
     }
 
-    kernel_info_initialize(
+    kernel_info_init_start(
         &kinfo,
         (size_t)&_kernel_offset,
         (size_t)&_kernel_size,
@@ -162,7 +162,7 @@ void main(
 
     paging_enable();
 
-    assert(kernel_info_validate(&kinfo), "Invalid kernel information.");
+    assert(kernel_info_init_finish(&kinfo), "Invalid kernel information.");
 
     protected_initialize(&kinfo);
 
