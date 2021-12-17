@@ -44,6 +44,17 @@ void main(
     kernel_info_initialize(&kinfo);
     KernAux_PFA_initialize(&pfa);
 
+    kinfo.kernel_offset = (unsigned long)&_kernel_offset;
+    kinfo.kernel_size   = (unsigned long)&_kernel_size;
+
+    kinfo.kernel_phys_base = (unsigned long)&_kernel_phys_base;
+    kinfo.kernel_virt_base = (unsigned long)&_kernel_virt_base;
+
+    kinfo.kernel_phys_limit = kinfo.kernel_phys_base + kinfo.kernel_size - 1;
+    kinfo.kernel_virt_limit = kinfo.kernel_virt_base + kinfo.kernel_size - 1;
+
+    kinfo.kernel_stack_top = (unsigned long)&_kernel_stack_top;
+
     {
         const char *const cmdline =
             KernAux_Multiboot2_boot_cmd_line(multiboot2_info);
@@ -143,18 +154,7 @@ void main(
         kinfo.modules_total_size += module->size;
     }
 
-    kinfo.kernel_offset = (unsigned long)&_kernel_offset;
-    kinfo.kernel_size   = (unsigned long)&_kernel_size;
-
-    kinfo.kernel_phys_base = (unsigned long)&_kernel_phys_base;
-    kinfo.kernel_virt_base = (unsigned long)&_kernel_virt_base;
-
-    kinfo.kernel_phys_limit = kinfo.kernel_phys_base + kinfo.kernel_size - 1;
-    kinfo.kernel_virt_limit = kinfo.kernel_virt_base + kinfo.kernel_size - 1;
-
     kinfo.kernel_and_modules_total_size = kinfo.kernel_size + kinfo.modules_total_size;
-
-    kinfo.kernel_stack_top = (unsigned long)&_kernel_stack_top;
 
     paging_clear();
     paging_identity();
