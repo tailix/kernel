@@ -52,20 +52,8 @@ void main(
 
     KernAux_PFA_initialize(&pfa);
 
-    {
-        const char *const cmdline =
-            KernAux_Multiboot2_boot_cmd_line(multiboot2_info);
-
-        if (cmdline) {
-            unsigned int slen = strlen(cmdline);
-
-            if (slen > KERNEL_INFO_CMDLINE_SLEN_MAX) {
-                panic("Multiboot 2 boot cmd line is too long.");
-            }
-
-            strcpy(kinfo.cmdline, cmdline);
-        }
-    }
+    kernel_info_init_cmdline(&kinfo,
+                             KernAux_Multiboot2_boot_cmd_line(multiboot2_info));
 
     {
         const struct KernAux_Multiboot2_Tag_MemoryMap *const tag =

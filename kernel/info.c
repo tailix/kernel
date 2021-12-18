@@ -148,6 +148,20 @@ bool kernel_info_init_finish(const struct Kernel_Info *const kinfo)
     return 1;
 }
 
+void kernel_info_init_cmdline(
+    struct Kernel_Info *const kinfo,
+    const char *const cmdline
+) {
+    KERNAUX_NOTNULL_RETURN(kinfo);
+    KERNAUX_ASSERT_RETURN(kinfo->cmdline[0] == '\0');
+
+    if (!cmdline) return;
+
+    KERNAUX_ASSERT(strlen(cmdline) <= KERNEL_INFO_CMDLINE_SLEN_MAX);
+
+    strcpy(kinfo->cmdline, cmdline);
+}
+
 bool cmdline_terminated(const char *const str)
 {
     for (size_t i = 0; i < KERNEL_INFO_CMDLINE_SIZE_MAX; ++i) {
