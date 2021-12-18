@@ -43,7 +43,7 @@ void paging_enable()
 
 void paging_clear(struct Paging *const paging)
 {
-    memset(&paging->page_dir, 0, sizeof(paging->page_dir));
+    memset(paging, 0, sizeof(*paging));
 }
 
 void paging_identity(struct Paging *const paging)
@@ -51,10 +51,9 @@ void paging_identity(struct Paging *const paging)
     for (size_t i = 0; i < PAGE_DIR_LENGTH; ++i) {
         paging->page_dir[i].addr = PAGE_DIR_ADDR(i * PAGE_BIG_SIZE);
 
-        paging->page_dir[i].unused         = 0;
-        paging->page_dir[i].ignored        = 0;
+        paging->page_dir[i].available1     = 0;
         paging->page_dir[i].page_size      = 1;
-        paging->page_dir[i].always_0       = 0;
+        paging->page_dir[i].available0     = 0;
         paging->page_dir[i].accessed       = 0;
         paging->page_dir[i].cache_disabled = 1;
         paging->page_dir[i].write_through  = 1;
@@ -79,10 +78,9 @@ void paging_mapkernel(
     while (mapped < kinfo->kernel_size) {
         paging->page_dir[pde].addr = PAGE_DIR_ADDR(kern_phys);
 
-        paging->page_dir[pde].unused         = 0;
-        paging->page_dir[pde].ignored        = 0;
+        paging->page_dir[pde].available1     = 0;
         paging->page_dir[pde].page_size      = 1;
-        paging->page_dir[pde].always_0       = 0;
+        paging->page_dir[pde].available0     = 0;
         paging->page_dir[pde].accessed       = 0;
         paging->page_dir[pde].cache_disabled = 0;
         paging->page_dir[pde].write_through  = 0;

@@ -143,7 +143,9 @@ void main(
     kernel_info_print(&kinfo);
     assert(kernel_info_is_valid(&kinfo), "Invalid kernel information.");
 
+    // TODO: maybe rename to init?
     paging_clear(&paging);
+
     paging_identity(&paging);
     paging_mapkernel(&paging, &kinfo);
 
