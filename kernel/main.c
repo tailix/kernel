@@ -140,8 +140,8 @@ void main(
     }
 
     kernel_info_init_finish(&kinfo);
-
     kernel_info_print(&kinfo);
+    assert(kernel_info_is_valid(&kinfo), "Invalid kernel information.");
 
     paging_clear();
     paging_identity();
@@ -149,8 +149,6 @@ void main(
     paging_load();
 
     paging_enable();
-
-    assert(kernel_info_is_valid(&kinfo), "Invalid kernel information.");
 
     protected_initialize(&kinfo);
 
