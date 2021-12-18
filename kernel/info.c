@@ -71,7 +71,7 @@ void kernel_info_print(const struct Kernel_Info *const kinfo)
     kernaux_console_printf("  virt limit: %lu\n", kinfo->kernel_virt_limit);
     kernaux_console_printf("\n");
     kernaux_console_printf("  modules size: %lu\n", kinfo->modules_total_size);
-    kernaux_console_printf("  kernel & modules sizet: %lu\n", kinfo->kernel_and_modules_total_size);
+    kernaux_console_printf("  kernel & modules size: %lu\n", kinfo->kernel_and_modules_total_size);
     kernaux_console_printf("\n");
     kernaux_console_printf("  stack top: %lu\n", kinfo->kernel_stack_top);
 }
