@@ -5,6 +5,12 @@
 #include <kernaux/libc.h>
 #include <kernaux/stdlib.h>
 
+void paging_load(struct Paging *const paging)
+{
+    uint32_t page_dir_phys = (uint32_t)&paging->page_dir;
+    kernaux_arch_i386_write_cr3(page_dir_phys);
+}
+
 void paging_enable()
 {
     uint32_t cr0 = kernaux_arch_i386_read_cr0();
@@ -33,12 +39,6 @@ void paging_enable()
 
     kernaux_arch_i386_write_cr0(cr0);
     kernaux_arch_i386_write_cr4(cr4);
-}
-
-void paging_load(struct Paging *const paging)
-{
-    uint32_t page_dir_phys = (uint32_t)&paging->page_dir;
-    kernaux_arch_i386_write_cr3(page_dir_phys);
 }
 
 void paging_clear(struct Paging *const paging)

@@ -21,8 +21,8 @@ __attribute__((packed))
 __attribute__((aligned((PAGE_DIR_ALIGN))))
 ;
 
-void paging_enable();
 void paging_load(struct Paging *paging);
+void paging_enable();
 
 void paging_clear(struct Paging *paging);
 void paging_identity(struct Paging *paging);
