@@ -6,25 +6,6 @@
 #include <kernaux/libc.h>
 #include <kernaux/stdlib.h>
 
-// CR0 bits
-#define I386_CR0_PE 0x00000001 // Protected mode
-#define I386_CR0_MP 0x00000002 // Monitor Coprocessor
-#define I386_CR0_EM 0x00000004 // Emulate
-#define I386_CR0_TS 0x00000008 // Task Switched
-#define I386_CR0_ET 0x00000010 // Extension Type
-#define I386_CR0_WP 0x00010000 // Enable paging
-#define I386_CR0_PG 0x80000000 // Enable paging
-
-// some CR4 bits
-#define I386_CR4_VME 0x00000001 // Virtual 8086
-#define I386_CR4_PVI 0x00000002 // Virtual ints
-#define I386_CR4_TSD 0x00000004 // RDTSC privileged
-#define I386_CR4_DE  0x00000008 // Debugging extensions
-#define I386_CR4_PSE 0x00000010 // Page size extensions
-#define I386_CR4_PAE 0x00000020 // Physical addr extens
-#define I386_CR4_MCE 0x00000040 // Machine check enable
-#define I386_CR4_PGE 0x00000080 // Global page flag enable
-
 static PageDir page_dir;
 
 void paging_enable()
@@ -32,26 +13,26 @@ void paging_enable()
     unsigned long cr0 = kernaux_arch_i386_read_cr0();
     unsigned long cr4 = kernaux_arch_i386_read_cr4();
 
-    assert(cr0 & I386_CR0_PE, "The boot loader should have put us in protected mode.");
+    assert(cr0 & KERNAUX_ARCH_I386_CR0_PE, "The boot loader should have put us in protected mode.");
 
     // First clear PG and PGE flag, as PGE must be enabled after PG.
-    kernaux_arch_i386_write_cr0(cr0 & ~I386_CR0_PG);
-    kernaux_arch_i386_write_cr4(cr4 & ~(I386_CR4_PGE | I386_CR4_PSE));
+    kernaux_arch_i386_write_cr0(cr0 & ~KERNAUX_ARCH_I386_CR0_PG);
+    kernaux_arch_i386_write_cr4(cr4 & ~(KERNAUX_ARCH_I386_CR4_PGE | KERNAUX_ARCH_I386_CR4_PSE));
 
     cr0 = kernaux_arch_i386_read_cr0();
     cr4 = kernaux_arch_i386_read_cr4();
 
     // Our page table contains 4MB entries.
-    cr4 |= I386_CR4_PSE;
+    cr4 |= KERNAUX_ARCH_I386_CR4_PSE;
 
     kernaux_arch_i386_write_cr4(cr4);
 
     // First enable paging, then enable global page flag.
-    cr0 |= I386_CR0_PG;
+    cr0 |= KERNAUX_ARCH_I386_CR0_PG;
 
     kernaux_arch_i386_write_cr0(cr0);
 
-    cr0 |= I386_CR0_WP;
+    cr0 |= KERNAUX_ARCH_I386_CR0_WP;
 
     kernaux_arch_i386_write_cr0(cr0);
     kernaux_arch_i386_write_cr4(cr4);
