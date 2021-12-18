@@ -32,5 +32,5 @@ SECTIONS
         *(.bss)
     }
 
-    _kernel_size = .;
+    _kernel_size = . - _kernel_phys_base;
 }
