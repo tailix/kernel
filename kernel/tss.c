@@ -2,27 +2,9 @@
 
 #include "config.h"
 
+#include <kernaux/arch/i386.h>
 #include <kernaux/libc.h>
 #include <kernaux/stdlib.h>
-
-struct gdt_entry_bits {
-    unsigned int limit_low              : 16;
-    unsigned int base_low               : 24;
-    unsigned int accessed               : 1;
-    unsigned int read_write             : 1;
-    unsigned int conforming_expand_down : 1;
-    unsigned int code                   : 1;
-    unsigned int always_1               : 1;
-    unsigned int DPL                    : 2;
-    unsigned int present                : 1;
-    unsigned int limit_high             : 4;
-    unsigned int available              : 1;
-    unsigned int always_0               : 1;
-    unsigned int big                    : 1;
-    unsigned int gran                   : 1;
-    unsigned int base_high              : 8;
-}
-__attribute__((packed));
 
 struct tss_entry {
     unsigned int prev_tss;
@@ -58,7 +40,7 @@ static struct tss_entry tss;
 
 void tss_write_to_gdt(const struct Kernel_Info *const kinfo, void *gdt_entry_ptr)
 {
-    struct gdt_entry_bits *const g = gdt_entry_ptr;
+    struct KernAux_Arch_I386_GDTE *const g = gdt_entry_ptr;
 
     unsigned long base = (unsigned long)&tss;
     unsigned long limit = sizeof(tss);
