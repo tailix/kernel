@@ -37,7 +37,7 @@ void paging_enable()
 
 void paging_load(struct Paging *const paging)
 {
-    size_t page_dir_phys = (size_t)&paging->page_dir;
+    uint32_t page_dir_phys = (uint32_t)&paging->page_dir;
     kernaux_arch_i386_write_cr3(page_dir_phys);
 }
 
