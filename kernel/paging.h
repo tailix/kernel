@@ -10,7 +10,7 @@
 
 #define PAGE_DIR_ADDR(base) ((base) >> 12)
 
-typedef struct KernAux_Arch_I386_PageDirEntry PageDir_Entry;
+typedef struct KernAux_Arch_I386_PDE PageDir_Entry;
 
 typedef PageDir_Entry PageDir[PAGE_DIR_LENGTH];
 
