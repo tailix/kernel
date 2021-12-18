@@ -145,7 +145,7 @@ void main(
 
     paging_clear();
     paging_identity();
-    /* kinfo.freepde_start = */ paging_mapkernel(&kinfo);
+    paging_mapkernel(&kinfo);
     paging_load();
 
     paging_enable();
