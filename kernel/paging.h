@@ -9,17 +9,17 @@
 #define PAGE_DIR_ADDR(base) ((base) >> 12)
 
 struct PageDir_Entry {
-    unsigned int present        : 1;
-    unsigned int writable       : 1;
-    unsigned int user           : 1;
-    unsigned int write_through  : 1;
-    unsigned int cache_disabled : 1;
-    unsigned int accessed       : 1;
-    unsigned int always_0       : 1;
-    unsigned int page_size      : 1;
-    unsigned int ignored        : 1;
-    unsigned int unused         : 3;
-    unsigned int addr           : 20;
+    unsigned present        : 1;
+    unsigned writable       : 1;
+    unsigned user           : 1;
+    unsigned write_through  : 1;
+    unsigned cache_disabled : 1;
+    unsigned accessed       : 1;
+    unsigned always_0       : 1;
+    unsigned page_size      : 1;
+    unsigned ignored        : 1;
+    unsigned unused         : 3;
+    unsigned addr           : 20;
 }
 __attribute__((packed));
 
@@ -29,7 +29,7 @@ void paging_enable();
 
 void paging_clear();
 void paging_identity();
-int paging_mapkernel(const struct Kernel_Info *kinfo);
-unsigned long paging_load();
+void paging_mapkernel(const struct Kernel_Info *kinfo);
+void paging_load();
 
 #endif

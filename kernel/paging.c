@@ -10,8 +10,8 @@ static PageDir page_dir;
 
 void paging_enable()
 {
-    unsigned long cr0 = kernaux_arch_i386_read_cr0();
-    unsigned long cr4 = kernaux_arch_i386_read_cr4();
+    uint32_t cr0 = kernaux_arch_i386_read_cr0();
+    uint32_t cr4 = kernaux_arch_i386_read_cr4();
 
     assert(cr0 & KERNAUX_ARCH_I386_CR0_PE, "The boot loader should have put us in protected mode.");
 
@@ -45,7 +45,7 @@ void paging_clear()
 
 void paging_identity()
 {
-    for (int i = 0; i < PAGE_DIR_LENGTH; ++i) {
+    for (size_t i = 0; i < PAGE_DIR_LENGTH; ++i) {
         page_dir[i].addr = PAGE_DIR_ADDR(i * PAGE_BIG_SIZE);
 
         page_dir[i].unused         = 0;
@@ -61,15 +61,15 @@ void paging_identity()
     }
 }
 
-int paging_mapkernel(const struct Kernel_Info *const kinfo)
+void paging_mapkernel(const struct Kernel_Info *const kinfo)
 {
     assert(!(kinfo->kernel_phys_base % PAGE_BIG_SIZE), "Kernel physical address is not aligned.");
     assert(!(kinfo->kernel_virt_base % PAGE_BIG_SIZE), "Kernel virtual address is not aligned.");
 
-    int pde = kinfo->kernel_virt_base / PAGE_BIG_SIZE;
+    size_t pde = kinfo->kernel_virt_base / PAGE_BIG_SIZE;
 
-    unsigned long mapped = 0;
-    unsigned long kern_phys = kinfo->kernel_phys_base;
+    size_t mapped = 0;
+    size_t kern_phys = kinfo->kernel_phys_base;
 
     while (mapped < kinfo->kernel_size) {
         page_dir[pde].addr = PAGE_DIR_ADDR(kern_phys);
@@ -90,13 +90,10 @@ int paging_mapkernel(const struct Kernel_Info *const kinfo)
 
         ++pde;
     }
-
-    return pde;
 }
 
-unsigned long paging_load()
+void paging_load()
 {
-    unsigned long page_dir_phys = (unsigned long)page_dir;
+    size_t page_dir_phys = (size_t)page_dir;
     kernaux_arch_i386_write_cr3(page_dir_phys);
-    return page_dir_phys;
 }
