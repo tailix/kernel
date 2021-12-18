@@ -16,6 +16,9 @@ CFLAGS = \
 	-fno-stack-protector \
 	-I/usr/local/include
 
+CPPFLAGS = \
+	-DKERNAUX_ENABLE_ASSERT
+
 # Architecture-dependent
 OBJS = start.s.o
 OBJS += main.c.o
@@ -50,7 +53,7 @@ $(KERNEL): $(OBJS)
 	grub-file --is-x86-multiboot2 $@
 
 %.c.o: %.c
-	$(CC) -c $< -o $@ $(CFLAGS)
+	$(CC) -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
 
 %.s.o: %.s
 	$(AS) $< -o $@

@@ -14,7 +14,7 @@ void kernel_info_init_start(
     const size_t virt_base,
     const size_t stack_top
 ) {
-    kernaux_assert(kinfo);
+    KERNAUX_NOTNULL_RETURN(kinfo);
 
     memset(kinfo, 0, sizeof(*kinfo));
 
@@ -32,7 +32,7 @@ void kernel_info_init_start(
 
 void kernel_info_print(const struct Kernel_Info *const kinfo)
 {
-    kernaux_assert(kinfo);
+    KERNAUX_NOTNULL_RETURN(kinfo);
 
     kernaux_console_printf("Kernel info\n");
     kernaux_console_printf("  cmdline: %s\n", kinfo->cmdline);
@@ -56,7 +56,7 @@ void kernel_info_print(const struct Kernel_Info *const kinfo)
 
 bool kernel_info_init_finish(const struct Kernel_Info *const kinfo)
 {
-    kernaux_assert(kinfo);
+    KERNAUX_NOTNULL_RETVAL(kinfo, false);
 
     if (!cmdline_terminated(kinfo->cmdline)) return false;
 
