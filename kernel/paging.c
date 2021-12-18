@@ -2,7 +2,6 @@
 
 #include "panic.h"
 
-#include <kernaux/arch/i386.h>
 #include <kernaux/libc.h>
 #include <kernaux/stdlib.h>
 
