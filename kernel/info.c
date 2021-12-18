@@ -24,9 +24,6 @@ void kernel_info_init_start(
     kinfo->kernel_phys_base = phys_base;
     kinfo->kernel_virt_base = virt_base;
 
-    kinfo->kernel_phys_limit = phys_base + size - 1;
-    kinfo->kernel_virt_limit = virt_base + size - 1;
-
     kinfo->kernel_stack_top = stack_top;
 }
 
@@ -62,14 +59,11 @@ void kernel_info_print(const struct Kernel_Info *const kinfo)
     kernaux_console_printf("  areas: %lu\n", kinfo->areas_count);
     kernaux_console_printf("\n");
     kernaux_console_printf("  offset: %lu\n", kinfo->kernel_offset);
-    kernaux_console_printf("  size: %lu\n", kinfo->kernel_size);
     kernaux_console_printf("\n");
     kernaux_console_printf("  phys base: %lu\n", kinfo->kernel_phys_base);
-    kernaux_console_printf("  phys limit: %lu\n", kinfo->kernel_phys_limit);
-    kernaux_console_printf("\n");
     kernaux_console_printf("  virt base: %lu\n", kinfo->kernel_virt_base);
-    kernaux_console_printf("  virt limit: %lu\n", kinfo->kernel_virt_limit);
     kernaux_console_printf("\n");
+    kernaux_console_printf("  size: %lu\n", kinfo->kernel_size);
     kernaux_console_printf("  modules size: %lu\n", kinfo->modules_total_size);
     kernaux_console_printf("  kernel & modules size: %lu\n", kinfo->kernel_and_modules_total_size);
     kernaux_console_printf("\n");
@@ -87,18 +81,6 @@ bool kernel_info_is_valid(const struct Kernel_Info *const kinfo)
 
     if (kinfo->kernel_offset == 0) return false;
     if (kinfo->kernel_size   == 0) return false;
-
-    if (kinfo->kernel_phys_base + kinfo->kernel_size !=
-        kinfo->kernel_phys_limit + 1)
-    {
-        return false;
-    }
-
-    if (kinfo->kernel_virt_base + kinfo->kernel_size !=
-        kinfo->kernel_virt_limit + 1)
-    {
-        return false;
-    }
 
     if (kinfo->kernel_virt_base - kinfo->kernel_phys_base !=
         kinfo->kernel_offset)
@@ -144,8 +126,9 @@ bool kernel_info_is_valid(const struct Kernel_Info *const kinfo)
                 return false;
             }
 
-            if (kinfo->kernel_phys_limit >= area->base &&
-                kinfo->kernel_phys_limit <= area->limit)
+            if (kinfo->kernel_phys_base + kinfo->kernel_size - 1 >= area->base
+                &&
+                kinfo->kernel_phys_base + kinfo->kernel_size - 1 <= area->limit)
             {
                 return false;
             }

@@ -43,14 +43,11 @@ struct Kernel_Info {
 
     // Higher-half offset, typically 3 GiB
     size_t kernel_offset;
-    size_t kernel_size;
 
     size_t kernel_phys_base;
-    size_t kernel_phys_limit;
-
     size_t kernel_virt_base;
-    size_t kernel_virt_limit;
 
+    size_t kernel_size;
     size_t modules_total_size;
     size_t kernel_and_modules_total_size;
 
