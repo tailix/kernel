@@ -22,10 +22,10 @@ __attribute__((aligned((PAGE_DIR_ALIGN))))
 ;
 
 void paging_enable();
+void paging_load(struct Paging *paging);
 
 void paging_clear(struct Paging *paging);
 void paging_identity(struct Paging *paging);
 void paging_mapkernel(struct Paging *paging, const struct Kernel_Info *kinfo);
-void paging_load(struct Paging *paging);
 
 #endif
