@@ -12,7 +12,8 @@ void kernel_info_init_start(
     const size_t size,
     const size_t phys_base,
     const size_t virt_base,
-    const size_t stack_top
+    const size_t stack_start,
+    const size_t stack_size
 ) {
     KERNAUX_NOTNULL_RETURN(kinfo);
 
@@ -24,7 +25,8 @@ void kernel_info_init_start(
     kinfo->kernel_phys_base = phys_base;
     kinfo->kernel_virt_base = virt_base;
 
-    kinfo->kernel_stack_top = stack_top;
+    kinfo->kernel_stack_start = stack_start;
+    kinfo->kernel_stack_size  = stack_size;
 }
 
 void kernel_info_init_finish(struct Kernel_Info *const kinfo)
@@ -59,15 +61,15 @@ void kernel_info_print(const struct Kernel_Info *const kinfo)
     kernaux_console_printf("  areas: %lu\n", kinfo->areas_count);
     kernaux_console_printf("\n");
     kernaux_console_printf("  offset: %lu\n", kinfo->kernel_offset);
-    kernaux_console_printf("\n");
+    kernaux_console_printf("  size: %lu\n", kinfo->kernel_size);
     kernaux_console_printf("  phys base: %lu\n", kinfo->kernel_phys_base);
     kernaux_console_printf("  virt base: %lu\n", kinfo->kernel_virt_base);
     kernaux_console_printf("\n");
-    kernaux_console_printf("  size: %lu\n", kinfo->kernel_size);
     kernaux_console_printf("  modules size: %lu\n", kinfo->modules_total_size);
     kernaux_console_printf("  kernel & modules size: %lu\n", kinfo->kernel_and_modules_total_size);
     kernaux_console_printf("\n");
-    kernaux_console_printf("  stack top: %lu\n", kinfo->kernel_stack_top);
+    kernaux_console_printf("  stack start: %lu\n", kinfo->kernel_stack_start);
+    kernaux_console_printf("  stack size: %lu\n", kinfo->kernel_stack_size);
 }
 
 bool kernel_info_is_valid(const struct Kernel_Info *const kinfo)
@@ -84,6 +86,24 @@ bool kernel_info_is_valid(const struct Kernel_Info *const kinfo)
 
     if (kinfo->kernel_virt_base - kinfo->kernel_phys_base !=
         kinfo->kernel_offset)
+    {
+        return false;
+    }
+
+    if (kinfo->kernel_stack_size != 16 * 1024) return false;
+
+    if (!(kinfo->kernel_stack_start >= kinfo->kernel_phys_base &&
+          kinfo->kernel_stack_start <
+          kinfo->kernel_phys_base + kinfo->kernel_size))
+    {
+        return false;
+    }
+
+    const size_t stack_end =
+        kinfo->kernel_stack_start + kinfo->kernel_stack_size;
+
+    if (!(stack_end - 1 >= kinfo->kernel_phys_base &&
+          stack_end - 1 < kinfo->kernel_phys_base + kinfo->kernel_size))
     {
         return false;
     }

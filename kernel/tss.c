@@ -84,5 +84,5 @@ void tss_write_to_gdt(const struct Kernel_Info *const kinfo, void *gdt_entry_ptr
     memset(&tss, 0, sizeof(tss));
 
     tss.ss0 = GDT_KERNEL_DS_SELECTOR;
-    tss.esp0 = kinfo->kernel_stack_top;
+    tss.esp0 = kinfo->kernel_stack_start + kinfo->kernel_stack_size;
 }

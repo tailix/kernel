@@ -43,15 +43,15 @@ struct Kernel_Info {
 
     // Higher-half offset, typically 3 GiB
     size_t kernel_offset;
-
+    size_t kernel_size;
     size_t kernel_phys_base;
     size_t kernel_virt_base;
 
-    size_t kernel_size;
     size_t modules_total_size;
     size_t kernel_and_modules_total_size;
 
-    size_t kernel_stack_top;
+    size_t kernel_stack_start;
+    size_t kernel_stack_size;
 };
 
 void kernel_info_init_start(
@@ -60,7 +60,8 @@ void kernel_info_init_start(
     size_t size,
     size_t phys_base,
     size_t virt_base,
-    size_t stack_top
+    size_t stack_start,
+    size_t stack_size
 );
 
 void kernel_info_init_finish(struct Kernel_Info *kinfo);

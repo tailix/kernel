@@ -3,6 +3,8 @@
 .set MULTIBOOT_LENGTH, 16 + 8
 .set MULTIBOOT_CHECKSUM, -(MULTIBOOT_MAGIC + MULTIBOOT_ARCH + MULTIBOOT_LENGTH)
 
+
+
 .section .multiboot
 .align 4
 .long MULTIBOOT_MAGIC
@@ -12,12 +14,19 @@
 .long 0
 .long 8
 
-.section .bss
-.align 16
-.skip 16384 # 16 KiB
-_kernel_stack_top:
 
-.global _kernel_stack_top
+
+.section .bss
+
+.global _kernel_stack_start
+.global _kernel_stack_end
+
+.align 16
+_kernel_stack_start:
+.skip 16384 # 16 KiB
+_kernel_stack_end:
+
+
 
 .section .text
 
@@ -27,7 +36,7 @@ _kernel_stack_top:
 .type halt,   @function
 
 _start:
-    mov $_kernel_stack_top, %esp // Initialize stack
+    mov $_kernel_stack_end, %esp // Initialize stack
 
     push %ebx // Multiboot information pointer
     push %eax // Multiboot magic number

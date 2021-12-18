@@ -14,12 +14,15 @@
 #include <kernaux/pfa.h>
 #include <kernaux/stdlib.h>
 
+#include <stdint.h>
+
 // Defined in linker script
-extern char _kernel_offset;
-extern char _kernel_size;
-extern char _kernel_phys_base;
-extern char _kernel_virt_base;
-extern char _kernel_stack_top;
+extern uint8_t _kernel_offset;
+extern uint8_t _kernel_size;
+extern uint8_t _kernel_phys_base;
+extern uint8_t _kernel_virt_base;
+extern uint8_t _kernel_stack_start;
+extern uint8_t _kernel_stack_size;
 
 static struct Kernel_Info kinfo;
 static struct KernAux_PFA pfa;
@@ -47,7 +50,8 @@ void main(
         (size_t)&_kernel_size,
         (size_t)&_kernel_phys_base,
         (size_t)&_kernel_virt_base,
-        (size_t)&_kernel_stack_top
+        (size_t)&_kernel_stack_start,
+        (size_t)&_kernel_stack_size
     );
 
     KernAux_PFA_initialize(&pfa);
