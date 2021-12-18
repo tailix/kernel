@@ -139,7 +139,7 @@ void main(
         kinfo.modules_total_size += module->size;
     }
 
-    kinfo.kernel_and_modules_total_size = kinfo.kernel_size + kinfo.modules_total_size;
+    kernel_info_init_finish(&kinfo);
 
     kernel_info_print(&kinfo);
 
@@ -150,7 +150,7 @@ void main(
 
     paging_enable();
 
-    assert(kernel_info_init_finish(&kinfo), "Invalid kernel information.");
+    assert(kernel_info_is_valid(&kinfo), "Invalid kernel information.");
 
     protected_initialize(&kinfo);
 

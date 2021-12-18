@@ -66,10 +66,11 @@ void kernel_info_init_start(
     size_t stack_top
 );
 
+void kernel_info_init_finish(struct Kernel_Info *kinfo);
+
 void kernel_info_init_cmdline(struct Kernel_Info *kinfo, const char *cmdline);
 
-bool kernel_info_init_finish(const struct Kernel_Info *kinfo);
-
+bool kernel_info_is_valid(const struct Kernel_Info *kinfo);
 void kernel_info_print(const struct Kernel_Info *kinfo);
 
 #ifdef __cplusplus

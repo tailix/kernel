@@ -30,6 +30,28 @@ void kernel_info_init_start(
     kinfo->kernel_stack_top = stack_top;
 }
 
+void kernel_info_init_finish(struct Kernel_Info *const kinfo)
+{
+    KERNAUX_NOTNULL_RETURN(kinfo);
+
+    kinfo->kernel_and_modules_total_size =
+        kinfo->kernel_size + kinfo->modules_total_size;
+}
+
+void kernel_info_init_cmdline(
+    struct Kernel_Info *const kinfo,
+    const char *const cmdline
+) {
+    KERNAUX_NOTNULL_RETURN(kinfo);
+    KERNAUX_ASSERT_RETURN(kinfo->cmdline[0] == '\0');
+
+    if (!cmdline) return;
+
+    KERNAUX_ASSERT(strlen(cmdline) <= KERNEL_INFO_CMDLINE_SLEN_MAX);
+
+    strcpy(kinfo->cmdline, cmdline);
+}
+
 void kernel_info_print(const struct Kernel_Info *const kinfo)
 {
     KERNAUX_NOTNULL_RETURN(kinfo);
@@ -54,7 +76,7 @@ void kernel_info_print(const struct Kernel_Info *const kinfo)
     kernaux_console_printf("  stack top: %lu\n", kinfo->kernel_stack_top);
 }
 
-bool kernel_info_init_finish(const struct Kernel_Info *const kinfo)
+bool kernel_info_is_valid(const struct Kernel_Info *const kinfo)
 {
     KERNAUX_NOTNULL_RETVAL(kinfo, false);
 
@@ -145,21 +167,7 @@ bool kernel_info_init_finish(const struct Kernel_Info *const kinfo)
         }
     }
 
-    return 1;
-}
-
-void kernel_info_init_cmdline(
-    struct Kernel_Info *const kinfo,
-    const char *const cmdline
-) {
-    KERNAUX_NOTNULL_RETURN(kinfo);
-    KERNAUX_ASSERT_RETURN(kinfo->cmdline[0] == '\0');
-
-    if (!cmdline) return;
-
-    KERNAUX_ASSERT(strlen(cmdline) <= KERNEL_INFO_CMDLINE_SLEN_MAX);
-
-    strcpy(kinfo->cmdline, cmdline);
+    return true;
 }
 
 bool cmdline_terminated(const char *const str)
