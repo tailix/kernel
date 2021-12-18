@@ -23,6 +23,7 @@ extern char _kernel_stack_top;
 
 static struct Kernel_Info kinfo;
 static struct KernAux_PFA pfa;
+static struct Paging paging;
 
 void main(
     const unsigned long multiboot2_magic,
@@ -142,12 +143,12 @@ void main(
     kernel_info_print(&kinfo);
     assert(kernel_info_is_valid(&kinfo), "Invalid kernel information.");
 
-    paging_clear();
-    paging_identity();
-    paging_mapkernel(&kinfo);
-    paging_load();
+    paging_clear(&paging);
+    paging_identity(&paging);
+    paging_mapkernel(&paging, &kinfo);
+    paging_load(&paging);
 
-    paging_enable();
+    paging_enable(&paging);
 
     protected_initialize(&kinfo);
 

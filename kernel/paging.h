@@ -12,13 +12,20 @@
 
 typedef struct KernAux_Arch_I386_PageDirEntry PageDir_Entry;
 
-typedef PageDir_Entry PageDir[PAGE_DIR_LENGTH] __attribute__((aligned((PAGE_DIR_ALIGN))));
+typedef PageDir_Entry PageDir[PAGE_DIR_LENGTH];
+
+struct Paging {
+    PageDir page_dir;
+}
+__attribute__((packed))
+__attribute__((aligned((PAGE_DIR_ALIGN))))
+;
 
 void paging_enable();
 
-void paging_clear();
-void paging_identity();
-void paging_mapkernel(const struct Kernel_Info *kinfo);
-void paging_load();
+void paging_clear(struct Paging *paging);
+void paging_identity(struct Paging *paging);
+void paging_mapkernel(struct Paging *paging, const struct Kernel_Info *kinfo);
+void paging_load(struct Paging *paging);
 
 #endif

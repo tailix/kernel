@@ -5,8 +5,6 @@
 #include <kernaux/libc.h>
 #include <kernaux/stdlib.h>
 
-static PageDir page_dir;
-
 void paging_enable()
 {
     uint32_t cr0 = kernaux_arch_i386_read_cr0();
@@ -37,31 +35,33 @@ void paging_enable()
     kernaux_arch_i386_write_cr4(cr4);
 }
 
-void paging_clear()
+void paging_clear(struct Paging *const paging)
 {
-    memset(page_dir, 0, sizeof(page_dir));
+    memset(&paging->page_dir, 0, sizeof(paging->page_dir));
 }
 
-void paging_identity()
+void paging_identity(struct Paging *const paging)
 {
     for (size_t i = 0; i < PAGE_DIR_LENGTH; ++i) {
-        page_dir[i].addr = PAGE_DIR_ADDR(i * PAGE_BIG_SIZE);
+        paging->page_dir[i].addr = PAGE_DIR_ADDR(i * PAGE_BIG_SIZE);
 
-        page_dir[i].unused         = 0;
-        page_dir[i].ignored        = 0;
-        page_dir[i].page_size      = 1;
-        page_dir[i].always_0       = 0;
-        page_dir[i].accessed       = 0;
-        page_dir[i].cache_disabled = 1;
-        page_dir[i].write_through  = 1;
-        page_dir[i].user           = 1;
-        page_dir[i].writable       = 1;
-        page_dir[i].present        = 1;
+        paging->page_dir[i].unused         = 0;
+        paging->page_dir[i].ignored        = 0;
+        paging->page_dir[i].page_size      = 1;
+        paging->page_dir[i].always_0       = 0;
+        paging->page_dir[i].accessed       = 0;
+        paging->page_dir[i].cache_disabled = 1;
+        paging->page_dir[i].write_through  = 1;
+        paging->page_dir[i].user           = 1;
+        paging->page_dir[i].writable       = 1;
+        paging->page_dir[i].present        = 1;
     }
 }
 
-void paging_mapkernel(const struct Kernel_Info *const kinfo)
-{
+void paging_mapkernel(
+    struct Paging *const paging,
+    const struct Kernel_Info *const kinfo
+) {
     assert(!(kinfo->kernel_phys_base % PAGE_BIG_SIZE), "Kernel physical address is not aligned.");
     assert(!(kinfo->kernel_virt_base % PAGE_BIG_SIZE), "Kernel virtual address is not aligned.");
 
@@ -71,18 +71,18 @@ void paging_mapkernel(const struct Kernel_Info *const kinfo)
     size_t kern_phys = kinfo->kernel_phys_base;
 
     while (mapped < kinfo->kernel_size) {
-        page_dir[pde].addr = PAGE_DIR_ADDR(kern_phys);
+        paging->page_dir[pde].addr = PAGE_DIR_ADDR(kern_phys);
 
-        page_dir[pde].unused         = 0;
-        page_dir[pde].ignored        = 0;
-        page_dir[pde].page_size      = 1;
-        page_dir[pde].always_0       = 0;
-        page_dir[pde].accessed       = 0;
-        page_dir[pde].cache_disabled = 0;
-        page_dir[pde].write_through  = 0;
-        page_dir[pde].user           = 0;
-        page_dir[pde].writable       = 1;
-        page_dir[pde].present        = 1;
+        paging->page_dir[pde].unused         = 0;
+        paging->page_dir[pde].ignored        = 0;
+        paging->page_dir[pde].page_size      = 1;
+        paging->page_dir[pde].always_0       = 0;
+        paging->page_dir[pde].accessed       = 0;
+        paging->page_dir[pde].cache_disabled = 0;
+        paging->page_dir[pde].write_through  = 0;
+        paging->page_dir[pde].user           = 0;
+        paging->page_dir[pde].writable       = 1;
+        paging->page_dir[pde].present        = 1;
 
         mapped += PAGE_BIG_SIZE;
         kern_phys += PAGE_BIG_SIZE;
@@ -91,8 +91,8 @@ void paging_mapkernel(const struct Kernel_Info *const kinfo)
     }
 }
 
-void paging_load()
+void paging_load(struct Paging *const paging)
 {
-    size_t page_dir_phys = (size_t)page_dir;
+    size_t page_dir_phys = (size_t)&paging->page_dir;
     kernaux_arch_i386_write_cr3(page_dir_phys);
 }
