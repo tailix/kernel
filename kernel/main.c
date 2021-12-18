@@ -22,7 +22,6 @@ extern char _kernel_virt_base;
 extern char _kernel_stack_top;
 
 static struct Kernel_Info kinfo;
-
 static struct KernAux_PFA pfa;
 
 void main(
