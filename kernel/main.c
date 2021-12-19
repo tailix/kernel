@@ -59,7 +59,7 @@ void main(
     assert(kernel_info_is_valid(&kinfo), "Invalid kernel information.");
 
     KernAux_PFA_initialize(&pfa);
-    // kernel_info_setup_pfa(&pfa);
+    kernel_info_setup_pfa(&kinfo, &pfa);
 
     // TODO: maybe rename to init?
     paging_clear(&paging);
