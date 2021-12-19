@@ -89,16 +89,6 @@ void kernel_info_init_from_multiboot2(
                 (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)
                 ((unsigned char*)entry + tag->entry_size)
         ) {
-            /*
-            if (entry->type == 1) {
-                KernAux_PFA_mark_available(
-                    &pfa,
-                    entry->base_addr,
-                    entry->base_addr + entry->length - 1
-                );
-            }
-            */
-
             if (kinfo->areas_count >= KERNEL_INFO_AREAS_MAX) {
                 panic("Too many memory map entries in Multiboot 2 info.");
             }
