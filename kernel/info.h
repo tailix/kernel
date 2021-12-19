@@ -9,6 +9,8 @@ extern "C" {
 #include <stddef.h>
 #include <stdint.h>
 
+#include <kernaux/multiboot2.h>
+
 #define KERNEL_INFO_CMDLINE_SIZE_MAX 256
 #define KERNEL_INFO_CMDLINE_SLEN_MAX (KERNEL_INFO_CMDLINE_SIZE_MAX - 1)
 
@@ -66,7 +68,10 @@ void kernel_info_init_start(
 
 void kernel_info_init_finish(struct Kernel_Info *kinfo);
 
-void kernel_info_init_cmdline(struct Kernel_Info *kinfo, const char *cmdline);
+void kernel_info_init_from_multiboot2(
+    struct Kernel_Info *kinfo,
+    const struct KernAux_Multiboot2 *multiboot2_info
+);
 
 bool kernel_info_is_valid(const struct Kernel_Info *kinfo);
 void kernel_info_print(const struct Kernel_Info *kinfo);

@@ -1,4 +1,5 @@
 #include "info.h"
+#include "panic.h"
 
 #include <kernaux/assert.h>
 #include <kernaux/console.h>
@@ -35,20 +36,6 @@ void kernel_info_init_finish(struct Kernel_Info *const kinfo)
 
     kinfo->kernel_and_modules_total_size =
         kinfo->kernel_size + kinfo->modules_total_size;
-}
-
-void kernel_info_init_cmdline(
-    struct Kernel_Info *const kinfo,
-    const char *const cmdline
-) {
-    KERNAUX_NOTNULL_RETURN(kinfo);
-    KERNAUX_ASSERT_RETURN(kinfo->cmdline[0] == '\0');
-
-    if (!cmdline) return;
-
-    KERNAUX_ASSERT(strlen(cmdline) <= KERNEL_INFO_CMDLINE_SLEN_MAX);
-
-    strcpy(kinfo->cmdline, cmdline);
 }
 
 void kernel_info_print(const struct Kernel_Info *const kinfo)
@@ -172,6 +159,118 @@ bool kernel_info_is_valid(const struct Kernel_Info *const kinfo)
 
     return true;
 }
+
+void kernel_info_init_from_multiboot2(
+    struct Kernel_Info *kinfo,
+    const struct KernAux_Multiboot2 *multiboot2_info
+) {
+    KERNAUX_NOTNULL_RETURN(kinfo);
+    KERNAUX_NOTNULL_RETURN(multiboot2_info);
+
+    {
+        const char *const cmdline =
+            KernAux_Multiboot2_boot_cmd_line(multiboot2_info);
+
+        if (cmdline) {
+            assert(strlen(cmdline) <= KERNEL_INFO_CMDLINE_SLEN_MAX,
+                   "Kernel cmdline is too long");
+
+            strcpy(kinfo->cmdline, cmdline);
+        } else {
+            memset(kinfo->cmdline, '\0', sizeof(kinfo->cmdline));
+        }
+    }
+
+    {
+        const struct KernAux_Multiboot2_Tag_MemoryMap *const tag =
+            (struct KernAux_Multiboot2_Tag_MemoryMap*)
+            KernAux_Multiboot2_first_tag_with_type(
+                multiboot2_info,
+                KERNAUX_MULTIBOOT2_TAGTYPE_MEMORY_MAP
+            );
+
+        if (!tag) {
+            panic("No memory map provided in Multiboot 2 info.");
+        }
+
+        for (
+            const struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase *entry =
+                (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)tag->data;
+            (unsigned char*)entry < (unsigned char*)tag + tag->base.size;
+            entry =
+                (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)
+                ((unsigned char*)entry + tag->entry_size)
+        ) {
+            /*
+            if (entry->type == 1) {
+                KernAux_PFA_mark_available(
+                    &pfa,
+                    entry->base_addr,
+                    entry->base_addr + entry->length - 1
+                );
+            }
+            */
+
+            if (kinfo->areas_count >= KERNEL_INFO_AREAS_MAX) {
+                panic("Too many memory map entries in Multiboot 2 info.");
+            }
+
+            struct Kernel_Info_Area *const area =
+                &kinfo->areas[kinfo->areas_count];
+
+            area->base = entry->base_addr;
+            area->size = entry->length;
+            area->limit = area->base + area->size - 1;
+
+            area->is_available = entry->type == 1;
+
+            ++kinfo->areas_count;
+        }
+    }
+
+    for (
+        const struct KernAux_Multiboot2_Tag_Module *tag =
+            (struct KernAux_Multiboot2_Tag_Module*)
+            KernAux_Multiboot2_first_tag_with_type(
+                multiboot2_info,
+                KERNAUX_MULTIBOOT2_TAGTYPE_MODULE
+            );
+        tag;
+        tag = (struct KernAux_Multiboot2_Tag_Module*)
+            KernAux_Multiboot2_tag_with_type_after(
+                multiboot2_info,
+                KERNAUX_MULTIBOOT2_TAGTYPE_MODULE,
+                (struct KernAux_Multiboot2_TagBase*)tag
+            )
+    ) {
+        if (kinfo->modules_count >= KERNEL_INFO_MODULES_MAX) {
+            panic("Too many modules in Multiboot 2 info.");
+        }
+
+        unsigned int slen = strlen(tag->cmdline);
+
+        if (slen > KERNEL_INFO_CMDLINE_SLEN_MAX) {
+            panic("Multiboot 2 module cmd line is too long.");
+        }
+
+        struct Kernel_Info_Module *const module =
+            &kinfo->modules[kinfo->modules_count];
+
+        strcpy(module->cmdline, tag->cmdline);
+
+        module->base = tag->mod_start;
+        module->limit = tag->mod_end;
+        module->size = module->limit - module->base + 1;
+
+        ++kinfo->modules_count;
+
+        kinfo->modules_total_size += module->size;
+    }
+}
+
+/*********************
+ * Utility functions *
+ *********************/
 
 bool cmdline_terminated(const char *const str)
 {
