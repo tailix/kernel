@@ -4,12 +4,7 @@
 #include <kernaux/libc.h>
 #include <kernaux/stdlib.h>
 
-static void mapping(
-    struct Paging *paging,
-    KernAux_PFA pfa,
-    uint32_t virt,
-    uint32_t phys
-);
+static void mapping(struct Paging *paging, uint32_t virt, uint32_t phys);
 
 void paging_load(struct Paging *const paging)
 {
@@ -52,17 +47,16 @@ void paging_clear(struct Paging *const paging)
     memset(paging, 0, sizeof(*paging));
 }
 
-void paging_identity(struct Paging *const paging, const KernAux_PFA pfa)
+void paging_identity(struct Paging *const paging)
 {
     for (size_t i = 0; i < PAGE_DIR_LENGTH; ++i) {
         const size_t addr = i * PAGE_BIG_SIZE;
-        mapping(paging, pfa, addr, addr);
+        mapping(paging, addr, addr);
     }
 }
 
 void paging_mapkernel(
     struct Paging *const paging,
-    const KernAux_PFA pfa,
     const struct Kernel_Info *const kinfo
 ) {
     assert(!(kinfo->kernel_phys_base % PAGE_BIG_SIZE), "Kernel physical address is not aligned.");
@@ -73,7 +67,7 @@ void paging_mapkernel(
     size_t mapped = 0;
 
     while (mapped < kinfo->kernel_size) {
-        mapping(paging, pfa, virt, phys);
+        mapping(paging, virt, phys);
 
         phys   += PAGE_BIG_SIZE;
         virt   += PAGE_BIG_SIZE;
@@ -83,7 +77,6 @@ void paging_mapkernel(
 
 void mapping(
     struct Paging *const paging,
-    const KernAux_PFA pfa,
     const uint32_t virt,
     const uint32_t phys
 ) {

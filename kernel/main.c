@@ -64,8 +64,8 @@ void main(
     // TODO: maybe rename to init?
     paging_clear(&paging);
 
-    paging_identity(&paging, &pfa);
-    paging_mapkernel(&paging, &pfa, &kinfo);
+    paging_identity(&paging);
+    paging_mapkernel(&paging, &kinfo);
 
     paging_load(&paging);
     paging_enable();
