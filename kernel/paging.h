@@ -5,6 +5,7 @@
 #include "info.h"
 
 #include <kernaux/arch/i386.h>
+#include <kernaux/pfa.h>
 
 #define PAGE_DIR_ALIGN 4096
 
@@ -26,7 +27,7 @@ void paging_enable();
 
 void paging_clear(struct Paging *paging);
 
-void paging_identity(struct Paging *paging);
-void paging_mapkernel(struct Paging *paging, const struct Kernel_Info *kinfo);
+void paging_identity(struct Paging *paging, KernAux_PFA pfa);
+void paging_mapkernel(struct Paging *paging, KernAux_PFA pfa, const struct Kernel_Info *kinfo);
 
 #endif
