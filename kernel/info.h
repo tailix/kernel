@@ -10,6 +10,7 @@ extern "C" {
 #include <stdint.h>
 
 #include <kernaux/multiboot2.h>
+#include <kernaux/pfa.h>
 
 #define KERNEL_INFO_CMDLINE_SIZE_MAX 256
 #define KERNEL_INFO_CMDLINE_SLEN_MAX (KERNEL_INFO_CMDLINE_SIZE_MAX - 1)
@@ -77,6 +78,7 @@ void kernel_info_init_from_multiboot2(
 
 bool kernel_info_is_valid(const struct Kernel_Info *kinfo);
 void kernel_info_print(const struct Kernel_Info *kinfo);
+void kernel_info_setup_pfa(const struct Kernel_Info *kinfo, KernAux_PFA pfa);
 
 #ifdef __cplusplus
 }

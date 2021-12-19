@@ -273,6 +273,23 @@ bool kernel_info_is_valid(const struct Kernel_Info *const kinfo)
     return true;
 }
 
+void kernel_info_setup_pfa(
+    const struct Kernel_Info *const kinfo,
+    const KernAux_PFA pfa
+) {
+    KERNAUX_NOTNULL_RETURN(kinfo);
+    KERNAUX_NOTNULL_RETURN(pfa);
+    KERNAUX_ASSERT_RETURN(kinfo->initialized);
+
+    for (size_t i = 0; i < kinfo->areas_count; ++i) {
+        const struct Kernel_Info_Area *const area = &kinfo->areas[i];
+
+        if (area->is_available) {
+            KernAux_PFA_mark_available(pfa, area->base, area->limit);
+        }
+    }
+}
+
 /*********************
  * Utility functions *
  *********************/
