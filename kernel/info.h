@@ -35,6 +35,8 @@ struct Kernel_Info_Area {
 };
 
 struct Kernel_Info {
+    bool initialized;
+
     char cmdline[KERNEL_INFO_CMDLINE_SIZE_MAX];
 
     struct Kernel_Info_Module modules[KERNEL_INFO_MODULES_MAX];

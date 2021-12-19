@@ -20,6 +20,8 @@ void kernel_info_init_start(
 
     memset(kinfo, 0, sizeof(*kinfo));
 
+    kinfo->initialized = false;
+
     kinfo->kernel_offset = offset;
     kinfo->kernel_size   = size;
 
@@ -33,9 +35,12 @@ void kernel_info_init_start(
 void kernel_info_init_finish(struct Kernel_Info *const kinfo)
 {
     KERNAUX_NOTNULL_RETURN(kinfo);
+    KERNAUX_ASSERT_RETURN(!kinfo->initialized);
 
     kinfo->kernel_and_modules_total_size =
         kinfo->kernel_size + kinfo->modules_total_size;
+
+    kinfo->initialized = true;
 }
 
 void kernel_info_print(const struct Kernel_Info *const kinfo)
@@ -62,6 +67,7 @@ void kernel_info_print(const struct Kernel_Info *const kinfo)
 bool kernel_info_is_valid(const struct Kernel_Info *const kinfo)
 {
     KERNAUX_NOTNULL_RETVAL(kinfo, false);
+    KERNAUX_ASSERT_RETVAL(kinfo->initialized, false);
 
     if (!cmdline_terminated(kinfo->cmdline)) return false;
 
@@ -166,6 +172,7 @@ void kernel_info_init_from_multiboot2(
 ) {
     KERNAUX_NOTNULL_RETURN(kinfo);
     KERNAUX_NOTNULL_RETURN(multiboot2_info);
+    KERNAUX_ASSERT_RETURN(!kinfo->initialized);
 
     {
         const char *const cmdline =
