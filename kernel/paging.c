@@ -83,7 +83,7 @@ void mapping(
     KERNAUX_NOTNULL_RETURN(paging);
 
     const size_t pde_index = virt / PAGE_BIG_SIZE;
-    struct KernAux_Arch_I386_PDE *const pde = &paging->page_dir[pde_index];
+    struct KernAux_Arch_I386_PDE *const pde = &paging->page_dir.pdes[pde_index];
 
     if (!pde->present) {
         pde->addr = PAGE_DIR_ADDR(phys);
