@@ -1,12 +1,12 @@
 #include "panic.h"
 
-#include <kernaux/arch/i386.h>
+#include <kernaux/asm/i386.h>
 #include <kernaux/console.h>
 
 void panic(const char *const s)
 {
     kernaux_console_printf("[FAIL] panic: %s\n", s);
-    kernaux_arch_i386_hang();
+    kernaux_asm_i386_hang();
 }
 
 void halt()
@@ -21,5 +21,5 @@ void kernaux_assert_fn(
 ) {
     kernaux_console_printf("[FAIL] assertion failed: %s:%u: \"%s\"\n",
                            file, line, str);
-    kernaux_arch_i386_hang();
+    kernaux_asm_i386_hang();
 }
