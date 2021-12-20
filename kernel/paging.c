@@ -27,7 +27,7 @@ void paging_enable()
     cr4 = kernaux_arch_i386_read_cr4();
 
     // Our page table contains 4MB entries.
-    cr4 |= KERNAUX_ARCH_I386_CR4_PSE;
+    // cr4 |= KERNAUX_ARCH_I386_CR4_PSE;
 
     kernaux_arch_i386_write_cr4(cr4);
 
@@ -49,8 +49,8 @@ void paging_clear(struct Paging *const paging)
 
 void paging_identity(struct Paging *const paging)
 {
-    for (size_t i = 0; i < PAGE_DIR_LENGTH; ++i) {
-        const size_t addr = i * PAGE_BIG_SIZE;
+    for (size_t i = 0; i < (1024 * 1024); ++i) {
+        const size_t addr = i * (4 * 1024);
         mapping(paging, addr, addr);
     }
 }
@@ -59,8 +59,8 @@ void paging_mapkernel(
     struct Paging *const paging,
     const struct Kernel_Info *const kinfo
 ) {
-    assert(!(kinfo->kernel_phys_base % PAGE_BIG_SIZE), "Kernel physical address is not aligned.");
-    assert(!(kinfo->kernel_virt_base % PAGE_BIG_SIZE), "Kernel virtual address is not aligned.");
+    assert(!(kinfo->kernel_phys_base % (4 * 1024)), "Kernel physical address is not aligned.");
+    assert(!(kinfo->kernel_virt_base % (4 * 1024)), "Kernel virtual address is not aligned.");
 
     size_t phys = kinfo->kernel_phys_base;
     size_t virt = kinfo->kernel_virt_base;
@@ -69,9 +69,9 @@ void paging_mapkernel(
     while (mapped < kinfo->kernel_size) {
         mapping(paging, virt, phys);
 
-        phys   += PAGE_BIG_SIZE;
-        virt   += PAGE_BIG_SIZE;
-        mapped += PAGE_BIG_SIZE;
+        phys   += (4 * 1024);
+        virt   += (4 * 1024);
+        mapped += (4 * 1024);
     }
 }
 
@@ -82,14 +82,20 @@ void mapping(
 ) {
     KERNAUX_NOTNULL_RETURN(paging);
 
-    const size_t pde_index = virt / PAGE_BIG_SIZE;
-    struct KernAux_Arch_I386_PDE *const pde = &paging->page_dir.pdes[pde_index];
+    const size_t pde_index = (virt >> 22);
+    const size_t pte_index = (virt >> 12) & 0x3ff;
+
+    struct KernAux_Arch_I386_PageDir   *const page_dir   = &paging->page_dir;
+    struct KernAux_Arch_I386_PageTable *const page_table = &paging->page_tables[pde_index];
+
+    struct KernAux_Arch_I386_PDE *const pde = &page_dir->pdes[pde_index];
+    struct KernAux_Arch_I386_PTE *const pte = &page_table->ptes[pte_index];
 
     if (!pde->present) {
-        pde->addr = PAGE_DIR_ADDR(phys);
+        pde->addr = ((size_t)page_table) >> 12;
 
         pde->available1     = 0;
-        pde->page_size      = 1;
+        pde->page_size      = 0;
         pde->available0     = 0;
         pde->accessed       = 0;
         pde->cache_disabled = 0;
@@ -98,4 +104,17 @@ void mapping(
         pde->writable       = 1;
         pde->present        = 1;
     }
+
+    pte->addr = phys >> 12;
+
+    pte->available      = 1;
+    pte->global         = 1;
+    pte->attr_table     = 0;
+    pte->dirty          = 0;
+    pte->accessed       = 0;
+    pte->cache_disabled = 0;
+    pte->write_through  = 0;
+    pte->user           = 0;
+    pte->writable       = 1;
+    pte->present        = 1;
 }
