@@ -12,6 +12,8 @@
 
 struct Paging {
     struct KernAux_Arch_I386_PageDir page_dir;
+    // FIXME: use PFA to allocate page tables dynamically.
+    struct KernAux_Arch_I386_PageTable page_tables[PAGE_DIR_LENGTH];
 }
 __attribute__((packed))
 __attribute__((aligned((PAGE_DIR_ALIGN))))
