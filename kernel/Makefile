@@ -17,7 +17,8 @@ CFLAGS = \
 	-I/usr/local/include
 
 CPPFLAGS = \
-	-DKERNAUX_ENABLE_ASSERT
+	-DKERNAUX_ENABLE_ASSERT \
+	-DKERNAUX_ENABLE_GUARD
 
 # Architecture-dependent
 OBJS = start.s.o
