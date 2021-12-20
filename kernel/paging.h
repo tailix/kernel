@@ -10,12 +10,8 @@
 
 #define PAGE_DIR_ADDR(base) ((base) >> 12)
 
-typedef struct KernAux_Arch_I386_PDE PageDir_Entry;
-
-typedef PageDir_Entry PageDir[PAGE_DIR_LENGTH];
-
 struct Paging {
-    PageDir page_dir;
+    struct KernAux_Arch_I386_PDE page_dir[PAGE_DIR_LENGTH];
 }
 __attribute__((packed))
 __attribute__((aligned((PAGE_DIR_ALIGN))))
