@@ -5,3 +5,5 @@
 
 /config.mk
 /rootfs/boot/tailix.multiboot2
+/rootfs/boot/procman
+/rootfs/boot/memgr
