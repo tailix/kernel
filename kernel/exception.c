@@ -41,10 +41,7 @@ static const char *const messages[] = {
 
 void exception_handler(struct IsrRegisters regs)
 {
-    if (
-        !(/* regs.int_no >= INT_EXCEPTION_FIRST && */ // unsigned is always >= 0
-          regs.int_no <= INT_EXCEPTION_LAST)
-    ) {
+    if (regs.int_no > INT_EXCEPTION_LAST) {
         return;
     }
 
