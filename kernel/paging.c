@@ -50,8 +50,8 @@ void paging_clear(struct Paging *const paging)
 
 void paging_identity(struct Paging *const paging)
 {
-    for (size_t i = 0; i < (1024 * 1024); ++i) {
-        const size_t addr = i * (4 * 1024);
+    for (size_t i = 0; i < KERNAUX_ARCH_I386_PAGES_COUNT_MAX; ++i) {
+        const size_t addr = i * KERNAUX_ARCH_I386_PAGE_SIZE;
         mapping(paging, addr, addr);
     }
 }
@@ -60,8 +60,8 @@ void paging_mapkernel(
     struct Paging *const paging,
     const struct Kernel_Info *const kinfo
 ) {
-    assert(!(kinfo->kernel_phys_base % (4 * 1024)), "Kernel physical address is not aligned.");
-    assert(!(kinfo->kernel_virt_base % (4 * 1024)), "Kernel virtual address is not aligned.");
+    assert(!(kinfo->kernel_phys_base % KERNAUX_ARCH_I386_PAGE_SIZE), "Kernel physical address is not aligned.");
+    assert(!(kinfo->kernel_virt_base % KERNAUX_ARCH_I386_PAGE_SIZE), "Kernel virtual address is not aligned.");
 
     size_t phys = kinfo->kernel_phys_base;
     size_t virt = kinfo->kernel_virt_base;
@@ -70,9 +70,9 @@ void paging_mapkernel(
     while (mapped < kinfo->kernel_size) {
         mapping(paging, virt, phys);
 
-        phys   += (4 * 1024);
-        virt   += (4 * 1024);
-        mapped += (4 * 1024);
+        phys   += KERNAUX_ARCH_I386_PAGE_SIZE;
+        virt   += KERNAUX_ARCH_I386_PAGE_SIZE;
+        mapped += KERNAUX_ARCH_I386_PAGE_SIZE;
     }
 }
 
