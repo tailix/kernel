@@ -83,8 +83,8 @@ void mapping(
 ) {
     KERNAUX_NOTNULL_RETURN(paging);
 
-    const size_t pde_index = (virt >> 22);
-    const size_t pte_index = (virt >> 12) & 0x3ff;
+    const size_t pde_index = KERNAUX_ARCH_I386_ADDR_TO_PDE_INDEX(virt);
+    const size_t pte_index = KERNAUX_ARCH_I386_ADDR_TO_PTE_INDEX(virt);
 
     struct KernAux_Arch_I386_PageDir   *const page_dir   = &paging->page_dir;
     struct KernAux_Arch_I386_PageTable *const page_table = &paging->page_tables[pde_index];
@@ -93,7 +93,7 @@ void mapping(
     struct KernAux_Arch_I386_PTE *const pte = &page_table->ptes[pte_index];
 
     if (!pde->present) {
-        pde->addr = ((size_t)page_table) >> 12;
+        pde->addr = KERNAUX_ARCH_I386_ADDR_TO_PDE_ADDR(page_table);
 
         pde->available1     = 0;
         pde->page_size      = 0;
@@ -106,7 +106,7 @@ void mapping(
         pde->present        = 1;
     }
 
-    pte->addr = phys >> 12;
+    pte->addr = KERNAUX_ARCH_I386_ADDR_TO_PTE_ADDR(phys);
 
     pte->available      = 1;
     pte->global         = 1;
