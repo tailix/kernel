@@ -3,7 +3,6 @@
 
 #include <kernaux/asm/i386.h>
 #include <kernaux/libc.h>
-#include <kernaux/stdlib.h>
 
 static void mapping(struct Paging *paging, uint32_t virt, uint32_t phys);
 

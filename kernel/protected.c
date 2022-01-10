@@ -8,7 +8,6 @@
 
 #include <kernaux/console.h>
 #include <kernaux/libc.h>
-#include <kernaux/stdlib.h>
 
 struct GdtPointer {
     unsigned short limit;

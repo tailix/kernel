@@ -12,7 +12,6 @@
 #include <kernaux/libc.h>
 #include <kernaux/multiboot2.h>
 #include <kernaux/pfa.h>
-#include <kernaux/stdlib.h>
 
 #include <stdint.h>
 

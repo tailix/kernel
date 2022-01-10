@@ -4,7 +4,6 @@
 
 #include <kernaux/arch/i386.h>
 #include <kernaux/libc.h>
-#include <kernaux/stdlib.h>
 
 struct tss_entry {
     unsigned int prev_tss;
