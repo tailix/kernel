@@ -83,7 +83,8 @@ void kernel_info_init_from_multiboot2(
 
         for (
             const struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase *entry =
-                (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)tag->data;
+                (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)
+                KERNAUX_MULTIBOOT2_DATA(tag);
             (unsigned char*)entry < (unsigned char*)tag + tag->base.size;
             entry =
                 (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)
@@ -125,7 +126,7 @@ void kernel_info_init_from_multiboot2(
             panic("Too many modules in Multiboot 2 info.");
         }
 
-        unsigned int slen = strlen(tag->cmdline);
+        unsigned int slen = strlen((char*)KERNAUX_MULTIBOOT2_DATA(tag));
 
         if (slen > KERNEL_INFO_CMDLINE_SLEN_MAX) {
             panic("Multiboot 2 module cmd line is too long.");
@@ -134,7 +135,7 @@ void kernel_info_init_from_multiboot2(
         struct Kernel_Info_Module *const module =
             &kinfo->modules[kinfo->modules_count];
 
-        strcpy(module->cmdline, tag->cmdline);
+        strcpy(module->cmdline, (char*)KERNAUX_MULTIBOOT2_DATA(tag));
 
         module->base = tag->mod_start;
         module->limit = tag->mod_end;
