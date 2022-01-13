@@ -73,7 +73,7 @@ void kernel_info_init_finish(struct Kernel_Info *kinfo);
 
 void kernel_info_init_from_multiboot2(
     struct Kernel_Info *kinfo,
-    const struct KernAux_Multiboot2 *multiboot2_info
+    const struct KernAux_Multiboot2_Info *multiboot2_info
 );
 
 bool kernel_info_is_valid(const struct Kernel_Info *kinfo);

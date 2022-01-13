@@ -49,7 +49,7 @@ void kernel_info_init_finish(struct Kernel_Info *const kinfo)
 
 void kernel_info_init_from_multiboot2(
     struct Kernel_Info *kinfo,
-    const struct KernAux_Multiboot2 *multiboot2_info
+    const struct KernAux_Multiboot2_Info *multiboot2_info
 ) {
     KERNAUX_NOTNULL_RETURN(kinfo);
     KERNAUX_NOTNULL_RETURN(multiboot2_info);
@@ -57,7 +57,7 @@ void kernel_info_init_from_multiboot2(
 
     {
         const char *const cmdline =
-            KernAux_Multiboot2_boot_cmd_line(multiboot2_info);
+            KernAux_Multiboot2_Info_boot_cmd_line(multiboot2_info);
 
         if (cmdline) {
             assert(strlen(cmdline) <= KERNEL_INFO_CMDLINE_SLEN_MAX,
@@ -70,11 +70,11 @@ void kernel_info_init_from_multiboot2(
     }
 
     {
-        const struct KernAux_Multiboot2_Tag_MemoryMap *const tag =
-            (struct KernAux_Multiboot2_Tag_MemoryMap*)
-            KernAux_Multiboot2_first_tag_with_type(
+        const struct KernAux_Multiboot2_ITag_MemoryMap *const tag =
+            (struct KernAux_Multiboot2_ITag_MemoryMap*)
+            KernAux_Multiboot2_Info_first_tag_with_type(
                 multiboot2_info,
-                KERNAUX_MULTIBOOT2_TAGTYPE_MEMORY_MAP
+                KERNAUX_MULTIBOOT2_ITAG_MEMORY_MAP
             );
 
         if (!tag) {
@@ -82,12 +82,12 @@ void kernel_info_init_from_multiboot2(
         }
 
         for (
-            const struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase *entry =
-                (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)
+            const struct KernAux_Multiboot2_ITag_MemoryMap_EntryBase *entry =
+                (struct KernAux_Multiboot2_ITag_MemoryMap_EntryBase*)
                 KERNAUX_MULTIBOOT2_DATA(tag);
             (unsigned char*)entry < (unsigned char*)tag + tag->base.size;
             entry =
-                (struct KernAux_Multiboot2_Tag_MemoryMap_EntryBase*)
+                (struct KernAux_Multiboot2_ITag_MemoryMap_EntryBase*)
                 ((unsigned char*)entry + tag->entry_size)
         ) {
             if (kinfo->areas_count >= KERNEL_INFO_AREAS_MAX) {
@@ -108,18 +108,18 @@ void kernel_info_init_from_multiboot2(
     }
 
     for (
-        const struct KernAux_Multiboot2_Tag_Module *tag =
-            (struct KernAux_Multiboot2_Tag_Module*)
-            KernAux_Multiboot2_first_tag_with_type(
+        const struct KernAux_Multiboot2_ITag_Module *tag =
+            (struct KernAux_Multiboot2_ITag_Module*)
+            KernAux_Multiboot2_Info_first_tag_with_type(
                 multiboot2_info,
-                KERNAUX_MULTIBOOT2_TAGTYPE_MODULE
+                KERNAUX_MULTIBOOT2_ITAG_MODULE
             );
         tag;
-        tag = (struct KernAux_Multiboot2_Tag_Module*)
-            KernAux_Multiboot2_tag_with_type_after(
+        tag = (struct KernAux_Multiboot2_ITag_Module*)
+            KernAux_Multiboot2_Info_tag_with_type_after(
                 multiboot2_info,
-                KERNAUX_MULTIBOOT2_TAGTYPE_MODULE,
-                (struct KernAux_Multiboot2_TagBase*)tag
+                KERNAUX_MULTIBOOT2_ITAG_MODULE,
+                (struct KernAux_Multiboot2_ITagBase*)tag
             )
     ) {
         if (kinfo->modules_count >= KERNEL_INFO_MODULES_MAX) {
