@@ -28,13 +28,13 @@ static struct KernAux_PFA pfa;
 static struct Paging paging;
 
 void main(
-    const unsigned long multiboot2_magic,
+    const unsigned long multiboot2_info_magic,
     const struct KernAux_Multiboot2_Info *const multiboot2_info
 ) {
     kernaux_assert_cb = kernaux_assert_fn;
 
-    if (multiboot2_magic != KERNAUX_MULTIBOOT2_MAGIC) {
-        panic("Multiboot 2 magic number is invalid.");
+    if (multiboot2_info_magic != KERNAUX_MULTIBOOT2_INFO_MAGIC) {
+        panic("Multiboot 2 info magic number is invalid.");
     }
 
     KernAux_Multiboot2_Info_print(multiboot2_info, kernaux_console_printf);
