@@ -1,4 +1,5 @@
 CCPREFIX = /home/kotovalexarian/repos/global/tailix/libkernaux/vendor/cross/bin/i386-elf-
+LIBKERNAUX_PREFIX = /opt/libkernaux/i386
 
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
@@ -14,7 +15,7 @@ CFLAGS = \
 	-ffreestanding       \
 	-fno-builtin         \
 	-fno-stack-protector \
-	-I/usr/local/include
+	-I$(LIBKERNAUX_PREFIX)/include
 
 CPPFLAGS = \
 	-DKERNAUX_ENABLE_ASSERT \
@@ -50,7 +51,7 @@ clean:
 	rm -f $(KERNEL) $(OBJS)
 
 $(KERNEL): $(OBJS)
-	$(CC) -T linker.ld -o $@ $^ -ffreestanding -nostdlib -lgcc -lkernaux -Wl,-L/usr/local/lib
+	$(CC) -T linker.ld -o $@ $^ -ffreestanding -nostdlib -lgcc -lkernaux -Wl,-L$(LIBKERNAUX_PREFIX)/lib
 	grub-file --is-x86-multiboot2 $@
 
 %.c.o: %.c
