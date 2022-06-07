@@ -1,4 +1,4 @@
-CCPREFIX = /home/kotovalexarian/repos/global/tailix/libkernaux/vendor/cross/root/bin/i386-elf-
+CCPREFIX = /home/kotovalexarian/repos/global/tailix/cross/root/bin/i386-elf-
 
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
