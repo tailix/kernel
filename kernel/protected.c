@@ -2,7 +2,6 @@
 
 #include "config.h"
 #include "interrupts/main.h"
-#include "interrupts/hwint.h"
 #include "tss.h"
 
 #include <kernaux/drivers/console.h>

@@ -1,7 +1,5 @@
 #include "main.h"
 
-#include "syscall.h"
-
 #include <kernaux/drivers/console.h>
 
 static void syscall_do_exit(struct IsrRegisters regs);

@@ -1,4 +1,5 @@
 #include "../config.h"
+#include "config.h"
 
 %macro INTERRUPT_NOERRCODE 2
 [GLOBAL interrupt_%2]

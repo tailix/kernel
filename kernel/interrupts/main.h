@@ -1,5 +1,7 @@
-#ifndef KERNEL_INCLUDED_INTERRUPT
-#define KERNEL_INCLUDED_INTERRUPT 1
+#ifndef KERNEL_INCLUDED_INTERRUPTS_MAIN
+#define KERNEL_INCLUDED_INTERRUPTS_MAIN 1
+
+#include "config.h"
 
 struct IsrRegisters {
     unsigned int ds;                                     // Data segment selector
@@ -62,5 +64,26 @@ void interrupt_47();
 
 // Syscalls
 void interrupt_0x80();
+
+
+
+/*********
+ * hwint *
+ *********/
+
+typedef void(*hwint_handler_t)();
+
+void hwint_register_handler(unsigned int int_no, hwint_handler_t handler);
+void hwint_unregister_handler(unsigned int int_no);
+
+
+
+/***********
+ * syscall *
+ ***********/
+
+enum Kernel_Syscall_Number {
+    KERNEL_SYSCALL_EXIT = 0,
+};
 
 #endif
