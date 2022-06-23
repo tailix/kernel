@@ -1,11 +1,11 @@
 #include "timer.h"
 
 #include <kernaux/asm/i386.h>
-#include <kernaux/console.h>
+#include <kernaux/drivers/console.h>
 
 void timer_initialize(unsigned int frequency)
 {
-    kernaux_console_print("[INFO] timer: Initialize timer.\n");
+    kernaux_drivers_console_print("[INFO] timer: Initialize timer.\n");
 
     const unsigned int divisor = 1193180 / frequency;
 

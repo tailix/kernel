@@ -8,7 +8,7 @@
 #include "tasks.h"
 #include "elf.h"
 
-#include <kernaux/console.h>
+#include <kernaux/drivers/console.h>
 #include <kernaux/libc.h>
 #include <kernaux/multiboot2.h>
 #include <kernaux/pfa.h>
@@ -37,7 +37,8 @@ void main(
         panic("Multiboot 2 info magic number is invalid.");
     }
 
-    KernAux_Multiboot2_Info_print(multiboot2_info, kernaux_console_printf);
+    KernAux_Multiboot2_Info_print(multiboot2_info,
+                                  kernaux_drivers_console_printf);
 
     if (!KernAux_Multiboot2_Info_is_valid(multiboot2_info)) {
         panic("Multiboot 2 info is invalid.");
@@ -82,7 +83,7 @@ void main(
             tasks_switch_to_user(real_entrypoint);
         }
         else {
-            kernaux_console_print("[WARN] init: Invalid ELF header.\n");
+            kernaux_drivers_console_print("[WARN] init: Invalid ELF header.\n");
         }
     }
 }

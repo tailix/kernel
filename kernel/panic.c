@@ -1,7 +1,7 @@
 #include "panic.h"
 
 #include <kernaux/asm/i386.h>
-#include <kernaux/console.h>
+#include <kernaux/drivers/console.h>
 
 static void poweroff()
 {
@@ -10,7 +10,7 @@ static void poweroff()
 
 void panic(const char *const s)
 {
-    kernaux_console_printf("[FAIL] panic: %s\n", s);
+    kernaux_drivers_console_printf("[FAIL] panic: %s\n", s);
     poweroff();
 }
 
@@ -24,7 +24,7 @@ void kernaux_assert_fn(
     const int line,
     const char *const str
 ) {
-    kernaux_console_printf("[FAIL] assertion failed: %s:%u: \"%s\"\n",
-                           file, line, str);
+    kernaux_drivers_console_printf("[FAIL] assertion failed: %s:%u: \"%s\"\n",
+                                   file, line, str);
     poweroff();
 }

@@ -4,7 +4,7 @@
 #include "config.h"
 #include "pic.h"
 
-#include <kernaux/console.h>
+#include <kernaux/drivers/console.h>
 
 static hwint_handler_t handlers[INT_HWINT_COUNT] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -19,7 +19,7 @@ void hwint_handler(struct IsrRegisters regs)
     const hwint_handler_t handler = handlers[hwint_no];
 
     if (!handler) {
-        kernaux_console_printf("[WARN] hwint: Unhandled hardware interrupt: %u\n", hwint_no);
+        kernaux_drivers_console_printf("[WARN] hwint: Unhandled hardware interrupt: %u\n", hwint_no);
         return;
     }
 

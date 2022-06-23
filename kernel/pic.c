@@ -1,7 +1,7 @@
 #include "pic.h"
 
 #include <kernaux/asm/i386.h>
-#include <kernaux/console.h>
+#include <kernaux/drivers/console.h>
 
 #define MASTER_COMMAND 0x20
 #define MASTER_DATA    0x21
@@ -17,7 +17,7 @@ static unsigned char slave_irq_start  = 8;
 
 void pic_enable_all()
 {
-    kernaux_console_print("[INFO] pic: Enable all IRQs.\n");
+    kernaux_drivers_console_print("[INFO] pic: Enable all IRQs.\n");
 
     kernaux_asm_i386_outportb(MASTER_DATA, 0);
     kernaux_asm_i386_outportb(SLAVE_DATA,  0);
@@ -25,7 +25,7 @@ void pic_enable_all()
 
 void pic_disable_all()
 {
-    kernaux_console_print("[INFO] pic: Disable all IRQs.\n");
+    kernaux_drivers_console_print("[INFO] pic: Disable all IRQs.\n");
 
     kernaux_asm_i386_outportb(MASTER_DATA, 0xFF);
     kernaux_asm_i386_outportb(SLAVE_DATA,  0xFF);
@@ -34,11 +34,11 @@ void pic_disable_all()
 void pic_enable(const unsigned char line)
 {
     if (line >= IRQS_TOTAL) {
-        kernaux_console_printf("[WARN] pic: Invalid line %u.\n", line);
+        kernaux_drivers_console_printf("[WARN] pic: Invalid line %u.\n", line);
         return;
     }
 
-    kernaux_console_printf("[INFO] pic: Enable line %u.\n", line);
+    kernaux_drivers_console_printf("[INFO] pic: Enable line %u.\n", line);
 
     if (line < IRQS_COUNT) {
         const unsigned char mask = kernaux_asm_i386_inportb(MASTER_DATA);
@@ -53,11 +53,11 @@ void pic_enable(const unsigned char line)
 void pic_disable(const unsigned char line)
 {
     if (line >= IRQS_TOTAL) {
-        kernaux_console_printf("[WARN] pic: Invalid line %u.\n", line);
+        kernaux_drivers_console_printf("[WARN] pic: Invalid line %u.\n", line);
         return;
     }
 
-    kernaux_console_printf("[INFO] pic: Disable line %u.\n", line);
+    kernaux_drivers_console_printf("[INFO] pic: Disable line %u.\n", line);
 
     if (line < IRQS_COUNT) {
         const unsigned char mask = kernaux_asm_i386_inportb(MASTER_DATA);
@@ -72,7 +72,7 @@ void pic_disable(const unsigned char line)
 
 void pic_remap(const unsigned char new_master_irq_start, const unsigned char new_slave_irq_start)
 {
-    kernaux_console_print("[INFO] pic: Remap the IRQ table.\n");
+    kernaux_drivers_console_print("[INFO] pic: Remap the IRQ table.\n");
 
     // Remember IRQ numbers
     master_irq_start = new_master_irq_start;

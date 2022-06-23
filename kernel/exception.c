@@ -2,7 +2,7 @@
 #include "config.h"
 #include "panic.h"
 
-#include <kernaux/console.h>
+#include <kernaux/drivers/console.h>
 
 static const char *const messages[] = {
     "0  #DE - Divide Error Exception",
@@ -45,7 +45,7 @@ void exception_handler(struct IsrRegisters regs)
         return;
     }
 
-    kernaux_console_printf("[FAIL] exception: Unhandled protected-mode exception: %s\n", messages[regs.int_no]);
+    kernaux_drivers_console_printf("[FAIL] exception: Unhandled protected-mode exception: %s\n", messages[regs.int_no]);
 
     panic("Can not continue.");
 }

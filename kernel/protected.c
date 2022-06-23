@@ -6,7 +6,7 @@
 #include "tss.h"
 #include "pic.h"
 
-#include <kernaux/console.h>
+#include <kernaux/drivers/console.h>
 #include <kernaux/libc.h>
 
 struct GdtPointer {
@@ -56,7 +56,7 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     pic_remap(32, 40);
     pic_disable_all();
 
-    kernaux_console_print("[INFO] protected: Setup GDT.\n");
+    kernaux_drivers_console_print("[INFO] protected: Setup GDT.\n");
 
     gdt_set_gate(GDT_NULL_INDEX,      0, 0x00000000, 0,    0);
     gdt_set_gate(GDT_KERNEL_CS_INDEX, 0, 0xFFFFFFFF, 0x9A, 0xCF);
@@ -66,7 +66,7 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
 
     tss_write_to_gdt(kinfo, &gdt_entries[GDT_TSS_INDEX]);
 
-    kernaux_console_print("[INFO] protected: Setup IDT.\n");
+    kernaux_drivers_console_print("[INFO] protected: Setup IDT.\n");
 
     memset(idt_entries, 0, sizeof(idt_entries));
 
@@ -125,25 +125,25 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
 
     idt_set_gate(INT_SYSCALL, (unsigned int)interrupt_0x80, 0x08, 0x8E | 0x60);
 
-    kernaux_console_print("[INFO] protected: Load GDT.\n");
+    kernaux_drivers_console_print("[INFO] protected: Load GDT.\n");
 
     gdt_pointer.limit = sizeof(struct GdtEntry) * GDT_SIZE - 1;
     gdt_pointer.base  = (unsigned int)&gdt_entries;
 
     gdt_flush(&gdt_pointer);
 
-    kernaux_console_print("[INFO] protected: Load IDT.\n");
+    kernaux_drivers_console_print("[INFO] protected: Load IDT.\n");
 
     idt_pointer.limit = sizeof(struct IdtEntry) * IDT_SIZE - 1;
     idt_pointer.base  = (unsigned int)&idt_entries;
 
     idt_flush(&idt_pointer);
 
-    kernaux_console_print("[INFO] protected: Load TSS.\n");
+    kernaux_drivers_console_print("[INFO] protected: Load TSS.\n");
 
     tss_flush();
 
-    kernaux_console_print("[INFO] protected: Enable interrupts.\n");
+    kernaux_drivers_console_print("[INFO] protected: Enable interrupts.\n");
 
     asm volatile ("sti");
 }
