@@ -1,8 +1,8 @@
 #include "protected.h"
 
 #include "config.h"
-#include "interrupt.h"
-#include "hwint.h"
+#include "interrupts/main.h"
+#include "interrupts/hwint.h"
 #include "tss.h"
 
 #include <kernaux/drivers/console.h>

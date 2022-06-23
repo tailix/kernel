@@ -39,11 +39,10 @@ OBJS += protected.c.o protected.asm.cpp.o
 OBJS += tss.c.o tss.asm.cpp.o
 OBJS += tasks.asm.cpp.o
 
-OBJS += interrupt.asm.cpp.o
-
-OBJS += exception.c.o
-OBJS += hwint.c.o
-OBJS += syscall.c.o
+OBJS += interrupts/main.asm.cpp.o
+OBJS += interrupts/exception.c.o
+OBJS += interrupts/hwint.c.o
+OBJS += interrupts/syscall.c.o
 
 all: $(KERNEL)
 

@@ -1,7 +1,7 @@
 #include "hwint.h"
 
-#include "interrupt.h"
-#include "config.h"
+#include "main.h"
+#include "../config.h"
 
 #include <kernaux/drivers/console.h>
 #include <kernaux/drivers/intel_8259_pic.h>

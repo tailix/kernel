@@ -1,7 +1,7 @@
 #ifndef KERNEL_INCLUDED_TIMER
 #define KERNEL_INCLUDED_TIMER 1
 
-#include "hwint.h"
+#include "interrupts/hwint.h"
 
 typedef hwint_handler_t timer_handler_t;
 

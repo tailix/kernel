@@ -1,4 +1,4 @@
-#include "interrupt.h"
+#include "main.h"
 
 #include "syscall.h"
 

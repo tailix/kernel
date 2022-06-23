@@ -1,6 +1,6 @@
-#include "interrupt.h"
-#include "config.h"
-#include "panic.h"
+#include "main.h"
+#include "../config.h"
+#include "../panic.h"
 
 #include <kernaux/drivers/console.h>
 
