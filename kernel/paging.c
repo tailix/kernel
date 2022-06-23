@@ -80,7 +80,7 @@ void mapping(
     const uint32_t virt,
     const uint32_t phys
 ) {
-    KERNAUX_NOTNULL_RETURN(paging);
+    KERNAUX_ASSERT(paging);
 
     const size_t pde_index = KERNAUX_ARCH_I386_ADDR_TO_PDE_INDEX(virt);
     const size_t pte_index = KERNAUX_ARCH_I386_ADDR_TO_PTE_INDEX(virt);
