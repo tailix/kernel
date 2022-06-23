@@ -4,9 +4,9 @@
 #include "interrupt.h"
 #include "hwint.h"
 #include "tss.h"
-#include "pic.h"
 
 #include <kernaux/drivers/console.h>
+#include <kernaux/drivers/intel_8259_pic.h>
 #include <kernaux/libc.h>
 
 struct GdtPointer {
@@ -53,8 +53,8 @@ void idt_flush(const struct IdtPointer *pointer);
 
 void protected_initialize(const struct Kernel_Info *const kinfo)
 {
-    pic_remap(32, 40);
-    pic_disable_all();
+    kernaux_drivers_intel_8259_pic_remap(32, 40);
+    kernaux_drivers_intel_8259_pic_disable_all();
 
     kernaux_drivers_console_print("[INFO] protected: Setup GDT.\n");
 

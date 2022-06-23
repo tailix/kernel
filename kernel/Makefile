@@ -32,7 +32,6 @@ OBJS += paging.c.o
 OBJS += info.c.o
 
 # Built-in drivers
-OBJS += pic.c.o
 OBJS += timer.c.o
 
 OBJS += protected.c.o protected.asm.cpp.o
