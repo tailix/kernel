@@ -72,6 +72,8 @@ void main(
 
     protected_initialize(&kinfo);
 
+    kernaux_drivers_console_print("[INFO] main: Finished.\n");
+
     if (kinfo.modules_count > 0) {
         const struct Kernel_ELF_Header *const elf_header =
             (void*)kinfo.modules[0].base;
@@ -83,7 +85,7 @@ void main(
             tasks_switch_to_user(real_entrypoint);
         }
         else {
-            kernaux_drivers_console_print("[WARN] init: Invalid ELF header.\n");
+            kernaux_drivers_console_print("[WARN] main: Invalid ELF header.\n");
         }
     }
 }
