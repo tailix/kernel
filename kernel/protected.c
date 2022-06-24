@@ -50,33 +50,28 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
 
     kernaux_drivers_console_print("[INFO] protected: Setup GDT.\n");
     gdt_set_gates();
-
     tss_write_to_gdt(kinfo, &gdt_entries[GDT_TSS_INDEX]);
 
     kernaux_drivers_console_print("[INFO] protected: Setup IDT.\n");
     idt_set_gates();
 
     kernaux_drivers_console_print("[INFO] protected: Load GDT.\n");
-
     gdt_pointer.limit = sizeof(struct KernAux_Arch_I386_DTE) * GDT_SIZE - 1;
     gdt_pointer.base  = (unsigned int)&gdt_entries;
-
     gdt_flush(&gdt_pointer);
 
     kernaux_drivers_console_print("[INFO] protected: Load IDT.\n");
-
     idt_pointer.limit = sizeof(struct IdtEntry) * IDT_SIZE - 1;
     idt_pointer.base  = (unsigned int)&idt_entries;
-
     idt_flush(&idt_pointer);
 
     kernaux_drivers_console_print("[INFO] protected: Load TSS.\n");
-
     tss_flush();
 
     kernaux_drivers_console_print("[INFO] protected: Enable interrupts.\n");
-
     asm volatile ("sti");
+
+    kernaux_drivers_console_print("[INFO] protected: Finished.\n");
 }
 
 void gdt_set_gates()
