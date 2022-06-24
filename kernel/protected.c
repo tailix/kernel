@@ -4,6 +4,7 @@
 #include "interrupts/main.h"
 #include "tss.h"
 
+#include <kernaux/arch/i386.h>
 #include <kernaux/drivers/console.h>
 #include <kernaux/drivers/intel_8259_pic.h>
 #include <kernaux/libc.h>
@@ -20,15 +21,6 @@ struct IdtPointer {
 }
 __attribute__((packed));
 
-struct GdtEntry {
-    unsigned short limit_low;
-    unsigned short base_low;
-    unsigned char  base_middle;
-    unsigned char  access;
-    unsigned char  granularity;
-    unsigned char  base_high;
-};
-
 struct IdtEntry {
     unsigned short base_lo;
     unsigned short sel;
@@ -40,10 +32,10 @@ struct IdtEntry {
 static struct GdtPointer gdt_pointer;
 static struct IdtPointer idt_pointer;
 
-static struct GdtEntry gdt_entries[GDT_SIZE];
+static struct KernAux_Arch_I386_DTE gdt_entries[GDT_SIZE];
 static struct IdtEntry idt_entries[IDT_SIZE];
 
-static void gdt_set_gate(int num, unsigned int base, unsigned int limit, unsigned char access, unsigned char gran);
+static void gdt_set_gates();
 
 static void idt_set_gate(unsigned char num, unsigned int base, unsigned short sel, unsigned char flags);
 
@@ -56,12 +48,7 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     kernaux_drivers_intel_8259_pic_disable_all();
 
     kernaux_drivers_console_print("[INFO] protected: Setup GDT.\n");
-
-    gdt_set_gate(GDT_NULL_INDEX,      0, 0x00000000, 0,    0);
-    gdt_set_gate(GDT_KERNEL_CS_INDEX, 0, 0xFFFFFFFF, 0x9A, 0xCF);
-    gdt_set_gate(GDT_KERNEL_DS_INDEX, 0, 0xFFFFFFFF, 0x92, 0xCF);
-    gdt_set_gate(GDT_USER_CS_INDEX,   0, 0xFFFFFFFF, 0xFA, 0xCF);
-    gdt_set_gate(GDT_USER_DS_INDEX,   0, 0xFFFFFFFF, 0xF2, 0xCF);
+    gdt_set_gates();
 
     tss_write_to_gdt(kinfo, &gdt_entries[GDT_TSS_INDEX]);
 
@@ -126,7 +113,7 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
 
     kernaux_drivers_console_print("[INFO] protected: Load GDT.\n");
 
-    gdt_pointer.limit = sizeof(struct GdtEntry) * GDT_SIZE - 1;
+    gdt_pointer.limit = sizeof(struct KernAux_Arch_I386_DTE) * GDT_SIZE - 1;
     gdt_pointer.base  = (unsigned int)&gdt_entries;
 
     gdt_flush(&gdt_pointer);
@@ -147,18 +134,83 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     asm volatile ("sti");
 }
 
-void gdt_set_gate(int num, unsigned int base, unsigned int limit, unsigned char access, unsigned char gran)
+void gdt_set_gates()
 {
-    gdt_entries[num].base_low    = (base & 0xFFFF);
-    gdt_entries[num].base_middle = (base >> 16) & 0xFF;
-    gdt_entries[num].base_high   = (base >> 24) & 0xFF;
+    memset(gdt_entries, 0, sizeof(gdt_entries));
 
-    gdt_entries[num].limit_low   = (limit & 0xFFFF);
-    gdt_entries[num].granularity = (limit >> 16) & 0x0F;
+    gdt_entries[GDT_NULL_INDEX].always_1 = 1;
 
-    gdt_entries[num].granularity |= gran & 0xF0;
+    gdt_entries[GDT_KERNEL_CS_INDEX] = (struct KernAux_Arch_I386_DTE){
+        .base_low               = 0,
+        .base_high              = 0,
+        .limit_low              = 0xFFFF,
+        .limit_high             = 0xF,
+        .available              = 0,
+        .always_0               = 0,
+        .big                    = 1,
+        .gran                   = 1,
+        .accessed               = 0,
+        .read_write             = 1,
+        .conforming_expand_down = 0,
+        .code                   = 1,
+        .always_1               = 1,
+        .DPL                    = 0,
+        .present                = 1,
+    };
 
-    gdt_entries[num].access = access;
+    gdt_entries[GDT_KERNEL_DS_INDEX] = (struct KernAux_Arch_I386_DTE){
+        .base_low               = 0,
+        .base_high              = 0,
+        .limit_low              = 0xFFFF,
+        .limit_high             = 0xF,
+        .available              = 0,
+        .always_0               = 0,
+        .big                    = 1,
+        .gran                   = 1,
+        .accessed               = 0,
+        .read_write             = 1,
+        .conforming_expand_down = 0,
+        .code                   = 0,
+        .always_1               = 1,
+        .DPL                    = 0,
+        .present                = 1,
+    };
+
+    gdt_entries[GDT_USER_CS_INDEX] = (struct KernAux_Arch_I386_DTE){
+        .base_low               = 0,
+        .base_high              = 0,
+        .limit_low              = 0xFFFF,
+        .limit_high             = 0xF,
+        .available              = 0,
+        .always_0               = 0,
+        .big                    = 1,
+        .gran                   = 1,
+        .accessed               = 0,
+        .read_write             = 1,
+        .conforming_expand_down = 0,
+        .code                   = 1,
+        .always_1               = 1,
+        .DPL                    = 3,
+        .present                = 1,
+    };
+
+    gdt_entries[GDT_USER_DS_INDEX] = (struct KernAux_Arch_I386_DTE){
+        .base_low               = 0,
+        .base_high              = 0,
+        .limit_low              = 0xFFFF,
+        .limit_high             = 0xF,
+        .available              = 0,
+        .always_0               = 0,
+        .big                    = 1,
+        .gran                   = 1,
+        .accessed               = 0,
+        .read_write             = 1,
+        .conforming_expand_down = 0,
+        .code                   = 0,
+        .always_1               = 1,
+        .DPL                    = 3,
+        .present                = 1,
+    };
 }
 
 void idt_set_gate(unsigned char num, unsigned int base, unsigned short sel, unsigned char flags)
