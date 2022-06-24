@@ -41,8 +41,6 @@ static void idt_set_gates();
 
 static void idt_set_gate(unsigned char num, unsigned int base, unsigned short sel, unsigned char flags);
 
-void gdt_flush(const struct GdtPointer *pointer);
-
 void protected_initialize(const struct Kernel_Info *const kinfo)
 {
     kernaux_drivers_intel_8259_pic_remap(32, 40);
@@ -58,7 +56,11 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     kernaux_drivers_console_print("[INFO] protected: Load GDT.\n");
     gdt_pointer.limit = sizeof(struct KernAux_Arch_I386_DTE) * GDT_SIZE - 1;
     gdt_pointer.base  = (unsigned int)&gdt_entries;
-    gdt_flush(&gdt_pointer);
+    kernaux_asm_i386_flush_gdt(
+        (uint32_t)&gdt_pointer,
+        GDT_KERNEL_DS_SELECTOR,
+        GDT_KERNEL_CS_SELECTOR
+    );
 
     kernaux_drivers_console_print("[INFO] protected: Load IDT.\n");
     idt_pointer.limit = sizeof(struct IdtEntry) * IDT_SIZE - 1;

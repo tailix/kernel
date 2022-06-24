@@ -34,7 +34,7 @@ OBJS += info.c.o
 # Built-in drivers
 OBJS += timer.c.o
 
-OBJS += protected.c.o protected.asm.cpp.o
+OBJS += protected.c.o
 
 OBJS += tss.c.o tss.asm.cpp.o
 OBJS += tasks.asm.cpp.o
