@@ -5,6 +5,7 @@
 #include "tss.h"
 
 #include <kernaux/arch/i386.h>
+#include <kernaux/asm/i386.h>
 #include <kernaux/drivers/console.h>
 #include <kernaux/drivers/intel_8259_pic.h>
 #include <kernaux/libc.h>
@@ -41,7 +42,6 @@ static void idt_set_gates();
 static void idt_set_gate(unsigned char num, unsigned int base, unsigned short sel, unsigned char flags);
 
 void gdt_flush(const struct GdtPointer *pointer);
-void idt_flush(const struct IdtPointer *pointer);
 
 void protected_initialize(const struct Kernel_Info *const kinfo)
 {
@@ -63,7 +63,7 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     kernaux_drivers_console_print("[INFO] protected: Load IDT.\n");
     idt_pointer.limit = sizeof(struct IdtEntry) * IDT_SIZE - 1;
     idt_pointer.base  = (unsigned int)&idt_entries;
-    idt_flush(&idt_pointer);
+    kernaux_asm_i386_flush_idt((uint32_t)&idt_pointer);
 
     kernaux_drivers_console_print("[INFO] protected: Load TSS.\n");
     tss_flush();
