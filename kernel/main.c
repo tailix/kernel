@@ -9,7 +9,6 @@
 #include "elf.h"
 
 #include <kernaux/drivers/console.h>
-#include <kernaux/libc.h>
 #include <kernaux/multiboot2.h>
 #include <kernaux/pfa.h>
 

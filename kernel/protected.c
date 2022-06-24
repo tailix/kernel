@@ -8,7 +8,8 @@
 #include <kernaux/asm/i386.h>
 #include <kernaux/drivers/console.h>
 #include <kernaux/drivers/intel_8259_pic.h>
-#include <kernaux/libc.h>
+
+#include <string.h>
 
 struct GdtPointer {
     unsigned short limit;

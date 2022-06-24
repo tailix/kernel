@@ -3,7 +3,8 @@
 
 #include <kernaux/assert.h>
 #include <kernaux/drivers/console.h>
-#include <kernaux/libc.h>
+
+#include <string.h>
 
 static bool cmdline_terminated(const char *s);
 

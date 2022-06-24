@@ -3,7 +3,8 @@
 #include "config.h"
 
 #include <kernaux/arch/i386.h>
-#include <kernaux/libc.h>
+
+#include <string.h>
 
 static struct KernAux_Arch_I386_TSS tss;
 
