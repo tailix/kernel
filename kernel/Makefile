@@ -36,7 +36,6 @@ OBJS += timer.c.o
 
 OBJS += protected.c.o
 
-OBJS += tss.c.o
 OBJS += tasks.asm.cpp.o
 
 OBJS += interrupts/main.asm.cpp.o

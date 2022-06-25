@@ -1,8 +1,8 @@
 #include "protected.h"
 
 #include "config.h"
+#include "info.h"
 #include "interrupts/main.h"
-#include "tss.h"
 
 #include <kernaux/arch/i386.h>
 #include <kernaux/asm/i386.h>
@@ -37,6 +37,8 @@ static struct IdtPointer idt_pointer;
 static struct KernAux_Arch_I386_DTE gdt_entries[GDT_SIZE];
 static struct IdtEntry idt_entries[IDT_SIZE];
 
+static struct KernAux_Arch_I386_TSS tss;
+
 static void gdt_set_gates();
 static void idt_set_gates();
 
@@ -49,10 +51,14 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
 
     kernaux_drivers_console_print("[INFO] protected: Setup GDT.\n");
     gdt_set_gates();
-    tss_write_to_gdt(kinfo, &gdt_entries[GDT_TSS_INDEX]);
 
     kernaux_drivers_console_print("[INFO] protected: Setup IDT.\n");
     idt_set_gates();
+
+    kernaux_drivers_console_print("[INFO] protected: Setup TSS.\n");
+    memset(&tss, 0, sizeof(tss));
+    tss.ss0 = GDT_KERNEL_DS_SELECTOR;
+    tss.esp0 = kinfo->kernel_stack_start + kinfo->kernel_stack_size;
 
     kernaux_drivers_console_print("[INFO] protected: Load GDT.\n");
     gdt_pointer.limit = sizeof(struct KernAux_Arch_I386_DTE) * GDT_SIZE - 1;
@@ -151,6 +157,27 @@ void gdt_set_gates()
         .conforming_expand_down = 0,
         .code                   = 0,
         .always_1               = 1,
+        .DPL                    = 3,
+        .present                = 1,
+    };
+
+    uint32_t base = (uint32_t)&tss;
+    uint32_t limit = sizeof(tss);
+
+    gdt_entries[GDT_TSS_INDEX] = (struct KernAux_Arch_I386_DTE){
+        .base_low               = base & 0xFFFFFF,
+        .base_high              = (base & 0xFF000000) >> 24,
+        .limit_low              = limit & 0xFFFF,
+        .limit_high             = (limit & 0xF0000) >> 16,
+        .available              = 0,
+        .always_0               = 0,
+        .big                    = 0,
+        .gran                   = 0,
+        .accessed               = 1,
+        .read_write             = 0,
+        .conforming_expand_down = 0,
+        .code                   = 1,
+        .always_1               = 1, // was 0
         .DPL                    = 3,
         .present                = 1,
     };
