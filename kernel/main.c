@@ -6,7 +6,6 @@
 #include "protected.h"
 
 #include "tasks.h"
-#include "elf.h"
 
 #include <kernaux/drivers/console.h>
 #include <kernaux/multiboot2.h>
@@ -72,19 +71,4 @@ void main(
     protected_initialize(&kinfo);
 
     kernaux_drivers_console_print("[INFO] main: Finished.\n");
-
-    if (kinfo.modules_count > 0) {
-        const struct Kernel_ELF_Header *const elf_header =
-            (void*)kinfo.modules[0].base;
-
-        if (Kernel_ELF_Header_is_valid(elf_header)) {
-            const unsigned long real_entrypoint =
-                kinfo.modules[0].base + elf_header->entrypoint;
-
-            tasks_switch_to_user(real_entrypoint);
-        }
-        else {
-            kernaux_drivers_console_print("[WARN] main: Invalid ELF header.\n");
-        }
-    }
 }
