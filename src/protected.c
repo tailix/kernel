@@ -74,8 +74,8 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     idt_pointer.base  = (unsigned int)&idt_entries;
     kernaux_asm_i386_flush_idt((uint32_t)&idt_pointer);
 
-    kernaux_drivers_console_print("[INFO] protected: Load TSS.\n");
-    kernaux_asm_i386_flush_tss(GDT_TSS_SELECTOR);
+    // kernaux_drivers_console_print("[INFO] protected: Load TSS.\n");
+    // kernaux_asm_i386_flush_tss(GDT_TSS_SELECTOR);
 
     kernaux_drivers_console_print("[INFO] protected: Enable interrupts.\n");
     asm volatile ("sti");
