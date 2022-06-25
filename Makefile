@@ -4,7 +4,7 @@ ROOTFS = rootfs
 GRUBCFG = $(ROOTFS)/boot/grub/grub.cfg
 KERNEL  = $(ROOTFS)/boot/tailix.multiboot2
 
-.PHONY: kernel/tailix.multiboot2
+.PHONY: src/tailix.multiboot2
 
 all: run0
 
@@ -16,13 +16,13 @@ run1: $(IMAGE)
 
 clean:
 	rm -f $(IMAGE) $(KERNEL)
-	make -C kernel clean
+	make -C src clean
 
 $(IMAGE): $(GRUBCFG) $(KERNEL)
 	grub-mkrescue $(ROOTFS) -o $@
 
-$(KERNEL): kernel/tailix.multiboot2
+$(KERNEL): src/tailix.multiboot2
 	cp $< $@
 
-kernel/tailix.multiboot2:
-	make -C kernel tailix.multiboot2
+src/tailix.multiboot2:
+	make -C src tailix.multiboot2
