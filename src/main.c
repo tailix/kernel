@@ -5,8 +5,6 @@
 #include "panic.h"
 #include "protected.h"
 
-#include "tasks.h"
-
 #include <kernaux/drivers/console.h>
 #include <kernaux/multiboot2.h>
 #include <kernaux/pfa.h>
