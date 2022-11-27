@@ -12,20 +12,8 @@
 #include <stdint.h>
 #include <string.h>
 
-struct GdtPointer {
-    uint16_t limit;
-    uint32_t base;
-}
-__attribute__((packed));
-
-struct IdtPointer {
-    uint16_t limit;
-    uint32_t base;
-}
-__attribute__((packed));
-
-static struct GdtPointer gdt_pointer;
-static struct IdtPointer idt_pointer;
+static struct KernAux_Arch_I386_DTR gdt_pointer;
+static struct KernAux_Arch_I386_DTR idt_pointer;
 
 static struct KernAux_Arch_I386_DTE  gdt_entries[GDT_SIZE];
 static struct KernAux_Arch_I386_IDTE idt_entries[IDT_SIZE];
@@ -54,8 +42,8 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     tss.esp0 = kinfo->kernel_stack_start + kinfo->kernel_stack_size;
 
     kernaux_drivers_console_print("[INFO] protected: Load GDT.\n");
-    gdt_pointer.limit = sizeof(struct KernAux_Arch_I386_DTE) * GDT_SIZE - 1;
-    gdt_pointer.base  = (uint32_t)&gdt_entries;
+    gdt_pointer.size = sizeof(struct KernAux_Arch_I386_DTE) * GDT_SIZE - 1;
+    gdt_pointer.offset  = (uint32_t)&gdt_entries;
     kernaux_asm_i386_flush_gdt(
         (uint32_t)&gdt_pointer,
         GDT_KERNEL_DS_SELECTOR,
@@ -63,8 +51,8 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     );
 
     kernaux_drivers_console_print("[INFO] protected: Load IDT.\n");
-    idt_pointer.limit = sizeof(struct KernAux_Arch_I386_IDTE) * IDT_SIZE - 1;
-    idt_pointer.base  = (uint32_t)&idt_entries;
+    idt_pointer.size = sizeof(struct KernAux_Arch_I386_IDTE) * IDT_SIZE - 1;
+    idt_pointer.offset  = (uint32_t)&idt_entries;
     kernaux_asm_i386_flush_idt((uint32_t)&idt_pointer);
 
     // kernaux_drivers_console_print("[INFO] protected: Load TSS.\n");
