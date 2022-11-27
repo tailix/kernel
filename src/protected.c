@@ -23,19 +23,11 @@ struct IdtPointer {
 }
 __attribute__((packed));
 
-struct IdtEntry {
-    unsigned short base_lo;
-    unsigned short sel;
-    unsigned char  always0;
-    unsigned char  flags;
-    unsigned short base_hi;
-};
-
 static struct GdtPointer gdt_pointer;
 static struct IdtPointer idt_pointer;
 
-static struct KernAux_Arch_I386_DTE gdt_entries[GDT_SIZE];
-static struct IdtEntry idt_entries[IDT_SIZE];
+static struct KernAux_Arch_I386_DTE  gdt_entries[GDT_SIZE];
+static struct KernAux_Arch_I386_IDTE idt_entries[IDT_SIZE];
 
 static struct KernAux_Arch_I386_TSS tss;
 
@@ -70,7 +62,7 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     );
 
     kernaux_drivers_console_print("[INFO] protected: Load IDT.\n");
-    idt_pointer.limit = sizeof(struct IdtEntry) * IDT_SIZE - 1;
+    idt_pointer.limit = sizeof(struct KernAux_Arch_I386_IDTE) * IDT_SIZE - 1;
     idt_pointer.base  = (unsigned int)&idt_entries;
     kernaux_asm_i386_flush_idt((uint32_t)&idt_pointer);
 
@@ -247,9 +239,9 @@ void idt_set_gates()
 
 void idt_set_gate(unsigned char num, unsigned int base, unsigned short sel, unsigned char flags)
 {
-    idt_entries[num].base_lo = base & 0xFFFF;
-    idt_entries[num].base_hi = (base >> 16) & 0xFFFF;
-    idt_entries[num].sel     = sel;
-    idt_entries[num].always0 = 0;
-    idt_entries[num].flags   = flags;
+    idt_entries[num].offset_low  = base & 0xFFFF;
+    idt_entries[num].offset_high = (base >> 16) & 0xFFFF;
+    idt_entries[num].selector    = sel;
+    idt_entries[num]._zero0      = 0;
+    idt_entries[num].flags       = flags;
 }
