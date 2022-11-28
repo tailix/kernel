@@ -5,7 +5,7 @@
 
 static void poweroff()
 {
-    kernaux_asm_i386_outportw(0x604, 0x2000);
+    kernaux_asm_x86_outportw(0x604, 0x2000);
 }
 
 void panic(const char *const s)
