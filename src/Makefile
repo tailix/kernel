@@ -25,7 +25,6 @@ CPPFLAGS = \
 # Architecture-dependent
 OBJS = start.s.o
 OBJS += main.c.o
-OBJS += poweroff.c.o
 OBJS += panic.c.o
 OBJS += paging.c.o
 

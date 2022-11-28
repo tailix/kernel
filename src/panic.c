@@ -1,14 +1,14 @@
 #include "panic.h"
-#include "poweroff.h"
 
 #include <kernaux/asm/i386.h>
 #include <kernaux/drivers/console.h>
+#include <kernaux/drivers/shutdown.h>
 #include <kernaux/drivers/qemu.h>
 
 void panic(const char *const s)
 {
     kernaux_drivers_console_printf("[FAIL] panic: %s\n", s);
-    poweroff();
+    kernaux_drivers_shutdown_poweroff();
 }
 
 void halt()
@@ -23,5 +23,5 @@ void kernaux_assert_fn(
 ) {
     kernaux_drivers_console_printf("[FAIL] assertion failed: %s:%u: \"%s\"\n",
                                    file, line, str);
-    poweroff();
+    kernaux_drivers_shutdown_poweroff();
 }
