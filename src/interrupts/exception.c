@@ -2,7 +2,6 @@
 #include "../panic.h"
 
 #include <kernaux/drivers/console.h>
-#include <kernaux/drivers/shutdown.h>
 
 static const char *const messages[] = {
     "0  #DE - Divide Error Exception",
@@ -42,11 +41,6 @@ static const char *const messages[] = {
 void exception_handler(struct IsrRegisters regs)
 {
     if (regs.int_no > INT_EXCEPTION_LAST) return;
-    if (regs.int_no == KERNAUX_DRIVERS_SHUTDOWN_INT &&
-        kernaux_drivers_shutdown_is_doing())
-    {
-        return;
-    }
 
     kernaux_drivers_console_printf(
         "[FAIL] exception: Unhandled protected-mode exception: %s\n",
