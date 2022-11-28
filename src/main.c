@@ -68,5 +68,5 @@ void main(
 
     protected_initialize(&kinfo);
 
-    kernaux_drivers_console_print("[INFO] main: Finished.\n");
+    kernaux_drivers_console_puts("[INFO] main: Finished.");
 }

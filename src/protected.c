@@ -30,18 +30,18 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     kernaux_drivers_intel_8259_pic_remap(32, 40);
     kernaux_drivers_intel_8259_pic_disable_all();
 
-    kernaux_drivers_console_print("[INFO] protected: Setup GDT.\n");
+    kernaux_drivers_console_puts("[INFO] protected: Setup GDT.");
     gdt_set_gates();
 
-    kernaux_drivers_console_print("[INFO] protected: Setup IDT.\n");
+    kernaux_drivers_console_puts("[INFO] protected: Setup IDT.");
     idt_set_gates();
 
-    kernaux_drivers_console_print("[INFO] protected: Setup TSS.\n");
+    kernaux_drivers_console_puts("[INFO] protected: Setup TSS.");
     memset(&tss, 0, sizeof(tss));
     tss.ss0 = GDT_KERNEL_DS_SELECTOR;
     tss.esp0 = kinfo->kernel_stack_start + kinfo->kernel_stack_size;
 
-    kernaux_drivers_console_print("[INFO] protected: Load GDT.\n");
+    kernaux_drivers_console_puts("[INFO] protected: Load GDT.");
     gdt_pointer.size = sizeof(struct KernAux_Arch_I386_DTE) * GDT_SIZE - 1;
     gdt_pointer.offset  = (uint32_t)&gdt_entries;
     kernaux_asm_i386_flush_gdt(
@@ -50,18 +50,18 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
         GDT_KERNEL_CS_SELECTOR
     );
 
-    kernaux_drivers_console_print("[INFO] protected: Load IDT.\n");
+    kernaux_drivers_console_puts("[INFO] protected: Load IDT.");
     idt_pointer.size = sizeof(struct KernAux_Arch_I386_IDTE) * IDT_SIZE - 1;
     idt_pointer.offset  = (uint32_t)&idt_entries;
     kernaux_asm_i386_flush_idt((uint32_t)&idt_pointer);
 
-    // kernaux_drivers_console_print("[INFO] protected: Load TSS.\n");
+    // kernaux_drivers_console_puts("[INFO] protected: Load TSS.");
     // kernaux_asm_i386_flush_tss(GDT_TSS_SELECTOR);
 
-    kernaux_drivers_console_print("[INFO] protected: Enable interrupts.\n");
+    kernaux_drivers_console_puts("[INFO] protected: Enable interrupts.");
     asm volatile ("sti");
 
-    kernaux_drivers_console_print("[INFO] protected: Finished.\n");
+    kernaux_drivers_console_puts("[INFO] protected: Finished.");
 }
 
 void gdt_set_gates()

@@ -6,7 +6,7 @@
 
 void timer_initialize(unsigned int frequency)
 {
-    kernaux_drivers_console_print("[INFO] timer: Initialize timer.\n");
+    kernaux_drivers_console_puts("[INFO] timer: Initialize timer.");
     kernaux_drivers_intel_8253_pit_initialize(frequency);
 }
 
