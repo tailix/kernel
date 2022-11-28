@@ -228,9 +228,8 @@ void idt_set_gates()
 
 void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags)
 {
-    idt_entries[num].offset_low  = base & 0xFFFF;
-    idt_entries[num].offset_high = (base >> 16) & 0xFFFF;
-    idt_entries[num].selector    = sel;
-    idt_entries[num]._zero0      = 0;
-    idt_entries[num].flags       = flags;
+    KernAux_Arch_I386_IDTE_set_offset(&idt_entries[num], base);
+    idt_entries[num].selector = sel;
+    idt_entries[num]._zero0   = 0;
+    idt_entries[num].flags    = flags;
 }
