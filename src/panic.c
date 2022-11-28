@@ -1,12 +1,9 @@
 #include "panic.h"
+#include "poweroff.h"
 
 #include <kernaux/asm/i386.h>
 #include <kernaux/drivers/console.h>
-
-static void poweroff()
-{
-    kernaux_asm_x86_outportw(0x604, 0x2000);
-}
+#include <kernaux/drivers/qemu.h>
 
 void panic(const char *const s)
 {

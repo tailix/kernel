@@ -1,5 +1,6 @@
 #include "main.h"
 #include "../panic.h"
+#include "../poweroff.h"
 
 #include <kernaux/drivers/console.h>
 
@@ -40,11 +41,13 @@ static const char *const messages[] = {
 
 void exception_handler(struct IsrRegisters regs)
 {
-    if (regs.int_no > INT_EXCEPTION_LAST) {
-        return;
-    }
+    if (regs.int_no > INT_EXCEPTION_LAST) return;
+    if (regs.int_no == POWEROFF_INT && poweroff_doing) return;
 
-    kernaux_drivers_console_printf("[FAIL] exception: Unhandled protected-mode exception: %s\n", messages[regs.int_no]);
+    kernaux_drivers_console_printf(
+        "[FAIL] exception: Unhandled protected-mode exception: %s\n",
+        messages[regs.int_no]
+    );
 
     panic("Can not continue.");
 }
