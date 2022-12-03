@@ -1,7 +1,7 @@
 CCPREFIX = /home/kotovalexarian/repos/global/tailix/cross/root/bin/i386-elf-
 
-LIBKERNAUX_PREFIX = /opt/libkernaux/i386
-DRIVERS_PREFIX    = /opt/drivers/i386
+LIBKERNAUX_PREFIX = /opt/tailix/libkernaux/i386
+DRIVERS_PREFIX    = /opt/tailix/drivers/i386
 
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
