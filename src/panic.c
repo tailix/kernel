@@ -1,14 +1,13 @@
 #include "panic.h"
 
+#include <drivers/console.h>
+#include <drivers/shutdown.h>
 #include <kernaux/asm/i386.h>
-#include <kernaux/drivers/console.h>
-#include <kernaux/drivers/shutdown.h>
-#include <kernaux/drivers/qemu.h>
 
 void panic(const char *const s)
 {
-    kernaux_drivers_console_printf("[FAIL] panic: %s\n", s);
-    kernaux_drivers_shutdown_poweroff();
+    drivers_console_printf("[FAIL] panic: %s\n", s);
+    drivers_shutdown_poweroff();
 }
 
 void halt()
@@ -21,7 +20,7 @@ void kernaux_assert_fn(
     const int line,
     const char *const str
 ) {
-    kernaux_drivers_console_printf("[FAIL] assertion failed: %s:%u: \"%s\"\n",
-                                   file, line, str);
-    kernaux_drivers_shutdown_poweroff();
+    drivers_console_printf("[FAIL] assertion failed: %s:%u: \"%s\"\n",
+                           file, line, str);
+    drivers_shutdown_poweroff();
 }

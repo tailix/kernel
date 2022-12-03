@@ -1,8 +1,8 @@
 #include "info.h"
 #include "panic.h"
 
+#include <drivers/console.h>
 #include <kernaux/assert.h>
-#include <kernaux/drivers/console.h>
 
 #include <string.h>
 
@@ -156,21 +156,21 @@ void kernel_info_print(const struct Kernel_Info *const kinfo)
 {
     KERNAUX_ASSERT(kinfo);
 
-    kernaux_drivers_console_printf("Kernel info\n");
-    kernaux_drivers_console_printf("  cmdline: %s\n", kinfo->cmdline);
-    kernaux_drivers_console_printf("  modules: %lu\n", kinfo->modules_count);
-    kernaux_drivers_console_printf("  areas: %lu\n", kinfo->areas_count);
-    kernaux_drivers_console_printf("\n");
-    kernaux_drivers_console_printf("  offset: %lu\n", kinfo->kernel_offset);
-    kernaux_drivers_console_printf("  size: %lu\n", kinfo->kernel_size);
-    kernaux_drivers_console_printf("  phys base: %lu\n", kinfo->kernel_phys_base);
-    kernaux_drivers_console_printf("  virt base: %lu\n", kinfo->kernel_virt_base);
-    kernaux_drivers_console_printf("\n");
-    kernaux_drivers_console_printf("  modules size: %lu\n", kinfo->modules_total_size);
-    kernaux_drivers_console_printf("  kernel & modules size: %lu\n", kinfo->kernel_and_modules_total_size);
-    kernaux_drivers_console_printf("\n");
-    kernaux_drivers_console_printf("  stack start: %lu\n", kinfo->kernel_stack_start);
-    kernaux_drivers_console_printf("  stack size: %lu\n", kinfo->kernel_stack_size);
+    drivers_console_printf("Kernel info\n");
+    drivers_console_printf("  cmdline: %s\n", kinfo->cmdline);
+    drivers_console_printf("  modules: %lu\n", kinfo->modules_count);
+    drivers_console_printf("  areas: %lu\n", kinfo->areas_count);
+    drivers_console_printf("\n");
+    drivers_console_printf("  offset: %lu\n", kinfo->kernel_offset);
+    drivers_console_printf("  size: %lu\n", kinfo->kernel_size);
+    drivers_console_printf("  phys base: %lu\n", kinfo->kernel_phys_base);
+    drivers_console_printf("  virt base: %lu\n", kinfo->kernel_virt_base);
+    drivers_console_printf("\n");
+    drivers_console_printf("  modules size: %lu\n", kinfo->modules_total_size);
+    drivers_console_printf("  kernel & modules size: %lu\n", kinfo->kernel_and_modules_total_size);
+    drivers_console_printf("\n");
+    drivers_console_printf("  stack start: %lu\n", kinfo->kernel_stack_start);
+    drivers_console_printf("  stack size: %lu\n", kinfo->kernel_stack_size);
 }
 
 bool kernel_info_is_valid(const struct Kernel_Info *const kinfo)

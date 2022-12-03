@@ -5,7 +5,7 @@
 #include "panic.h"
 #include "protected.h"
 
-#include <kernaux/drivers/console.h>
+#include <drivers/console.h>
 #include <kernaux/multiboot2.h>
 #include <kernaux/pfa.h>
 
@@ -33,8 +33,7 @@ void main(
         panic("Multiboot 2 info magic number is invalid.");
     }
 
-    KernAux_Multiboot2_Info_print(multiboot2_info,
-                                  kernaux_drivers_console_printf);
+    KernAux_Multiboot2_Info_print(multiboot2_info, drivers_console_printf);
 
     if (!KernAux_Multiboot2_Info_is_valid(multiboot2_info)) {
         panic("Multiboot 2 info is invalid.");
@@ -68,5 +67,5 @@ void main(
 
     protected_initialize(&kinfo);
 
-    kernaux_drivers_console_puts("[INFO] main: Finished.");
+    drivers_console_puts("[INFO] main: Finished.");
 }

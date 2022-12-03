@@ -1,13 +1,13 @@
 #include "timer.h"
 
+#include <drivers/console.h>
+#include <drivers/intel_8253_pit.h>
 #include <kernaux/asm/i386.h>
-#include <kernaux/drivers/console.h>
-#include <kernaux/drivers/intel_8253_pit.h>
 
 void timer_initialize(unsigned int frequency)
 {
-    kernaux_drivers_console_puts("[INFO] timer: Initialize timer.");
-    kernaux_drivers_intel_8253_pit_initialize(frequency);
+    drivers_console_puts("[INFO] timer: Initialize timer.");
+    drivers_intel_8253_pit_initialize(frequency);
 }
 
 void timer_register_handler(timer_handler_t handler)
