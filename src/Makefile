@@ -21,8 +21,8 @@ CFLAGS = \
 	-I$(DRIVERS_PREFIX)/include
 
 CPPFLAGS = \
-	-DKERNAUX_ENABLE_ASSERT \
-	-DKERNAUX_ENABLE_GUARD
+	-DKERNAUX_DEBUG \
+	-DKERNAUX_BITFIELDS
 
 # Architecture-dependent
 OBJS = start.s.o

@@ -89,33 +89,33 @@ void mapping(
     struct KernAux_Arch_I386_PageDir   *const page_dir   = &paging->page_dir;
     struct KernAux_Arch_I386_PageTable *const page_table = &paging->page_tables[pde_index];
 
-    struct KernAux_Arch_I386_PDE *const pde = &page_dir->pdes[pde_index];
-    struct KernAux_Arch_I386_PTE *const pte = &page_table->ptes[pte_index];
+    union KernAux_Arch_I386_PDE *const pde = &page_dir->pdes[pde_index];
+    union KernAux_Arch_I386_PTE *const pte = &page_table->ptes[pte_index];
 
-    if (!pde->present) {
-        pde->addr = KERNAUX_ARCH_I386_ADDR_TO_PDE_ADDR(page_table);
+    if (!pde->bitfields.present) {
+        pde->bitfields.addr = KERNAUX_ARCH_I386_ADDR_TO_PDE_ADDR(page_table);
 
-        pde->available1     = 0;
-        pde->page_size      = 0;
-        pde->available0     = 0;
-        pde->accessed       = 0;
-        pde->cache_disabled = 0;
-        pde->write_through  = 0;
-        pde->user           = 0;
-        pde->writable       = 1;
-        pde->present        = 1;
+        pde->bitfields.available1     = 0;
+        pde->bitfields.page_size      = 0;
+        pde->bitfields.available0     = 0;
+        pde->bitfields.accessed       = 0;
+        pde->bitfields.cache_disabled = 0;
+        pde->bitfields.write_through  = 0;
+        pde->bitfields.user           = 0;
+        pde->bitfields.writable       = 1;
+        pde->bitfields.present        = 1;
     }
 
-    pte->addr = KERNAUX_ARCH_I386_ADDR_TO_PTE_ADDR(phys);
+    pte->bitfields.addr = KERNAUX_ARCH_I386_ADDR_TO_PTE_ADDR(phys);
 
-    pte->available      = 1;
-    pte->global         = 1;
-    pte->attr_table     = 0;
-    pte->dirty          = 0;
-    pte->accessed       = 0;
-    pte->cache_disabled = 0;
-    pte->write_through  = 0;
-    pte->user           = 0;
-    pte->writable       = 1;
-    pte->present        = 1;
+    pte->bitfields.available      = 1;
+    pte->bitfields.global         = 1;
+    pte->bitfields.attr_table     = 0;
+    pte->bitfields.dirty          = 0;
+    pte->bitfields.accessed       = 0;
+    pte->bitfields.cache_disabled = 0;
+    pte->bitfields.write_through  = 0;
+    pte->bitfields.user           = 0;
+    pte->bitfields.writable       = 1;
+    pte->bitfields.present        = 1;
 }
