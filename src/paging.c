@@ -18,26 +18,26 @@ void paging_enable()
     uint32_t cr0 = kernaux_asm_i386_read_cr0();
     uint32_t cr4 = kernaux_asm_i386_read_cr4();
 
-    assert(cr0 & KERNAUX_ARCH_I386_CR0_PE, "The boot loader should have put us in protected mode.");
+    assert(cr0 & KERNAUX_ARCH_X86_CR0_PE, "The boot loader should have put us in protected mode.");
 
     // First clear PG and PGE flag, as PGE must be enabled after PG.
-    kernaux_asm_i386_write_cr0(cr0 & ~KERNAUX_ARCH_I386_CR0_PG);
-    kernaux_asm_i386_write_cr4(cr4 & ~(KERNAUX_ARCH_I386_CR4_PGE | KERNAUX_ARCH_I386_CR4_PSE));
+    kernaux_asm_i386_write_cr0(cr0 & ~KERNAUX_ARCH_X86_CR0_PG);
+    kernaux_asm_i386_write_cr4(cr4 & ~(KERNAUX_ARCH_X86_CR4_PGE | KERNAUX_ARCH_X86_CR4_PSE));
 
     cr0 = kernaux_asm_i386_read_cr0();
     cr4 = kernaux_asm_i386_read_cr4();
 
     // Our page table contains 4MB entries.
-    // cr4 |= KERNAUX_ARCH_I386_CR4_PSE;
+    // cr4 |= KERNAUX_ARCH_X86_CR4_PSE;
 
     kernaux_asm_i386_write_cr4(cr4);
 
     // First enable paging, then enable global page flag.
-    cr0 |= KERNAUX_ARCH_I386_CR0_PG;
+    cr0 |= KERNAUX_ARCH_X86_CR0_PG;
 
     kernaux_asm_i386_write_cr0(cr0);
 
-    cr0 |= KERNAUX_ARCH_I386_CR0_WP;
+    cr0 |= KERNAUX_ARCH_X86_CR0_WP;
 
     kernaux_asm_i386_write_cr0(cr0);
     kernaux_asm_i386_write_cr4(cr4);
