@@ -23,8 +23,6 @@ static struct KernAux_Arch_I386_TSS tss;
 static void gdt_set_gates();
 static void idt_set_gates();
 
-static void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags);
-
 void protected_initialize(const struct Kernel_Info *const kinfo)
 {
     drivers_intel_8259_pic_remap(32, 40);
@@ -164,80 +162,67 @@ void gdt_set_gates()
     };
 }
 
+#define init_intr(num, offset, sel, dpl) \
+    KernAux_Arch_I386_IDTE_init_intr(&idt_entries[num], (uint32_t)offset, sel, dpl)
+
 void idt_set_gates()
 {
     memset(idt_entries, 0, sizeof(idt_entries));
 
-    const uint16_t flags_base = 0x8e;
-    const uint16_t flags_priv_user = 0x60;
-
     // exception
-    idt_set_gate(0,  (uint32_t)interrupt_0,  0x08, flags_base);
-    idt_set_gate(1,  (uint32_t)interrupt_1,  0x08, flags_base);
-    idt_set_gate(2,  (uint32_t)interrupt_2,  0x08, flags_base);
-    idt_set_gate(3,  (uint32_t)interrupt_3,  0x08, flags_base);
-    idt_set_gate(4,  (uint32_t)interrupt_4,  0x08, flags_base);
-    idt_set_gate(5,  (uint32_t)interrupt_5,  0x08, flags_base);
-    idt_set_gate(6,  (uint32_t)interrupt_6,  0x08, flags_base);
-    idt_set_gate(7,  (uint32_t)interrupt_7,  0x08, flags_base);
-    idt_set_gate(8,  (uint32_t)interrupt_8,  0x08, flags_base);
-    idt_set_gate(9,  (uint32_t)interrupt_9,  0x08, flags_base);
-    idt_set_gate(10, (uint32_t)interrupt_10, 0x08, flags_base);
-    idt_set_gate(11, (uint32_t)interrupt_11, 0x08, flags_base);
-    idt_set_gate(12, (uint32_t)interrupt_12, 0x08, flags_base);
-    idt_set_gate(13, (uint32_t)interrupt_13, 0x08, flags_base);
-    idt_set_gate(14, (uint32_t)interrupt_14, 0x08, flags_base);
-    idt_set_gate(15, (uint32_t)interrupt_15, 0x08, flags_base);
-    idt_set_gate(16, (uint32_t)interrupt_16, 0x08, flags_base);
-    idt_set_gate(17, (uint32_t)interrupt_17, 0x08, flags_base);
-    idt_set_gate(18, (uint32_t)interrupt_18, 0x08, flags_base);
-    idt_set_gate(19, (uint32_t)interrupt_19, 0x08, flags_base);
-    idt_set_gate(20, (uint32_t)interrupt_20, 0x08, flags_base);
-    idt_set_gate(21, (uint32_t)interrupt_21, 0x08, flags_base);
-    idt_set_gate(22, (uint32_t)interrupt_22, 0x08, flags_base);
-    idt_set_gate(23, (uint32_t)interrupt_23, 0x08, flags_base);
-    idt_set_gate(24, (uint32_t)interrupt_24, 0x08, flags_base);
-    idt_set_gate(25, (uint32_t)interrupt_25, 0x08, flags_base);
-    idt_set_gate(26, (uint32_t)interrupt_26, 0x08, flags_base);
-    idt_set_gate(27, (uint32_t)interrupt_27, 0x08, flags_base);
-    idt_set_gate(28, (uint32_t)interrupt_28, 0x08, flags_base);
-    idt_set_gate(29, (uint32_t)interrupt_29, 0x08, flags_base);
-    idt_set_gate(30, (uint32_t)interrupt_30, 0x08, flags_base);
-    idt_set_gate(31, (uint32_t)interrupt_31, 0x08, flags_base);
+    init_intr(0,  interrupt_0,  0x08, 0);
+    init_intr(1,  interrupt_1,  0x08, 0);
+    init_intr(2,  interrupt_2,  0x08, 0);
+    init_intr(3,  interrupt_3,  0x08, 0);
+    init_intr(4,  interrupt_4,  0x08, 0);
+    init_intr(5,  interrupt_5,  0x08, 0);
+    init_intr(6,  interrupt_6,  0x08, 0);
+    init_intr(7,  interrupt_7,  0x08, 0);
+    init_intr(8,  interrupt_8,  0x08, 0);
+    init_intr(9,  interrupt_9,  0x08, 0);
+    init_intr(10, interrupt_10, 0x08, 0);
+    init_intr(11, interrupt_11, 0x08, 0);
+    init_intr(12, interrupt_12, 0x08, 0);
+    init_intr(13, interrupt_13, 0x08, 0);
+    init_intr(14, interrupt_14, 0x08, 0);
+    init_intr(15, interrupt_15, 0x08, 0);
+    init_intr(16, interrupt_16, 0x08, 0);
+    init_intr(17, interrupt_17, 0x08, 0);
+    init_intr(18, interrupt_18, 0x08, 0);
+    init_intr(19, interrupt_19, 0x08, 0);
+    init_intr(20, interrupt_20, 0x08, 0);
+    init_intr(21, interrupt_21, 0x08, 0);
+    init_intr(22, interrupt_22, 0x08, 0);
+    init_intr(23, interrupt_23, 0x08, 0);
+    init_intr(24, interrupt_24, 0x08, 0);
+    init_intr(25, interrupt_25, 0x08, 0);
+    init_intr(26, interrupt_26, 0x08, 0);
+    init_intr(27, interrupt_27, 0x08, 0);
+    init_intr(28, interrupt_28, 0x08, 0);
+    init_intr(29, interrupt_29, 0x08, 0);
+    init_intr(30, interrupt_30, 0x08, 0);
+    init_intr(31, interrupt_31, 0x08, 0);
 
     // hwint: master PIC
-    idt_set_gate(32, (uint32_t)interrupt_32, 0x08, flags_base);
-    idt_set_gate(33, (uint32_t)interrupt_33, 0x08, flags_base);
-    idt_set_gate(34, (uint32_t)interrupt_34, 0x08, flags_base);
-    idt_set_gate(35, (uint32_t)interrupt_35, 0x08, flags_base);
-    idt_set_gate(36, (uint32_t)interrupt_36, 0x08, flags_base);
-    idt_set_gate(37, (uint32_t)interrupt_37, 0x08, flags_base);
-    idt_set_gate(38, (uint32_t)interrupt_38, 0x08, flags_base);
-    idt_set_gate(39, (uint32_t)interrupt_39, 0x08, flags_base);
+    init_intr(32, interrupt_32, 0x08, 0);
+    init_intr(33, interrupt_33, 0x08, 0);
+    init_intr(34, interrupt_34, 0x08, 0);
+    init_intr(35, interrupt_35, 0x08, 0);
+    init_intr(36, interrupt_36, 0x08, 0);
+    init_intr(37, interrupt_37, 0x08, 0);
+    init_intr(38, interrupt_38, 0x08, 0);
+    init_intr(39, interrupt_39, 0x08, 0);
 
     // hwint: slave PIC
-    idt_set_gate(40, (uint32_t)interrupt_40, 0x08, flags_base);
-    idt_set_gate(41, (uint32_t)interrupt_41, 0x08, flags_base);
-    idt_set_gate(42, (uint32_t)interrupt_42, 0x08, flags_base);
-    idt_set_gate(43, (uint32_t)interrupt_43, 0x08, flags_base);
-    idt_set_gate(44, (uint32_t)interrupt_44, 0x08, flags_base);
-    idt_set_gate(45, (uint32_t)interrupt_45, 0x08, flags_base);
-    idt_set_gate(46, (uint32_t)interrupt_46, 0x08, flags_base);
-    idt_set_gate(47, (uint32_t)interrupt_47, 0x08, flags_base);
+    init_intr(40, interrupt_40, 0x08, 0);
+    init_intr(41, interrupt_41, 0x08, 0);
+    init_intr(42, interrupt_42, 0x08, 0);
+    init_intr(43, interrupt_43, 0x08, 0);
+    init_intr(44, interrupt_44, 0x08, 0);
+    init_intr(45, interrupt_45, 0x08, 0);
+    init_intr(46, interrupt_46, 0x08, 0);
+    init_intr(47, interrupt_47, 0x08, 0);
 
     // syscall
-    idt_set_gate(
-        INT_SYSCALL,
-        (uint32_t)interrupt_0x80,
-        0x08,
-        flags_base | flags_priv_user
-    );
-}
-
-void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags)
-{
-    KernAux_Arch_I386_IDTE_set_offset(&idt_entries[num], base);
-    idt_entries[num].selector = sel;
-    idt_entries[num]._zero0   = 0;
-    idt_entries[num].flags    = flags;
+    init_intr(INT_SYSCALL, interrupt_0x80, 0x08, 3);
 }
