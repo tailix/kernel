@@ -55,8 +55,8 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     idt_pointer.offset  = (uint32_t)&idt_entries;
     kernaux_asm_i386_flush_idt((uint32_t)&idt_pointer);
 
-    // drivers_console_puts("[INFO] protected: Load TSS.");
-    // kernaux_asm_i386_flush_tss(GDT_TSS_SELECTOR);
+    drivers_console_puts("[INFO] protected: Load TSS.");
+    kernaux_asm_i386_flush_tss(GDT_TSS_SELECTOR);
 
     drivers_console_puts("[INFO] protected: Enable interrupts.");
     asm volatile ("sti");
@@ -158,8 +158,8 @@ void gdt_set_gates()
         .read_write             = 0,
         .conforming_expand_down = 0,
         .code                   = 1,
-        .always_1               = 1, // was 0
-        .DPL                    = 3,
+        .always_1               = 0,
+        .DPL                    = 0,
         .present                = 1,
     };
 }
