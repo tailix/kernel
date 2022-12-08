@@ -73,8 +73,8 @@ void interrupt_0x80();
 
 typedef void(*hwint_handler_t)();
 
-void hwint_register_handler(unsigned int int_no, hwint_handler_t handler);
-void hwint_unregister_handler(unsigned int int_no);
+void hwint_register_handler(unsigned int hwint_no, hwint_handler_t handler);
+void hwint_unregister_handler(unsigned int hwint_no);
 
 
 
