@@ -6,6 +6,7 @@
 
 #include "panic.h"
 #include "protected.h"
+#include "interrupts.h"
 
 #include <drivers/console.h>
 #include <kernaux/generic/display.h>
@@ -77,6 +78,8 @@ void main(
 
     paging_load(&paging);
     paging_enable();
+
+    interrupts_init();
 
     protected_initialize(&kinfo);
 

@@ -3,8 +3,6 @@
 
 #define MEM_UPPER_BASE ((unsigned long)(1 * 1024 * 1024)) // 1 MB
 
-#define IDT_SIZE 256 // maximal size
-
 #define GDT_NULL_INDEX      0
 #define GDT_KERNEL_CS_INDEX 1
 #define GDT_KERNEL_DS_INDEX 2

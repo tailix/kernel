@@ -33,15 +33,8 @@ OBJS += paging.c.o
 # Architecture-independent
 OBJS += info.c.o
 
-# Built-in drivers
-OBJS += timer.c.o
-
 OBJS += protected.c.o
-
-OBJS += interrupts/main.asm.cpp.o
-OBJS += interrupts/exception.c.o
-OBJS += interrupts/hwint.c.o
-OBJS += interrupts/syscall.c.o
+OBJS += interrupts.c.o interrupts.asm.cpp.o
 
 all: $(KERNEL)
 
