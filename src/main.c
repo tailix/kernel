@@ -1,3 +1,5 @@
+#define KERNAUX_ACCESS_PROTECTED
+
 #include "paging.h"
 
 #include "info.h"
@@ -6,9 +8,12 @@
 #include "protected.h"
 
 #include <drivers/console.h>
+#include <kernaux/generic/display.h>
+#include <kernaux/macro.h>
 #include <kernaux/multiboot2.h>
 #include <kernaux/pfa.h>
 
+#include <stdarg.h>
 #include <stdint.h>
 
 // Defined in linker script
@@ -23,6 +28,14 @@ static struct Kernel_Info kinfo;
 static struct KernAux_PFA pfa;
 static struct Paging paging;
 
+void my_putc(void *display KERNAUX_UNUSED, char c);
+void my_vprintf(void *display KERNAUX_UNUSED, const char *format, va_list va);
+
+static const struct KernAux_Display display = {
+    .putc = my_putc,
+    .vprintf = my_vprintf,
+};
+
 void main(
     const unsigned long multiboot2_info_magic,
     const struct KernAux_Multiboot2_Info *const multiboot2_info
@@ -33,7 +46,7 @@ void main(
         panic("Multiboot 2 info magic number is invalid.");
     }
 
-    KernAux_Multiboot2_Info_print(multiboot2_info, drivers_console_printf);
+    KernAux_Multiboot2_Info_print(multiboot2_info, &display);
 
     if (!KernAux_Multiboot2_Info_is_valid(multiboot2_info)) {
         panic("Multiboot 2 info is invalid.");
@@ -68,4 +81,14 @@ void main(
     protected_initialize(&kinfo);
 
     drivers_console_puts("[INFO] main: Finished.");
+}
+
+void my_putc(void *display KERNAUX_UNUSED, char c)
+{
+    drivers_console_putc(c);
+}
+
+void my_vprintf(void *display KERNAUX_UNUSED, const char *format, va_list va)
+{
+    drivers_console_vprintf(format, va);
 }
