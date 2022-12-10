@@ -5,7 +5,6 @@
 %macro NOERRCODE 1
 [GLOBAL interrupts_cb_%1]
 interrupts_cb_%1:
-    cli
     push dword 0
     push dword %1
     jmp common_part
@@ -14,7 +13,6 @@ interrupts_cb_%1:
 %macro ERRCODE 1
 [GLOBAL interrupts_cb_%1]
 interrupts_cb_%1:
-    cli
     push dword %1
     jmp common_part
 %endmacro
@@ -42,7 +40,6 @@ common_part:
     popad
 
     add esp, 8 ; Cleans up the pushed error code and pushed ISR number
-    sti
     iret ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
 
 ; Protected mode exteptions
