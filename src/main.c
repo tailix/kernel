@@ -9,12 +9,16 @@
 #include "interrupts.h"
 
 #include <drivers/console.h>
+#include <kernaux/free_list.h>
 #include <kernaux/generic/display.h>
 #include <kernaux/macro.h>
+#include <kernaux/memmap.h>
 #include <kernaux/multiboot2.h>
 #include <kernaux/pfa.h>
+#include <kernaux/runtime.h>
 
 #include <stdarg.h>
+#include <stddef.h>
 #include <stdint.h>
 
 // Defined in linker script
@@ -24,6 +28,11 @@ extern uint8_t _kernel_phys_base;
 extern uint8_t _kernel_virt_base;
 extern uint8_t _kernel_stack_start;
 extern uint8_t _kernel_stack_size;
+
+static char free_list_memory[8192];
+static struct KernAux_FreeList free_list;
+
+static KernAux_Memmap memmap = NULL;
 
 static struct Kernel_Info kinfo;
 static struct KernAux_PFA pfa;
@@ -51,6 +60,26 @@ void main(
 
     if (!KernAux_Multiboot2_Info_is_valid(multiboot2_info)) {
         panic("Multiboot 2 info is invalid.");
+    }
+
+    KernAux_FreeList_init(&free_list, NULL);
+    KernAux_FreeList_add_zone(&free_list,
+                              free_list_memory, sizeof(free_list_memory));
+
+    {
+        const KernAux_Memmap_Builder builder =
+            KernAux_Multiboot2_Info_to_memmap_builder(
+                multiboot2_info,
+                &free_list.malloc
+            );
+        assert(builder, "builder");
+        memmap = KernAux_Memmap_Builder_finish_and_free(builder);
+        assert(memmap, "memmap");
+    }
+
+    {
+        KernAux_Display_println(&display, "Memory map:");
+        KernAux_Memmap_print(memmap, &display);
     }
 
     kernel_info_init_start(

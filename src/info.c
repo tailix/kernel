@@ -2,7 +2,6 @@
 #include "panic.h"
 
 #include <drivers/console.h>
-#include <kernaux/assert.h>
 
 #include <string.h>
 
@@ -21,7 +20,7 @@ void kernel_info_init_start(
     const size_t stack_start,
     const size_t stack_size
 ) {
-    KERNAUX_ASSERT(kinfo);
+    assert(kinfo, "kinfo");
 
     memset(kinfo, 0, sizeof(*kinfo));
 
@@ -39,8 +38,8 @@ void kernel_info_init_start(
 
 void kernel_info_init_finish(struct Kernel_Info *const kinfo)
 {
-    KERNAUX_ASSERT(kinfo);
-    KERNAUX_ASSERT(!kinfo->initialized);
+    assert(kinfo, "kinfo");
+    assert(!kinfo->initialized, "!kinfo->initialized");
 
     kinfo->kernel_and_modules_total_size =
         kinfo->kernel_size + kinfo->modules_total_size;
@@ -52,9 +51,9 @@ void kernel_info_init_from_multiboot2(
     struct Kernel_Info *kinfo,
     const struct KernAux_Multiboot2_Info *multiboot2_info
 ) {
-    KERNAUX_ASSERT(kinfo);
-    KERNAUX_ASSERT(multiboot2_info);
-    KERNAUX_ASSERT(!kinfo->initialized);
+    assert(kinfo, "kinfo");
+    assert(multiboot2_info, "multiboot2_info");
+    assert(!kinfo->initialized, "!kinfo->initialized");
 
     {
         const char *const cmdline =
@@ -154,7 +153,7 @@ void kernel_info_init_from_multiboot2(
 
 void kernel_info_print(const struct Kernel_Info *const kinfo)
 {
-    KERNAUX_ASSERT(kinfo);
+    assert(kinfo, "kinfo");
 
     drivers_console_printf("Kernel info\n");
     drivers_console_printf("  cmdline: %s\n", kinfo->cmdline);
@@ -175,8 +174,8 @@ void kernel_info_print(const struct Kernel_Info *const kinfo)
 
 bool kernel_info_is_valid(const struct Kernel_Info *const kinfo)
 {
-    KERNAUX_ASSERT(kinfo);
-    KERNAUX_ASSERT(kinfo->initialized);
+    assert(kinfo, "kinfo");
+    assert(kinfo->initialized, "kinfo->initialized");
 
     if (!cmdline_terminated(kinfo->cmdline)) return false;
 
@@ -279,9 +278,9 @@ void kernel_info_setup_pfa(
     const struct Kernel_Info *const kinfo,
     const KernAux_PFA pfa
 ) {
-    KERNAUX_ASSERT(kinfo);
-    KERNAUX_ASSERT(pfa);
-    KERNAUX_ASSERT(kinfo->initialized);
+    assert(kinfo, "kinfo");
+    assert(pfa, "pfa");
+    assert(kinfo->initialized, "kinfo->initialized");
 
     for (size_t i = 0; i < kinfo->areas_count; ++i) {
         const struct Kernel_Info_Area *const area = &kinfo->areas[i];
