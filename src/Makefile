@@ -33,6 +33,7 @@ OBJS += paging.c.o
 # Architecture-independent
 OBJS += info.c.o
 
+OBJS += multiboot2.c.o
 OBJS += protected.c.o
 OBJS += interrupts.c.o interrupts.asm.cpp.o
 OBJS += heap.c.o
