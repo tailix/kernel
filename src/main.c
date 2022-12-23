@@ -4,12 +4,12 @@
 
 #include "info.h"
 
+#include "heap.h"
 #include "panic.h"
 #include "protected.h"
 #include "interrupts.h"
 
 #include <drivers/console.h>
-#include <kernaux/free_list.h>
 #include <kernaux/generic/display.h>
 #include <kernaux/macro.h>
 #include <kernaux/memmap.h>
@@ -28,9 +28,6 @@ extern uint8_t _kernel_phys_base;
 extern uint8_t _kernel_virt_base;
 extern uint8_t _kernel_stack_start;
 extern uint8_t _kernel_stack_size;
-
-static char free_list_memory[8192];
-static struct KernAux_FreeList free_list;
 
 static KernAux_Memmap memmap = NULL;
 
@@ -62,15 +59,13 @@ void main(
         panic("Multiboot 2 info is invalid.");
     }
 
-    KernAux_FreeList_init(&free_list, NULL);
-    KernAux_FreeList_add_zone(&free_list,
-                              free_list_memory, sizeof(free_list_memory));
+    heap_initialize();
 
     {
         const KernAux_Memmap_Builder builder =
             KernAux_Multiboot2_Info_to_memmap_builder(
                 multiboot2_info,
-                &free_list.malloc
+                heap_malloc
             );
         assert(builder, "builder");
         memmap = KernAux_Memmap_Builder_finish_and_free(builder);

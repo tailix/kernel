@@ -35,6 +35,7 @@ OBJS += info.c.o
 
 OBJS += protected.c.o
 OBJS += interrupts.c.o interrupts.asm.cpp.o
+OBJS += heap.c.o
 
 all: $(KERNEL)
 
