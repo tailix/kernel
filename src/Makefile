@@ -1,7 +1,6 @@
 CCPREFIX = /home/kotovalexarian/repos/global/tailix/cross/root/bin/i386-elf-
 
-LIBKERNAUX_PREFIX = /opt/tailix/libkernaux/i386
-DRIVERS_PREFIX    = /opt/tailix/drivers/i386
+PREFIX = /opt/freestanding/i386-elf
 
 AS = $(CCPREFIX)as
 CC = $(CCPREFIX)gcc
@@ -17,8 +16,7 @@ CFLAGS = \
 	-ffreestanding       \
 	-fno-builtin         \
 	-fno-stack-protector \
-	-I$(LIBKERNAUX_PREFIX)/include \
-	-I$(DRIVERS_PREFIX)/include
+	-I$(PREFIX)/include
 
 CPPFLAGS = \
 	-DKERNAUX_DEBUG \
@@ -44,7 +42,7 @@ clean:
 	rm -f $(KERNEL) $(OBJS)
 
 $(KERNEL): $(OBJS)
-	$(CC) -T linker.ld -o $@ $^ -ffreestanding -nostdlib -ldrivers -lkernaux -lgcc -Wl,-L$(LIBKERNAUX_PREFIX)/lib -Wl,-L$(DRIVERS_PREFIX)/lib
+	$(CC) -T linker.ld -o $@ $^ -ffreestanding -nostdlib -ldrivers -lkernaux -lgcc -Wl,-L$(PREFIX)/lib
 	grub-file --is-x86-multiboot2 $@
 
 %.c.o: %.c
