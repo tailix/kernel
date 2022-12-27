@@ -42,7 +42,7 @@ clean:
 	rm -f $(KERNEL) $(OBJS)
 
 $(KERNEL): $(OBJS)
-	$(CC) -T linker.ld -o $@ $^ -ffreestanding -nostdlib -ldrivers -lkernaux -lgcc -Wl,-L$(PREFIX)/lib
+	$(CC) -T linker.ld -o $@ $^ -ffreestanding -nostdlib -ldrivers -lkernaux -lc -lgcc -Wl,-L$(PREFIX)/lib
 	grub-file --is-x86-multiboot2 $@
 
 %.c.o: %.c
