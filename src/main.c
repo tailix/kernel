@@ -18,6 +18,7 @@
 #include <kernaux/runtime.h>
 
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -63,11 +64,16 @@ void main(
 
     {
         const KernAux_Memmap_Builder builder =
-            KernAux_Multiboot2_Info_to_memmap_builder(
-                multiboot2_info,
-                heap_malloc
-            );
+            KernAux_Memmap_Builder_new(heap_malloc);
         assert(builder, "builder");
+
+        const bool result = KernAux_Multiboot2_Info_to_memmap(
+            multiboot2_info,
+            builder,
+            NULL
+        );
+        assert(result, "result");
+
         memmap = KernAux_Memmap_Builder_finish_and_free(builder);
         assert(memmap, "memmap");
     }
