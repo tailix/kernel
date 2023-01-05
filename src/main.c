@@ -95,6 +95,10 @@ void main(
     protected_initialize();
 
     drivers_console_puts("[INFO] main: Finished.");
+
+    asm("int $0x80");
+    asm("int $0x80");
+    asm("int $0x80");
 }
 
 void my_putc(void *display KERNAUX_UNUSED, char c)

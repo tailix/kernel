@@ -1,3 +1,4 @@
+#include <drivers/console.h>
 #include <kernaux/arch/i386.h>
 #include <kernaux/asm/i386.h>
 
@@ -22,7 +23,10 @@ void interrupts_load()
     kernaux_asm_i386_flush_idt((uint32_t)&idt_pointer);
 }
 
-void interrupts_handler() {}
+void interrupts_handler()
+{
+    drivers_console_puts("INTERRUPT!!!!!");
+}
 
 #define init_intr(num, dpl) do { \
     void interrupts_cb_##num();        \
@@ -73,4 +77,6 @@ void interrupts_setup(const uint16_t kernel_cs_selector)
     init_intr(0x1d, 0);
     init_intr(0x1e, 0);
     init_intr(0x1f, 0);
+
+    init_intr(0x80, 0);
 }
