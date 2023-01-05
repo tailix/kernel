@@ -57,6 +57,7 @@ void interrupts_setup(const uint16_t kernel_cs_selector)
     init_intr(0x0e, 0);
     init_intr(0x0f, 0);
     init_intr(0x10, 0);
+
     init_intr(0x11, 0);
     init_intr(0x12, 0);
     init_intr(0x13, 0);
@@ -72,24 +73,4 @@ void interrupts_setup(const uint16_t kernel_cs_selector)
     init_intr(0x1d, 0);
     init_intr(0x1e, 0);
     init_intr(0x1f, 0);
-
-    // Hardware IRQs
-
-    init_intr(0x20, 0);
-    init_intr(0x21, 0);
-    init_intr(0x22, 0);
-    init_intr(0x23, 0);
-    init_intr(0x24, 0);
-    init_intr(0x25, 0);
-    init_intr(0x26, 0);
-    init_intr(0x27, 0);
-
-    init_intr(0x28, 0);
-    init_intr(0x29, 0);
-    init_intr(0x2a, 0);
-    init_intr(0x2b, 0);
-    init_intr(0x2c, 0);
-    init_intr(0x2d, 0);
-    init_intr(0x2e, 0);
-    init_intr(0x2f, 0);
 }
