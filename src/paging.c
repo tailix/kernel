@@ -5,6 +5,10 @@
 
 #include <string.h>
 
+extern uint8_t _kernel_size;
+extern uint8_t _kernel_phys_base;
+extern uint8_t _kernel_virt_base;
+
 static void mapping(struct Paging *paging, uint32_t virt, uint32_t phys);
 
 void paging_load(struct Paging *const paging)
@@ -56,18 +60,16 @@ void paging_identity(struct Paging *const paging)
     }
 }
 
-void paging_mapkernel(
-    struct Paging *const paging,
-    const struct Kernel_Info *const kinfo
-) {
-    assert(!(kinfo->kernel_phys_base % KERNAUX_ARCH_I386_PAGE_SIZE), "Kernel physical address is not aligned.");
-    assert(!(kinfo->kernel_virt_base % KERNAUX_ARCH_I386_PAGE_SIZE), "Kernel virtual address is not aligned.");
+void paging_mapkernel(struct Paging *const paging)
+{
+    assert(!((size_t)&_kernel_phys_base % KERNAUX_ARCH_I386_PAGE_SIZE), "Kernel physical address is not aligned.");
+    assert(!((size_t)&_kernel_virt_base % KERNAUX_ARCH_I386_PAGE_SIZE), "Kernel virtual address is not aligned.");
 
-    size_t phys = kinfo->kernel_phys_base;
-    size_t virt = kinfo->kernel_virt_base;
+    size_t phys = (size_t)&_kernel_phys_base;
+    size_t virt = (size_t)&_kernel_virt_base;
     size_t mapped = 0;
 
-    while (mapped < kinfo->kernel_size) {
+    while (mapped < (size_t)&_kernel_size) {
         mapping(paging, virt, phys);
 
         phys   += KERNAUX_ARCH_I386_PAGE_SIZE;

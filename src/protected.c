@@ -1,7 +1,6 @@
 #include "protected.h"
 
 #include "config.h"
-#include "info.h"
 #include "interrupts.h"
 
 #include <drivers/console.h>
@@ -12,6 +11,8 @@
 #include <stdint.h>
 #include <string.h>
 
+extern uint8_t _kernel_stack_end;
+
 static struct KernAux_Arch_I386_DTR gdt_pointer;
 static struct KernAux_Arch_I386_DTE gdt_entries[GDT_SIZE];
 
@@ -19,7 +20,7 @@ static struct KernAux_Arch_I386_TSS tss;
 
 static void gdt_set_gates();
 
-void protected_initialize(const struct Kernel_Info *const kinfo)
+void protected_initialize()
 {
     drivers_intel_8259_pic_remap(32, 40);
     drivers_intel_8259_pic_disable_all();
@@ -33,7 +34,7 @@ void protected_initialize(const struct Kernel_Info *const kinfo)
     drivers_console_puts("[INFO] protected: Setup TSS.");
     memset(&tss, 0, sizeof(tss));
     tss.ss0 = GDT_KERNEL_DS_SELECTOR;
-    tss.esp0 = kinfo->kernel_stack_start + kinfo->kernel_stack_size;
+    tss.esp0 = (uint32_t)&_kernel_stack_end;
 
     drivers_console_puts("[INFO] protected: Load GDT.");
     gdt_pointer.size = sizeof(struct KernAux_Arch_I386_DTE) * GDT_SIZE - 1;

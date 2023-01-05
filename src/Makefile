@@ -22,15 +22,10 @@ CPPFLAGS = \
 	-DKERNAUX_DEBUG \
 	-DKERNAUX_BITFIELDS
 
-# Architecture-dependent
 OBJS = start.s.o
 OBJS += main.c.o
 OBJS += panic.c.o
 OBJS += paging.c.o
-
-# Architecture-independent
-OBJS += info.c.o
-
 OBJS += multiboot2.c.o
 OBJS += protected.c.o
 OBJS += interrupts.c.o interrupts.asm.cpp.o

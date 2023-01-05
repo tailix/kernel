@@ -2,7 +2,6 @@
 #define KERNEL_INCLUDED_PAGING 1
 
 #include "config.h"
-#include "info.h"
 
 #include <kernaux/arch/i386.h>
 
@@ -25,6 +24,6 @@ void paging_enable();
 void paging_clear(struct Paging *paging);
 
 void paging_identity(struct Paging *paging);
-void paging_mapkernel(struct Paging *paging, const struct Kernel_Info *kinfo);
+void paging_mapkernel(struct Paging *paging);
 
 #endif

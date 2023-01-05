@@ -1,13 +1,10 @@
 #define KERNAUX_ACCESS_PROTECTED
 
-#include "paging.h"
-
-#include "info.h"
-
 #include "heap.h"
+#include "interrupts.h"
+#include "paging.h"
 #include "panic.h"
 #include "protected.h"
-#include "interrupts.h"
 
 #include <drivers/console.h>
 #include <kernaux/generic/display.h>
@@ -32,7 +29,6 @@ extern uint8_t _kernel_stack_size;
 
 static KernAux_Memmap memmap = NULL;
 
-static struct Kernel_Info kinfo;
 static struct KernAux_PFA pfa;
 static struct Paging paging;
 
@@ -83,35 +79,20 @@ void main(
         KernAux_Memmap_print(memmap, &display);
     }
 
-    kernel_info_init_start(
-        &kinfo,
-        (size_t)&_kernel_offset,
-        (size_t)&_kernel_size,
-        (size_t)&_kernel_phys_base,
-        (size_t)&_kernel_virt_base,
-        (size_t)&_kernel_stack_start,
-        (size_t)&_kernel_stack_size
-    );
-    kernel_info_init_from_multiboot2(&kinfo, multiboot2_info);
-    kernel_info_init_finish(&kinfo);
-    kernel_info_print(&kinfo);
-    assert(kernel_info_is_valid(&kinfo), "Invalid kernel information.");
-
     KernAux_PFA_initialize(&pfa);
-    kernel_info_setup_pfa(&kinfo, &pfa);
 
     // TODO: maybe rename to init?
     paging_clear(&paging);
 
     paging_identity(&paging);
-    paging_mapkernel(&paging, &kinfo);
+    paging_mapkernel(&paging);
 
     paging_load(&paging);
     paging_enable();
 
     interrupts_init();
 
-    protected_initialize(&kinfo);
+    protected_initialize();
 
     drivers_console_puts("[INFO] main: Finished.");
 }
